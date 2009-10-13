@@ -16,6 +16,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 #include "peakengine/core/Engine.hpp"
 #include "peakengine/core/Game.hpp"
+#include "peakengine/core/Client.hpp"
 
 #include <enet/enet.h>
 
@@ -66,6 +67,7 @@ namespace peak
 		if (directory == "")
 			return false;
 		// Initialize engine
+		stopping = false;
 		// TODO
 		// Create test game
 		BufferPointer buffer = new Buffer();
@@ -74,7 +76,10 @@ namespace peak
 		Client *client = game->createClient(server);
 		// TODO
 		// Main loop
-		// TODO
+		while (!stopping)
+		{
+			client->update();
+		}
 		// Clean up again
 		// TODO
 		return false;
@@ -107,6 +112,7 @@ namespace peak
 	}
 	void Engine::stop()
 	{
+		stopping = true;
 	}
 
 	void Engine::render()

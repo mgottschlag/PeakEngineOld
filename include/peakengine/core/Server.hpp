@@ -35,6 +35,9 @@ namespace peak
 			virtual bool shutdown();
 			virtual bool load(BufferPointer serverdata) = 0;
 
+			virtual void addEntity(Entity *entity);
+			virtual void removeEntity(Entity *entity);
+
 			virtual BufferPointer onNewConnection(Connection *connection) = 0;
 			virtual void onConnectionAccepted(Connection *connection) = 0;
 

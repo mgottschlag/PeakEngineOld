@@ -37,6 +37,8 @@ namespace peak
 			virtual bool load(BufferPointer serverdata) = 0;
 
 			virtual unsigned int getTime();
+
+			virtual void update();
 		private:
 			Connection *connection;
 	};

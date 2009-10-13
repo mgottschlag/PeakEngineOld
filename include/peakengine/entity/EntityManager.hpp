@@ -32,8 +32,8 @@ namespace peak
 			EntityManager(Engine *engine);
 			virtual ~EntityManager();
 
-			void addEntity(Entity *entity);
-			void removeEntity(Entity *entity);
+			virtual void addEntity(Entity *entity);
+			virtual void removeEntity(Entity *entity);
 			Entity *getEntity(int id);
 
 			virtual unsigned int getTime() = 0;

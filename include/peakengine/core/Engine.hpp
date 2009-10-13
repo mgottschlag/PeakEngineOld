@@ -87,6 +87,7 @@ namespace peak
 		private:
 			Game *game;
 			std::string directory;
+			bool stopping;
 	};
 }
 

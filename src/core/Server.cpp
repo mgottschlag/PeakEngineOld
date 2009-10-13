@@ -51,6 +51,30 @@ namespace peak
 		thread->wait();
 	}
 
+	void Server::addEntity(Entity *entity)
+	{
+		// TODO: Owner?
+		EntityManager::addEntity(entity);
+		// Send the entity to all clients
+		BufferPointer buffer = new Buffer();
+		buffer->write8(EPT_EntityCreated);
+		buffer->write16(entity->getID());
+		buffer->writeString(entity->getType());
+		entity->getState(buffer.get());
+		for (unsigned int i = 0; i < clients.size(); i++)
+			clients[i]->send(buffer, true);
+	}
+	void Server::removeEntity(Entity *entity)
+	{
+		EntityManager::removeEntity(entity);
+		// Remove the entity from all clients
+		BufferPointer buffer = new Buffer();
+		buffer->write8(EPT_EntityDeleted);
+		buffer->write16(entity->getID());
+		for (unsigned int i = 0; i < clients.size(); i++)
+			clients[i]->send(buffer, true);
+	}
+
 	void Server::addClient(Connection *connection)
 	{
 		localconnection = connection;
@@ -88,7 +112,7 @@ namespace peak
 			// Receive data
 			// TODO
 			// Update entities
-			// TODO
+			update();
 			// Send updates
 			// TODO
 		}
