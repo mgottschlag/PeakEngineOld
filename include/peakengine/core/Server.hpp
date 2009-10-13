@@ -36,6 +36,7 @@ namespace peak
 			virtual bool load(BufferPointer serverdata) = 0;
 
 			virtual BufferPointer onNewConnection(Connection *connection) = 0;
+			virtual void onConnectionAccepted(Connection *connection) = 0;
 
 			void addClient(Connection *connection);
 

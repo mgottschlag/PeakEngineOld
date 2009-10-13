@@ -38,9 +38,13 @@ namespace peak
 
 			virtual unsigned int getTime() = 0;
 
+			Engine *getEngine();
+
 			virtual void update();
 		private:
 			EntityMap entities;
+
+			Engine *engine;
 	};
 }
 

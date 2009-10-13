@@ -19,12 +19,16 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 #include "../support/Buffer.hpp"
 
+#include <map>
+
 namespace peak
 {
 	class EntityFactory;
 	class Server;
 	class Client;
 	class Engine;
+	class ServerEntity;
+	class ClientEntity;
 
 	/**
 	 * Main interface providing the basic game actions. This class has to be
@@ -47,6 +51,7 @@ namespace peak
 			EntityFactory *getEntityFactory(std::string name);
 		private:
 			Engine *engine;
+			std::map<std::string, EntityFactory*> factories;
 	};
 }
 

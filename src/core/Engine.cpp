@@ -41,6 +41,7 @@ namespace peak
 	bool Engine::loadGame(Game *game)
 	{
 		this->game = game;
+		game->setEngine(this);
 		return true;
 	}
 	Game *Engine::getGame()

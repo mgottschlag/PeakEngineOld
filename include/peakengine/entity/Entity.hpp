@@ -18,6 +18,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #define _PEAKENGINE_ENTITY_ENTITY_HPP_
 
 #include <vector>
+#include <string>
 
 namespace peak
 {
@@ -41,6 +42,8 @@ namespace peak
 
 			void setID(unsigned int id);
 			unsigned int getID();
+
+			virtual std::string getType() = 0;
 
 			void addProperty(Property *property);
 		private:

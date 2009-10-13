@@ -75,6 +75,7 @@ namespace peak
 					msg->write8(EPT_InitialData);
 					*msg.get() += *serverdata.get();
 					localconnection->send(msg, true);
+					onConnectionAccepted(localconnection);
 					localconnection = 0;
 				}
 				else

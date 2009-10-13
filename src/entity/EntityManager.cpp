@@ -18,7 +18,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 namespace peak
 {
-	EntityManager::EntityManager(Engine *engine)
+	EntityManager::EntityManager(Engine *engine) : engine(engine)
 	{
 	}
 	EntityManager::~EntityManager()
@@ -41,6 +41,11 @@ namespace peak
 	Entity *EntityManager::getEntity(int id)
 	{
 		return entities.getEntity(id);
+	}
+
+	Engine *EntityManager::getEngine()
+	{
+		return engine;
 	}
 
 	void EntityManager::update()

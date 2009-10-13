@@ -15,6 +15,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
 #include "peakengine/core/Game.hpp"
+#include "peakengine/entity/EntityFactory.hpp"
 
 namespace peak
 {
@@ -36,8 +37,13 @@ namespace peak
 
 	void Game::addEntityFactory(EntityFactory *factory, std::string name)
 	{
+		factories.insert(std::pair<std::string, EntityFactory*>(name, factory));
 	}
 	EntityFactory *Game::getEntityFactory(std::string name)
 	{
+		std::map<std::string, EntityFactory*>::iterator it = factories.find(name);
+		if (it == factories.end())
+			return 0;
+		return it->second;
 	}
 }
