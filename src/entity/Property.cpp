@@ -18,7 +18,8 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 namespace peak
 {
-	Property::Property(Entity *entity) : dirty(false), entity(entity)
+	Property::Property(Entity *entity) : dirty(false), entity(entity),
+		updatetime(0)
 	{
 	}
 	Property::~Property()
@@ -32,5 +33,14 @@ namespace peak
 	bool Property::isDirty()
 	{
 		return dirty;
+	}
+
+	void Property::setLastUpdate(unsigned int time)
+	{
+		updatetime = time;
+	}
+	unsigned int Property::getLastUpdate()
+	{
+		return updatetime;
 	}
 }

@@ -23,8 +23,12 @@ src/entity/ClientEntity.cpp
 src/entity/Entity.cpp
 src/entity/EntityManager.cpp
 src/entity/EntityMap.cpp
+src/entity/FloatProperty.cpp
 src/entity/Property.cpp
 src/entity/ServerEntity.cpp
+src/entity/Vector2FProperty.cpp
+src/entity/Vector3FProperty.cpp
+src/entity/IntProperty.cpp
 src/network/LocalConnection.cpp
 src/support/Buffer.cpp
 src/support/Mutex.cpp

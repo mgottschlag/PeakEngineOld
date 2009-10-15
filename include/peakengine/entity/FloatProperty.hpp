@@ -14,23 +14,32 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-#ifndef _PEAKENGINE_HPP_
-#define _PEAKENGINE_HPP_
+#ifndef _PEAKENGINE_ENTITY_FLOATPROPERTY_HPP_
+#define _PEAKENGINE_ENTITY_FLOATPROPERTY_HPP_
 
-#include "peakengine/core/Client.hpp"
-#include "peakengine/core/Engine.hpp"
-#include "peakengine/core/Game.hpp"
-#include "peakengine/core/Server.hpp"
-#include "peakengine/entity/ClientEntity.hpp"
-#include "peakengine/entity/EntityFactory.hpp"
-#include "peakengine/entity/ServerEntity.hpp"
-#include "peakengine/entity/FloatProperty.hpp"
-#include "peakengine/entity/IntProperty.hpp"
-#include "peakengine/entity/Vector2FProperty.hpp"
-#include "peakengine/entity/Vector3FProperty.hpp"
+#include "Property.hpp"
 
 namespace peak
 {
+	class FloatProperty : public Property
+	{
+		public:
+			FloatProperty(Entity *entity);
+			virtual ~FloatProperty();
+
+			void init(float defaultval);
+
+			virtual void serialize(BufferPointer buffer);
+			virtual void deserialize(BufferPointer buffer);
+
+			virtual bool hasChanged();
+
+			void set(float value);
+			float get();
+		private:
+			float defaultval;
+			float value;
+	};
 }
 
 #endif

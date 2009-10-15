@@ -32,11 +32,17 @@ namespace peak
 			virtual void serialize(BufferPointer buffer) = 0;
 			virtual void deserialize(BufferPointer buffer) = 0;
 
+			virtual bool hasChanged() = 0;
+
 			void setDirty(bool dirty);
 			bool isDirty();
+
+			void setLastUpdate(unsigned int time);
+			unsigned int getLastUpdate();
 		private:
 			bool dirty;
 			Entity *entity;
+			unsigned int updatetime;;
 	};
 }
 

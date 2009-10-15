@@ -14,23 +14,44 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-#ifndef _PEAKENGINE_HPP_
-#define _PEAKENGINE_HPP_
-
-#include "peakengine/core/Client.hpp"
-#include "peakengine/core/Engine.hpp"
-#include "peakengine/core/Game.hpp"
-#include "peakengine/core/Server.hpp"
-#include "peakengine/entity/ClientEntity.hpp"
-#include "peakengine/entity/EntityFactory.hpp"
-#include "peakengine/entity/ServerEntity.hpp"
 #include "peakengine/entity/FloatProperty.hpp"
-#include "peakengine/entity/IntProperty.hpp"
-#include "peakengine/entity/Vector2FProperty.hpp"
-#include "peakengine/entity/Vector3FProperty.hpp"
 
 namespace peak
 {
-}
+	FloatProperty::FloatProperty(Entity *entity) : Property(entity),
+		defaultval(0.0f), value(0.0f)
+	{
+	}
+	FloatProperty::~FloatProperty()
+	{
+	}
 
-#endif
+	void FloatProperty::init(float defaultval)
+	{
+		this->defaultval = defaultval;
+		value = defaultval;
+	}
+
+	void FloatProperty::serialize(BufferPointer buffer)
+	{
+		buffer->writeFloat(value);
+	}
+	void FloatProperty::deserialize(BufferPointer buffer)
+	{
+		value = buffer->readFloat();
+	}
+
+	bool FloatProperty::hasChanged()
+	{
+		return value != defaultval;
+	}
+
+	void FloatProperty::set(float value)
+	{
+		this->value = value;
+	}
+	float FloatProperty::get()
+	{
+		return value;
+	}
+}

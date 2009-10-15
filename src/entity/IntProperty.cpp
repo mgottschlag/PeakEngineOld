@@ -14,23 +14,45 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-#ifndef _PEAKENGINE_HPP_
-#define _PEAKENGINE_HPP_
-
-#include "peakengine/core/Client.hpp"
-#include "peakengine/core/Engine.hpp"
-#include "peakengine/core/Game.hpp"
-#include "peakengine/core/Server.hpp"
-#include "peakengine/entity/ClientEntity.hpp"
-#include "peakengine/entity/EntityFactory.hpp"
-#include "peakengine/entity/ServerEntity.hpp"
-#include "peakengine/entity/FloatProperty.hpp"
 #include "peakengine/entity/IntProperty.hpp"
-#include "peakengine/entity/Vector2FProperty.hpp"
-#include "peakengine/entity/Vector3FProperty.hpp"
 
 namespace peak
 {
-}
+	IntProperty::IntProperty(Entity *entity) : Property(entity),
+		defaultval(0), value(0), bits(32)
+	{
+	}
+	IntProperty::~IntProperty()
+	{
+	}
 
-#endif
+	void IntProperty::init(int defaultval, unsigned int bits)
+	{
+		this->defaultval = defaultval;
+		value = defaultval;
+		this->bits = bits;
+	}
+
+	void IntProperty::serialize(BufferPointer buffer)
+	{
+		buffer->writeInt(value, bits);
+	}
+	void IntProperty::deserialize(BufferPointer buffer)
+	{
+		value = buffer->readInt(bits);
+	}
+
+	bool IntProperty::hasChanged()
+	{
+		return value != defaultval;
+	}
+
+	void IntProperty::set(int value)
+	{
+		this->value = value;
+	}
+	int IntProperty::get()
+	{
+		return value;
+	}
+}

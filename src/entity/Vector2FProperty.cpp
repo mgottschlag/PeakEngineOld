@@ -14,23 +14,48 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-#ifndef _PEAKENGINE_HPP_
-#define _PEAKENGINE_HPP_
-
-#include "peakengine/core/Client.hpp"
-#include "peakengine/core/Engine.hpp"
-#include "peakengine/core/Game.hpp"
-#include "peakengine/core/Server.hpp"
-#include "peakengine/entity/ClientEntity.hpp"
-#include "peakengine/entity/EntityFactory.hpp"
-#include "peakengine/entity/ServerEntity.hpp"
-#include "peakengine/entity/FloatProperty.hpp"
-#include "peakengine/entity/IntProperty.hpp"
 #include "peakengine/entity/Vector2FProperty.hpp"
-#include "peakengine/entity/Vector3FProperty.hpp"
 
 namespace peak
 {
-}
+	static Vector2F defval;
 
-#endif
+	Vector2FProperty::Vector2FProperty(Entity *entity) : Property(entity),
+		defaultval(defval)
+	{
+	}
+	Vector2FProperty::~Vector2FProperty()
+	{
+	}
+
+	void Vector2FProperty::init(Vector2F &defaultval)
+	{
+		this->defaultval = defaultval;
+		value = defaultval;
+	}
+
+	void Vector2FProperty::serialize(BufferPointer buffer)
+	{
+		buffer->writeFloat(value.x);
+		buffer->writeFloat(value.y);
+	}
+	void Vector2FProperty::deserialize(BufferPointer buffer)
+	{
+		value.x = buffer->readFloat();
+		value.y = buffer->readFloat();
+	}
+
+	bool Vector2FProperty::hasChanged()
+	{
+		return value != defaultval;
+	}
+
+	void Vector2FProperty::set(const Vector2F &value)
+	{
+		this->value = value;
+	}
+	Vector2F Vector2FProperty::get()
+	{
+		return value;
+	}
+}
