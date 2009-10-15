@@ -43,6 +43,7 @@ namespace peak
 			Connection *connection;
 			volatile bool stopping;
 			unsigned int time;
+			unsigned int lastupdate;
 	};
 }
 

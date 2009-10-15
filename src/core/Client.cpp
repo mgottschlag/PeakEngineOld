@@ -64,6 +64,7 @@ namespace peak
 		}
 		// Initialize the game
 		time = 0;
+		lastupdate = 0;
 		load(initialdata);
 		// TODO
 		stopping = false;
@@ -116,6 +117,35 @@ namespace peak
 						delete entity;
 						break;
 					}
+					case EPT_Update:
+					{
+						bool updatevalid = true;
+						unsigned int updatetime = data->read32();
+						// Adjust time if the latency has decreased
+						// TODO: This might affect client prediction
+						if (updatetime > time)
+							time = updatetime;
+						// Apply the updates
+						while (data->getPosition() + 16 <= data->getSize() * 8)
+						{
+							unsigned int id = data->read16() + 1;
+							Entity *entity = getEntity(id);
+							// Ignore invalid updates
+							if (!entity)
+							{
+								updatevalid = false;
+								break;
+							}
+							// TODO: Client prediction
+							entity->applyUpdate(data.get(), updatetime);
+							std::cout << "Update applied for " << id << "." << std::endl;
+						}
+						// Only send the server that we have received this
+						// update if it was valid
+						if (updatevalid)
+							lastupdate = updatetime;
+						break;
+					}
 					default:
 						// TODO: Warn
 						break;
@@ -125,7 +155,11 @@ namespace peak
 			time++;
 			update();
 			// Send messages
-			// TODO
+			BufferPointer update = new Buffer();
+			update->write8(EPT_Update);
+			update->write32(lastupdate);
+			// TODO: Get messages
+			connection->send(update);
 			// 20 ms per frame
 			lastframe = lastframe + 20000;
 			uint64_t currenttime = OS::getSystemTime();

@@ -41,9 +41,10 @@ namespace peak
 			Engine *getEngine();
 
 			virtual void update();
-		private:
+		protected:
 			EntityMap entities;
 
+		private:
 			Engine *engine;
 	};
 }

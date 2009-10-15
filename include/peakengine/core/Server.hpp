@@ -25,6 +25,21 @@ namespace peak
 	class Connection;
 	class Thread;
 
+	class ClientInfo
+	{
+		public:
+			ClientInfo(Connection *connection) : connection(connection),
+				lastreceived(0)
+			{
+				id = ++lastid;
+			}
+
+			Connection *connection;
+			unsigned int id;
+			static unsigned int lastid;
+			unsigned int lastreceived;
+	};
+
 	class Server : public EntityManager
 	{
 		public:
@@ -50,7 +65,7 @@ namespace peak
 			Thread *thread;
 			volatile bool stopping;
 			Connection * volatile localconnection;
-			std::vector<Connection*> clients;
+			std::vector<ClientInfo> clients;
 			unsigned int time;
 	};
 }

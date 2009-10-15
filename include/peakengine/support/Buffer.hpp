@@ -64,8 +64,8 @@ namespace peak
 			~Buffer();
 
 			/**
-			 * Sets the size of the buffer. The read/write position is not
-			 * changed if it is still valid.
+			 * Sets the size of the buffer in bytes. The read/write position is
+			 * not changed if it is still valid.
 			 */
 			void setSize(unsigned int size);
 			/**
@@ -74,7 +74,7 @@ namespace peak
 			unsigned int getSize();
 
 			/**
-			 * Sets the read/write position.
+			 * Sets the read/write position in bits.
 			 */
 			void setPosition(unsigned int position);
 			/**

@@ -24,6 +24,8 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 namespace peak
 {
+	unsigned int ClientInfo::lastid = 0;
+
 	Server::Server(Engine *engine) : EntityManager(engine), thread(0),
 		localconnection(0)
 	{
@@ -66,7 +68,7 @@ namespace peak
 		buffer->writeString(entity->getType());
 		entity->getState(buffer.get());
 		for (unsigned int i = 0; i < clients.size(); i++)
-			clients[i]->send(buffer, true);
+			clients[i].connection->send(buffer, true);
 	}
 	void Server::removeEntity(Entity *entity)
 	{
@@ -76,7 +78,7 @@ namespace peak
 		buffer->write8(EPT_EntityDeleted);
 		buffer->write16(entity->getID());
 		for (unsigned int i = 0; i < clients.size(); i++)
-			clients[i]->send(buffer, true);
+			clients[i].connection->send(buffer, true);
 	}
 
 	void Server::addClient(Connection *connection)
@@ -100,7 +102,7 @@ namespace peak
 				BufferPointer serverdata = onNewConnection(localconnection);
 				if (serverdata)
 				{
-					clients.push_back((Connection*)localconnection);
+					clients.push_back(ClientInfo((Connection*)localconnection));
 					BufferPointer msg = new Buffer();
 					msg->write8(EPT_InitialData);
 					*msg.get() += *serverdata.get();
@@ -116,12 +118,50 @@ namespace peak
 			// Incoming network connections
 			// TODO
 			// Receive data
-			// TODO
+			for (unsigned int i = 0; i < clients.size(); i++)
+			{
+				while (clients[i].connection->hasData())
+				{
+					BufferPointer data = clients[i].connection->receive();
+					PacketType type = (PacketType)data->read8();
+					switch (type)
+					{
+						case EPT_Update:
+						{
+							// Read last received packet
+							clients[i].lastreceived = data->read32();
+							unsigned int clienttime = data->read32();
+							// Read entity messages
+							break;
+						}
+						default:
+							break;
+					}
+				}
+			}
 			// Update entities
 			time++;
 			update();
 			// Send updates
-			// TODO
+			for (unsigned int i = 0; i < clients.size(); i++)
+			{
+				// Create update buffer
+				BufferPointer update = new Buffer();
+				update->write8(EPT_Update);
+				update->write32(time);
+				// Fill buffer with updates
+				EntityMap::Iterator it(entities);
+				for (Entity *entity = it.next();entity != 0; entity = it.next())
+				{
+					if (entity->hasChanged(clients[i].lastreceived))
+					{
+						update->write16(entity->getID() - 1);
+						entity->getUpdate(update.get(), clients[i].lastreceived);
+					}
+				}
+				// Send update
+				clients[i].connection->send(update);
+			}
 			// 20 ms per frame
 			lastframe = lastframe + 20000;
 			uint64_t currenttime = OS::getSystemTime();
