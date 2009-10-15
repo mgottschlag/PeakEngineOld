@@ -22,6 +22,9 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "peakengine/core/Game.hpp"
 #include "peakengine/entity/EntityFactory.hpp"
 #include "peakengine/entity/ClientEntity.hpp"
+#include "peakengine/support/OS.hpp"
+
+#include <iostream>
 
 namespace peak
 {
@@ -62,6 +65,7 @@ namespace peak
 		// Initialize the game
 		load(initialdata);
 		// TODO
+		stopping = false;
 		return true;
 	}
 	bool Client::shutdown()
@@ -72,49 +76,66 @@ namespace peak
 	{
 	}
 
-	void Client::update()
+	void Client::runThread()
 	{
-		// Receive data
-		while (connection->hasData())
+		uint64_t lastframe = OS::getSystemTime();
+		while (!stopping)
 		{
-			BufferPointer data = connection->receive();
-			PacketType type = (PacketType)data->read8();
-			switch (type)
+			// Receive data
+			while (connection->hasData())
 			{
-				case EPT_EntityCreated:
+				BufferPointer data = connection->receive();
+				PacketType type = (PacketType)data->read8();
+				switch (type)
 				{
-					unsigned int id = data->read16();
-					std::string type = data->readString();
-					// Create entity
-					Game *game = getEngine()->getGame();
-					EntityFactory *factory = game->getEntityFactory(type);
-					if (!factory)
+					case EPT_EntityCreated:
 					{
-						// TODO: Warn
-						continue;
+						unsigned int id = data->read16();
+						std::string type = data->readString();
+						// Create entity
+						Game *game = getEngine()->getGame();
+						EntityFactory *factory = game->getEntityFactory(type);
+						if (!factory)
+						{
+							// TODO: Warn
+							continue;
+						}
+						ClientEntity *entity = factory->createClientEntity(this);
+						entity->setID(id);
+						entity->setState(data.get());
+						addEntity(entity);
+						break;
 					}
-					ClientEntity *entity = factory->createClientEntity(this);
-					entity->setID(id);
-					entity->setState(data.get());
-					addEntity(entity);
-					break;
+					case EPT_EntityDeleted:
+					{
+						unsigned int id = data->read16();
+						Entity *entity = getEntity(id);
+						removeEntity(entity);
+						delete entity;
+						break;
+					}
+					default:
+						// TODO: Warn
+						break;
 				}
-				case EPT_EntityDeleted:
-				{
-					unsigned int id = data->read16();
-					Entity *entity = getEntity(id);
-					removeEntity(entity);
-					delete entity;
-					break;
-				}
-				default:
-					// TODO: Warn
-					break;
+			}
+			// Update entities
+			update();
+			// Send messages
+			// TODO
+			// 20 ms per frame
+			lastframe = lastframe + 20000;
+			uint64_t currenttime = OS::getSystemTime();
+			if (currenttime < lastframe)
+			{
+				float percentage = (float)(lastframe - currenttime) / 200;
+				//std::cout << "Server: " << lastframe - currenttime << std::endl;
+				std::cout << std::fixed;
+				std::streamsize prec = std::cout.precision(1);
+				std::cout << "Client: " << percentage << "%" << std::endl;
+				std::cout.precision(prec);
+				OS::sleep(lastframe - currenttime);
 			}
 		}
-		// Update entities
-		EntityManager::update();
-		// Send messages
-		// TODO
 	}
 }

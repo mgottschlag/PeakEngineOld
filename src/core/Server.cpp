@@ -18,6 +18,9 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "peakengine/support/Thread.hpp"
 #include "peakengine/network/NetworkData.hpp"
 #include "peakengine/network/Connection.hpp"
+#include "peakengine/support/OS.hpp"
+
+#include <iostream>
 
 namespace peak
 {
@@ -86,6 +89,7 @@ namespace peak
 
 	void Server::runThread()
 	{
+		uint64_t lastframe = OS::getSystemTime();
 		while (!stopping)
 		{
 			// Incoming local connections
@@ -115,6 +119,19 @@ namespace peak
 			update();
 			// Send updates
 			// TODO
+			// 20 ms per frame
+			lastframe = lastframe + 20000;
+			uint64_t currenttime = OS::getSystemTime();
+			if (currenttime < lastframe)
+			{
+				float percentage = (float)(lastframe - currenttime) / 200;
+				//std::cout << "Server: " << lastframe - currenttime << std::endl;
+				std::cout << std::fixed;
+				std::streamsize prec = std::cout.precision(1);
+				std::cout << "Server: " << percentage << "%" << std::endl;
+				std::cout.precision(prec);
+				OS::sleep(lastframe - currenttime);
+			}
 		}
 	}
 }

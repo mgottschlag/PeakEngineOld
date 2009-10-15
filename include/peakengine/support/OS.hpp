@@ -14,34 +14,31 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-#ifndef _PEAKENGINE_CORE_CLIENT_HPP_
-#define _PEAKENGINE_CORE_CLIENT_HPP_
+#ifndef _PEAKENGINE_SUPPORT_OS_HPP_
+#define _PEAKENGINE_SUPPORT_OS_HPP_
 
-#include "../entity/EntityManager.hpp"
-#include "../support/Buffer.hpp"
+#include <stdint.h>
 
 namespace peak
 {
-	class Server;
-	class Connection;
-
-	class Client : public EntityManager
+	class OS
 	{
 		public:
-			Client(Engine *engine);
-			virtual ~Client();
+			static OS &get();
+			~OS();
 
-			bool init(std::string address);
-			bool initLocally(Server *server);
-			virtual bool shutdown();
-			virtual bool load(BufferPointer serverdata) = 0;
+			unsigned int getTime();
+			static uint64_t getSystemTime();
+			unsigned int getMemory();
+			unsigned int getFreeMemory();
+			unsigned int getLogicalProcessors();
+			unsigned int getPhysicalProcessors();
 
-			virtual unsigned int getTime();
-
-			void runThread();
+			static void sleep(unsigned int usecs);
 		private:
-			Connection *connection;
-			volatile bool stopping;
+			OS();
+
+			uint64_t starttime;
 	};
 }
 

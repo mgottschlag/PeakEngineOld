@@ -75,11 +75,8 @@ namespace peak
 		Server *server = game->createServer(buffer);
 		Client *client = game->createClient(server);
 		// TODO
-		// Main loop
-		while (!stopping)
-		{
-			client->update();
-		}
+		// Client main loop
+		client->runThread();
 		// Clean up again
 		// TODO
 		return false;

@@ -32,6 +32,7 @@ src/entity/IntProperty.cpp
 src/network/LocalConnection.cpp
 src/support/Buffer.cpp
 src/support/Mutex.cpp
+src/support/OS.cpp
 src/support/ScopedLock.cpp
 src/support/Thread.cpp
 )
