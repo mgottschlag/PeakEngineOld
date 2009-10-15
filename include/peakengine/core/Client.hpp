@@ -42,6 +42,7 @@ namespace peak
 		private:
 			Connection *connection;
 			volatile bool stopping;
+			unsigned int time;
 	};
 }
 

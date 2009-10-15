@@ -37,6 +37,7 @@ namespace peak
 	}
 	void EntityManager::removeEntity(Entity *entity)
 	{
+		entities.removeEntity(entity->getID());
 	}
 	Entity *EntityManager::getEntity(int id)
 	{
@@ -50,5 +51,10 @@ namespace peak
 
 	void EntityManager::update()
 	{
+		EntityMap::Iterator it(entities);
+		for (Entity *entity = it.next();entity != 0; entity = it.next())
+		{
+			entity->update();
+		}
 	}
 }

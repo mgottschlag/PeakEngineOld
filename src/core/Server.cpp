@@ -39,6 +39,7 @@ namespace peak
 		// Create network host
 		// TODO
 		// Load server data
+		time = 0;
 		if (!load(serverdata))
 			return false;
 		// Create server thread
@@ -85,6 +86,7 @@ namespace peak
 
 	unsigned int Server::getTime()
 	{
+		return time;
 	}
 
 	void Server::runThread()
@@ -116,6 +118,7 @@ namespace peak
 			// Receive data
 			// TODO
 			// Update entities
+			time++;
 			update();
 			// Send updates
 			// TODO

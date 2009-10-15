@@ -63,6 +63,7 @@ namespace peak
 			}
 		}
 		// Initialize the game
+		time = 0;
 		load(initialdata);
 		// TODO
 		stopping = false;
@@ -74,6 +75,7 @@ namespace peak
 
 	unsigned int Client::getTime()
 	{
+		return time;
 	}
 
 	void Client::runThread()
@@ -120,6 +122,7 @@ namespace peak
 				}
 			}
 			// Update entities
+			time++;
 			update();
 			// Send messages
 			// TODO

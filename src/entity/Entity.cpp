@@ -110,6 +110,10 @@ namespace peak
 		return id;
 	}
 
+	void Entity::update()
+	{
+	}
+
 	void Entity::addProperty(Property *property)
 	{
 		properties.push_back(property);

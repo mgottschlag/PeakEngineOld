@@ -51,6 +51,7 @@ namespace peak
 			volatile bool stopping;
 			Connection * volatile localconnection;
 			std::vector<Connection*> clients;
+			unsigned int time;
 	};
 }
 

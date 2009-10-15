@@ -45,6 +45,8 @@ namespace peak
 
 			virtual std::string getType() = 0;
 
+			virtual void update();
+
 			void addProperty(Property *property);
 		private:
 			std::vector<Property*> properties;
