@@ -32,7 +32,7 @@ namespace peak
 			Entity(EntityManager *manager);
 			virtual ~Entity();
 
-			bool hasChanged();
+			bool hasChanged(unsigned int time);
 			void setState(Buffer *buffer);
 			void getState(Buffer *buffer);
 			void applyUpdate(Buffer *buffer, unsigned int time);

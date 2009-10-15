@@ -38,7 +38,11 @@ namespace peak
 	}
 	void FloatProperty::deserialize(BufferPointer buffer)
 	{
-		value = buffer->readFloat();
+		float newvalue = buffer->readFloat();
+		if (newvalue == value)
+			return;
+		value = newvalue;
+		setChanged();
 	}
 
 	bool FloatProperty::hasChanged()
@@ -48,7 +52,10 @@ namespace peak
 
 	void FloatProperty::set(float value)
 	{
+		if (value == this->value)
+			return;
 		this->value = value;
+		setChanged();
 	}
 	float FloatProperty::get()
 	{

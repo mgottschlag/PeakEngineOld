@@ -37,12 +37,14 @@ namespace peak
 			void setDirty(bool dirty);
 			bool isDirty();
 
-			void setLastUpdate(unsigned int time);
-			unsigned int getLastUpdate();
+			void setLastChange(unsigned int time);
+			unsigned int getLastChange();
+		protected:
+			void setChanged();
 		private:
 			bool dirty;
 			Entity *entity;
-			unsigned int updatetime;;
+			unsigned int changetime;
 	};
 }
 

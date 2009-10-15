@@ -42,9 +42,14 @@ namespace peak
 	}
 	void Vector3FProperty::deserialize(BufferPointer buffer)
 	{
-		value.x = buffer->readFloat();
-		value.y = buffer->readFloat();
-		value.z = buffer->readFloat();
+		Vector3F newvalue;
+		newvalue.x = buffer->readFloat();
+		newvalue.y = buffer->readFloat();
+		newvalue.z = buffer->readFloat();
+		if (newvalue == value)
+			return;
+		value = newvalue;
+		setChanged();
 	}
 
 	bool Vector3FProperty::hasChanged()
@@ -54,7 +59,10 @@ namespace peak
 
 	void Vector3FProperty::set(const Vector3F &value)
 	{
+		if (value == this->value)
+			return;
 		this->value = value;
+		setChanged();
 	}
 	Vector3F Vector3FProperty::get()
 	{

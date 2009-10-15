@@ -39,7 +39,11 @@ namespace peak
 	}
 	void IntProperty::deserialize(BufferPointer buffer)
 	{
-		value = buffer->readInt(bits);
+		int newvalue = buffer->readInt(bits);
+		if (newvalue == value)
+			return;
+		value = newvalue;
+		setChanged();
 	}
 
 	bool IntProperty::hasChanged()
@@ -49,7 +53,10 @@ namespace peak
 
 	void IntProperty::set(int value)
 	{
+		if (value == this->value)
+			return;
 		this->value = value;
+		setChanged();
 	}
 	int IntProperty::get()
 	{

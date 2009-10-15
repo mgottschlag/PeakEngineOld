@@ -15,11 +15,13 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
 #include "peakengine/entity/Property.hpp"
+#include "peakengine/entity/Entity.hpp"
+#include "peakengine/entity/EntityManager.hpp"
 
 namespace peak
 {
 	Property::Property(Entity *entity) : dirty(false), entity(entity),
-		updatetime(0)
+		changetime(0)
 	{
 	}
 	Property::~Property()
@@ -35,12 +37,17 @@ namespace peak
 		return dirty;
 	}
 
-	void Property::setLastUpdate(unsigned int time)
+	void Property::setLastChange(unsigned int time)
 	{
-		updatetime = time;
+		changetime = time;
 	}
-	unsigned int Property::getLastUpdate()
+	unsigned int Property::getLastChange()
 	{
-		return updatetime;
+		return changetime;
+	}
+
+	void Property::setChanged()
+	{
+		setLastChange(entity->getManager()->getTime());
 	}
 }

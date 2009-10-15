@@ -41,8 +41,13 @@ namespace peak
 	}
 	void Vector2FProperty::deserialize(BufferPointer buffer)
 	{
-		value.x = buffer->readFloat();
-		value.y = buffer->readFloat();
+		Vector2F newvalue;
+		newvalue.x = buffer->readFloat();
+		newvalue.y = buffer->readFloat();
+		if (newvalue == value)
+			return;
+		value = newvalue;
+		setChanged();
 	}
 
 	bool Vector2FProperty::hasChanged()
@@ -52,7 +57,10 @@ namespace peak
 
 	void Vector2FProperty::set(const Vector2F &value)
 	{
+		if (value == this->value)
+			return;
 		this->value = value;
+		setChanged();
 	}
 	Vector2F Vector2FProperty::get()
 	{
