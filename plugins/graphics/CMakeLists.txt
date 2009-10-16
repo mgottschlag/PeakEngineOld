@@ -1,6 +1,9 @@
 
 set(SRC
 src/Graphics.cpp
+src/ModelSceneNode.cpp
+src/RootSceneNode.cpp
+src/SceneNode.cpp
 )
 
 include_directories(include ../../include)

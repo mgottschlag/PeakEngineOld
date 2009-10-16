@@ -15,7 +15,9 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
 #include "peakgraphics/Graphics.hpp"
-#include "peakengine/support/Thread.hpp"
+#include "peakgraphics/RootSceneNode.hpp"
+#include <peakengine/support/Thread.hpp>
+#include <peakengine/support/OS.hpp>
 
 #include <lf/Lightfeather.h>
 using namespace lf;
@@ -56,6 +58,18 @@ namespace peak
 		return true;
 	}
 
+	SceneNode *Graphics::getRootSceneNode()
+	{
+		return rootscenenode.get();
+	}
+
+	void Graphics::registerParentChange(SceneNode *node)
+	{
+		parentmutex.lock();
+		parentchange.push(node);
+		parentmutex.unlock();
+	}
+
 	void Graphics::runThread()
 	{
 		// Initialize graphics
@@ -69,13 +83,29 @@ namespace peak
 		resmgr = CResourceManager::getInstancePtr();
 		scene = window->getRenderLayer3D()->getScene();
 		fps = 0;
+		// Create root scene node
+		rootscenenode = new RootSceneNode(this, scene->getRootSceneNode());
 		// We have finished initializaition
 		cond.lock();
 		cond.signal();
 		cond.unlock();
-		// Render
+		// Render loop
 		while (!stopping)
 		{
+			// Update scene node tree
+			parentmutex.lock();
+			while (parentchange.size() > 0)
+			{
+				SceneNodePointer node = parentchange.front();
+				parentchange.pop();
+				parentmutex.unlock();
+				node->updateParent();
+				parentmutex.lock();
+			}
+			parentmutex.unlock();
+			// Update scene node positions
+			rootscenenode->update(OS::get().getTime());
+			// Render
 			if (!CLFRender::getInstance().update())
 			{
 				stopped = true;

@@ -17,7 +17,11 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #ifndef _PEAKGRAPHICS_GRAPHICS_HPP_
 #define _PEAKGRAPHICS_GRAPHICS_HPP_
 
-#include "peakengine/support/ConditionVariable.hpp"
+#include "SceneNode.hpp"
+#include <peakengine/support/ConditionVariable.hpp>
+#include <peakengine/support/Mutex.hpp>
+
+#include <queue>
 
 namespace lf
 {
@@ -36,6 +40,7 @@ namespace lf
 namespace peak
 {
 	class Thread;
+	class SceneNode;
 
 	class Graphics
 	{
@@ -45,6 +50,10 @@ namespace peak
 
 			bool init(int width, int height, bool fullscreen);
 			bool shutdown();
+
+			SceneNode *getRootSceneNode();
+
+			void registerParentChange(SceneNode *node);
 
 			void runThread();
 		private:
@@ -60,6 +69,11 @@ namespace peak
 			lf::render::IRenderWindow *window;
 			lf::CResourceManager *resmgr;
 			lf::scene::CScene *scene;
+
+			SceneNodePointer rootscenenode;
+
+			Mutex parentmutex;
+			std::queue<SceneNodePointer> parentchange;
 
 			unsigned int fps;
 	};
