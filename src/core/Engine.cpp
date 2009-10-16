@@ -68,6 +68,8 @@ namespace peak
 			return false;
 		// Initialize engine
 		stopping = false;
+		if (!game->init())
+			return false;
 		// TODO
 		// Create test game
 		BufferPointer buffer = new Buffer();
@@ -78,6 +80,7 @@ namespace peak
 		// Client main loop
 		client->runThread();
 		// Clean up again
+		game->shutdown();
 		// TODO
 		return false;
 	}

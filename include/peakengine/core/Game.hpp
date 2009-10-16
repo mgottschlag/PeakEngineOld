@@ -40,6 +40,9 @@ namespace peak
 			Game();
 			virtual ~Game();
 
+			virtual bool init() = 0;
+			virtual bool shutdown() = 0;
+
 			void setEngine(Engine *engine);
 			Engine *getEngine();
 
