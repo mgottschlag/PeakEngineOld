@@ -18,6 +18,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #define _PEAKGRAPHICS_GRAPHICS_HPP_
 
 #include "SceneNode.hpp"
+#include "KeyCode.hpp"
 #include <peakengine/support/ConditionVariable.hpp>
 #include <peakengine/support/Mutex.hpp>
 
@@ -42,6 +43,8 @@ namespace peak
 {
 	class Thread;
 	class SceneNode;
+	class InputReceiver;
+	class EventReceiver;
 
 	class Graphics
 	{
@@ -56,10 +59,17 @@ namespace peak
 
 			void loadFile(std::string path);
 
+			void addInputReceiver(InputReceiver *receiver);
+			void removeInputReceiver(InputReceiver *receiver);
+
 			void registerLoading(SceneNode *node);
 			void registerParentChange(SceneNode *node);
 
 			lf::render::IRenderWindow *getWindow();
+
+			void onKeyDown(peak::KeyCode key);
+			void onKeyUp(peak::KeyCode key);
+			void onMouseMoved(int x, int y, int dx, int dy);
 
 			void runThread();
 		private:
@@ -77,6 +87,10 @@ namespace peak
 			lf::scene::CScene *scene;
 
 			SceneNodePointer rootscenenode;
+
+			Mutex inputmutex;
+			std::vector<InputReceiver*> inputreceiver;
+			EventReceiver *eventreceiver;
 
 			Mutex parentmutex;
 			std::queue<SceneNodePointer> parentchange;

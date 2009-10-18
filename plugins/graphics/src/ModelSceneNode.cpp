@@ -43,7 +43,6 @@ namespace peak
 			return false;
 		ScopedLock lock(mutex);
 		node = new scene::CModelSceneNode(model);
-		node->setPosition(core::vector3df(0, 0, 20));
 		// Update parent and position
 		// TODO
 		return true;

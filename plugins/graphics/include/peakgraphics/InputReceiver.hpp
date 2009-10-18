@@ -14,16 +14,20 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-#ifndef _PEAKGRAPHICS_HPP_
-#define _PEAKGRAPHICS_HPP_
+#ifndef _PEAKGRAPHICS_INPUTRECEIVER_HPP_
+#define _PEAKGRAPHICS_INPUTRECEIVER_HPP_
 
-#include "peakgraphics/Graphics.hpp"
-#include "peakgraphics/CameraSceneNode.hpp"
-#include "peakgraphics/ModelSceneNode.hpp"
-#include "peakgraphics/InputReceiver.hpp"
+#include "KeyCode.hpp"
 
 namespace peak
 {
+	class InputReceiver
+	{
+		public:
+			virtual void onKeyDown(KeyCode key) = 0;
+			virtual void onKeyUp(KeyCode key) = 0;
+			virtual void onMouseMoved(int x, int y, int dx, int dy) = 0;
+	};
 }
 
 #endif

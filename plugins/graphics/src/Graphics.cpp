@@ -16,6 +16,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 #include "peakgraphics/Graphics.hpp"
 #include "peakgraphics/RootSceneNode.hpp"
+#include "peakgraphics/InputReceiver.hpp"
 #include <peakengine/support/Thread.hpp>
 #include <peakengine/support/OS.hpp>
 
@@ -24,11 +25,49 @@ using namespace lf;
 
 namespace peak
 {
+	class EventReceiver : public input::IMouseListener,
+		public input::IMouseMovementListener,
+		public input::IMouseWheelListener,
+		public input::IKeyListener
+	{
+		public:
+			EventReceiver(Graphics *graphics) : graphics(graphics)
+			{
+			}
+			virtual ~EventReceiver()
+			{
+			}
+			virtual void mousePressed(lf::input::CMouseEvent &event)
+			{
+			}
+			virtual void mouseReleased(lf::input::CMouseEvent &event)
+			{
+			}
+			virtual void mouseMoved(lf::input::CMouseEvent &event)
+			{
+				if (event.getOldX() != 32000)
+					graphics->onMouseMoved(event.getX(), event.getY(),
+						event.getXDelta(), event.getYDelta());
+				else
+					graphics->onMouseMoved(event.getX(), event.getY(), 0, 0);
+			}
+			virtual void keyPressed(lf::input::CKeyEvent &event)
+			{
+			}
+			virtual void keyReleased(lf::input::CKeyEvent &event)
+			{
+			}
+
+			Graphics *graphics;
+	};
+
 	Graphics::Graphics()
 	{
+		eventreceiver = new EventReceiver(this);
 	}
 	Graphics::~Graphics()
 	{
+		delete eventreceiver;
 	}
 
 	bool Graphics::init(int width, int height, bool fullscreen)
@@ -70,6 +109,26 @@ namespace peak
 		loadingmutex.unlock();
 	}
 
+	void Graphics::addInputReceiver(InputReceiver *receiver)
+	{
+		inputmutex.lock();
+		inputreceiver.push_back(receiver);
+		inputmutex.unlock();
+	}
+	void Graphics::removeInputReceiver(InputReceiver *receiver)
+	{
+		inputmutex.lock();
+		for (unsigned int i = 0; i < inputreceiver.size(); i++)
+		{
+			if (inputreceiver[i] == receiver)
+			{
+				inputreceiver.erase(inputreceiver.begin() + i);
+				break;
+			}
+		}
+		inputmutex.unlock();
+	}
+
 	void Graphics::registerLoading(SceneNode *node)
 	{
 		loadingmutex.lock();
@@ -88,6 +147,37 @@ namespace peak
 		return window;
 	}
 
+	void Graphics::onKeyDown(peak::KeyCode key)
+	{
+		// Get input receivers
+		inputmutex.lock();
+		std::vector<InputReceiver*> receivers = inputreceiver;
+		inputmutex.unlock();
+		// Callback
+		for (unsigned int i = 0; i < receivers.size(); i++)
+			receivers[i]->onKeyDown(key);
+	}
+	void Graphics::onKeyUp(peak::KeyCode key)
+	{
+		// Get input receivers
+		inputmutex.lock();
+		std::vector<InputReceiver*> receivers = inputreceiver;
+		inputmutex.unlock();
+		// Callback
+		for (unsigned int i = 0; i < receivers.size(); i++)
+			receivers[i]->onKeyUp(key);
+	}
+	void Graphics::onMouseMoved(int x, int y, int dx, int dy)
+	{
+		// Get input receivers
+		inputmutex.lock();
+		std::vector<InputReceiver*> receivers = inputreceiver;
+		inputmutex.unlock();
+		// Callback
+		for (unsigned int i = 0; i < receivers.size(); i++)
+			receivers[i]->onMouseMoved(x, y, dx, dy);
+	}
+
 	void Graphics::runThread()
 	{
 		// Initialize graphics
@@ -97,6 +187,9 @@ namespace peak
 			render::EWCF_AUTOCLOSE | (fullscreen ? render::EWCF_FULLSCREEN : 0));
 		window->setWindowCaption(L"PeakEngine");
 		window->setVisible(true);
+		window->addMouseListener(eventreceiver);
+		window->addMouseMovementListener(eventreceiver);
+		window->addKeyListener(eventreceiver);
 		CLFRender::getInstance().setAutoSleep(1);
 		resmgr = CResourceManager::getInstancePtr();
 		scene = window->getRenderLayer3D()->getScene();
