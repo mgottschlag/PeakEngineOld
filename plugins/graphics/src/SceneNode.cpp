@@ -115,7 +115,7 @@ namespace peak
 			}
 		}
 		// Interpolate
-		if (transformationcount == 1)
+		if (transformationcount == 2)
 		{
 			TransformationInfo &a = transformation[0];
 			TransformationInfo &b = transformation[1];
@@ -146,16 +146,16 @@ namespace peak
 				transformation[0] = tmp;
 			}
 			// Interpolate
-			TransformationInfo &a = transformation[0];
-			TransformationInfo &b = transformation[1];
-			if (time > b.time)
+			TransformationInfo *a = &transformation[0];
+			TransformationInfo *b = &transformation[1];
+			if (time > b->time)
 			{
-				a = transformation[1];
-				b = transformation[2];
+				a = &transformation[1];
+				b = &transformation[2];
 			}
-			float s = (float)(time - a.time) / (b.time - a.time);
-			position.interpolate(a.position, b.position, s);
-			rotation.interpolate(a.rotation, b.rotation, s);
+			float s = (float)(time - a->time) / (b->time - a->time);
+			position.interpolate(a->position, b->position, s);
+			rotation.interpolate(a->rotation, b->rotation, s);
 		}
 	}
 
@@ -214,7 +214,6 @@ namespace peak
 		mutex.lock();
 		if (node)
 		{
-			printf("Position: %f/%f/%f\n", position.x, position.y, position.z);
 			node->setPosition(core::vector3df(position.x, position.y,
 				position.z));
 			node->setRotationDegrees(core::vector3df(rotation.x, rotation.y,
