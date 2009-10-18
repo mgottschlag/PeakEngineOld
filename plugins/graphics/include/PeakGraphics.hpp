@@ -18,6 +18,8 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #define _PEAKGRAPHICS_HPP_
 
 #include "peakgraphics/Graphics.hpp"
+#include "peakgraphics/CameraSceneNode.hpp"
+#include "peakgraphics/ModelSceneNode.hpp"
 
 namespace peak
 {

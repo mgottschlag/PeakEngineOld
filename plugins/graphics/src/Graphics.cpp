@@ -63,11 +63,29 @@ namespace peak
 		return rootscenenode.get();
 	}
 
+	void Graphics::loadFile(std::string path)
+	{
+		loadingmutex.lock();
+		loadingfiles.push(path);
+		loadingmutex.unlock();
+	}
+
+	void Graphics::registerLoading(SceneNode *node)
+	{
+		loadingmutex.lock();
+		loading.push(node);
+		loadingmutex.unlock();
+	}
 	void Graphics::registerParentChange(SceneNode *node)
 	{
 		parentmutex.lock();
 		parentchange.push(node);
 		parentmutex.unlock();
+	}
+
+	lf::render::IRenderWindow *Graphics::getWindow()
+	{
+		return window;
 	}
 
 	void Graphics::runThread()
@@ -92,6 +110,26 @@ namespace peak
 		// Render loop
 		while (!stopping)
 		{
+			loadingmutex.lock();
+			// Load resource files
+			while (loadingfiles.size() > 0)
+			{
+				std::string file = loadingfiles.front();
+				loadingfiles.pop();
+				loadingmutex.unlock();
+				resmgr->loadResources(file.c_str());
+				loadingmutex.lock();
+			}
+			// Load scene nodes
+			while (loading.size() > 0)
+			{
+				SceneNodePointer node = loading.front();
+				loading.pop();
+				loadingmutex.unlock();
+				node->load();
+				loadingmutex.lock();
+			}
+			loadingmutex.unlock();
 			// Update scene node tree
 			parentmutex.lock();
 			while (parentchange.size() > 0)

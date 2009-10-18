@@ -1,5 +1,6 @@
 
 set(SRC
+src/CameraSceneNode.cpp
 src/Graphics.cpp
 src/ModelSceneNode.cpp
 src/RootSceneNode.cpp

@@ -14,25 +14,40 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-#include "peakgraphics/RootSceneNode.hpp"
+#include "peakgraphics/CameraSceneNode.hpp"
+#include "peakgraphics/Graphics.hpp"
+#include <peakengine/support/ScopedLock.hpp>
+
+#include <lf/Lightfeather.h>
+using namespace lf;
 
 namespace peak
 {
-	RootSceneNode::RootSceneNode(Graphics *graphics, lf::scene::CSceneNode *node)
-		: SceneNode(graphics)
+	CameraSceneNode::CameraSceneNode(Graphics *graphics) : SceneNode(graphics)
 	{
-		this->node = node;
+		graphics->registerLoading(this);
 	}
-	RootSceneNode::~RootSceneNode()
+	CameraSceneNode::~CameraSceneNode()
 	{
+		if (node)
+			node->drop();
 	}
 
-	bool RootSceneNode::load()
+	bool CameraSceneNode::load()
 	{
+		// Create camera
+		scene::C3DCamera *camera = new scene::C3DCamera(graphics->getWindow(),
+			core::PI / 3.0f, 1.0f, 1000.0f, true);
+		camera->setBackgroundColor(core::CColorI(0,0,255,0));
+		ScopedLock lock(mutex);
+		node = camera;
+		graphics->getWindow()->getRenderLayer3D()->addCamera(camera);
+		// Update parent and position
+		// TODO
 		return true;
 	}
-	bool RootSceneNode::isLoaded()
+	bool CameraSceneNode::isLoaded()
 	{
-		return true;
+		return node != 0;
 	}
 }

@@ -27,6 +27,7 @@ namespace peak
 			RootSceneNode(Graphics *graphics, lf::scene::CSceneNode *node);
 			~RootSceneNode();
 
+			virtual bool load();
 			virtual bool isLoaded();
 		private:
 	};

@@ -22,6 +22,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include <peakengine/support/Mutex.hpp>
 
 #include <queue>
+#include <string>
 
 namespace lf
 {
@@ -53,7 +54,12 @@ namespace peak
 
 			SceneNode *getRootSceneNode();
 
+			void loadFile(std::string path);
+
+			void registerLoading(SceneNode *node);
 			void registerParentChange(SceneNode *node);
+
+			lf::render::IRenderWindow *getWindow();
 
 			void runThread();
 		private:
@@ -74,6 +80,9 @@ namespace peak
 
 			Mutex parentmutex;
 			std::queue<SceneNodePointer> parentchange;
+			Mutex loadingmutex;
+			std::queue<std::string> loadingfiles;
+			std::queue<SceneNodePointer> loading;
 
 			unsigned int fps;
 	};
