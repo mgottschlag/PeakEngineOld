@@ -24,32 +24,139 @@ using namespace lf;
 namespace peak
 {
 	SceneNode::SceneNode(Graphics *graphics) : ReferenceCounted(),
-		positioncount(0), parent(0), newparent(0), node(0), graphics(graphics)
+		transformationcount(0), moving(true), parent(0), newparent(0), node(0),
+		graphics(graphics)
 	{
 	}
 	SceneNode::~SceneNode()
 	{
 	}
 
-	void SceneNode::setPosition(const Vector3F &position, unsigned int time)
+	void SceneNode::setTransformation(const Vector3F &position,
+		const Vector3F &rotation, unsigned int time)
 	{
 		ScopedLock lock(mutex);
+		if (transformationcount == 0)
+		{
+			// We do not have any transformation information yet
+			transformation[0].position = position;
+			transformation[0].rotation = rotation;
+			transformation[0].time = time;
+			transformationcount = 1;
+			return;
+		}
+		// Check whether the time already has been there
+		for (unsigned int i = 0; i < transformationcount; i++)
+		{
+			if (transformation[i].time == time)
+			{
+				transformation[i].position = position;
+				transformation[i].rotation = rotation;
+				return;
+			}
+		}
+		// Add transformation entry
+		if (transformationcount < 3)
+		{
+			transformation[transformationcount].position = position;
+			transformation[transformationcount].rotation = rotation;
+			transformation[transformationcount].time = time;
+			transformationcount++;
+		}
+		else
+		{
+			// Drop the oldest entry
+			unsigned int oldestentry = 0;
+			unsigned int oldesttime = 0xFFFFFFFF;
+			for (unsigned int i = 0; i < 3; i++)
+			{
+				if (transformation[i].time < oldesttime)
+				{
+					oldesttime = transformation[i].time;
+					oldestentry = i;
+				}
+			}
+			for (unsigned int i = oldestentry; i < 2; i++)
+			{
+				transformation[i] = transformation[i + 1];
+			}
+			// Set the last entry
+			transformation[2].position = position;
+			transformation[2].rotation = rotation;
+			transformation[2].time = time;
+		}
 	}
-	Vector3F SceneNode::getPosition(unsigned int time)
-	{
-		// We do not have any position information yet
-		if (positioncount == 0)
-			return Vector3F();
-	}
-	void SceneNode::setRotation(const Vector3F &position, unsigned int time)
+	void SceneNode::getTransformation(Vector3F &position, Vector3F &rotation,
+		unsigned int time)
 	{
 		ScopedLock lock(mutex);
-	}
-	Vector3F SceneNode::getRotation(unsigned int time)
-	{
-		// We do not have any rotation information yet
-		if (positioncount == 0)
-			return Vector3F();
+		if (transformationcount == 0)
+		{
+			// We do not have any transformation information yet
+			position = Vector3F();
+			rotation = Vector3F();
+			return;
+		}
+		if (transformationcount == 1)
+		{
+			// We do not have enough information to interpolate yet
+			position = transformation[0].position;
+			rotation = transformation[0].rotation;
+			return;
+		}
+		// Get exact values
+		for (unsigned int i = 0; i < transformationcount; i++)
+		{
+			if (transformation[i].time == time)
+			{
+				position = transformation[i].position;
+				rotation = transformation[i].rotation;
+				return;
+			}
+		}
+		// Interpolate
+		if (transformationcount == 1)
+		{
+			TransformationInfo &a = transformation[0];
+			TransformationInfo &b = transformation[1];
+			float s = (float)(time - a.time) / (b.time - a.time);
+			position.interpolate(a.position, b.position, s);
+			rotation.interpolate(a.rotation, b.rotation, s);
+			return;
+		}
+		else
+		{
+			// Sort entries
+			if (transformation[1].time < transformation[0].time)
+			{
+				TransformationInfo tmp = transformation[1];
+				transformation[1] = transformation[0];
+				transformation[0] = tmp;
+			}
+			if (transformation[2].time < transformation[1].time)
+			{
+				TransformationInfo tmp = transformation[2];
+				transformation[2] = transformation[1];
+				transformation[1] = tmp;
+			}
+			if (transformation[1].time < transformation[0].time)
+			{
+				TransformationInfo tmp = transformation[1];
+				transformation[1] = transformation[0];
+				transformation[0] = tmp;
+			}
+			// Interpolate
+			TransformationInfo &a = transformation[0];
+			TransformationInfo &b = transformation[1];
+			if (time > b.time)
+			{
+				a = transformation[1];
+				b = transformation[2];
+			}
+			float s = (float)(time - a.time) / (b.time - a.time);
+			position.interpolate(a.position, b.position, s);
+			rotation.interpolate(a.rotation, b.rotation, s);
+		}
 	}
 
 	void SceneNode::setParent(SceneNode *parent)
@@ -64,6 +171,15 @@ namespace peak
 		return parent;
 	}
 
+	void SceneNode::setMoving(bool moving)
+	{
+		this->moving = moving;
+	}
+	bool SceneNode::isMoving()
+	{
+		return moving;
+	}
+
 	void SceneNode::updateParent()
 	{
 		ScopedLock lock(mutex);
@@ -74,10 +190,10 @@ namespace peak
 		if (node)
 			node->grab();
 		// Remove the node from the parent node
-		if (this->parent)
-			this->parent->removeChild(this);
+		if (parent)
+			parent->removeChild(this);
 		// Add to the new parent
-		this->parent = parent;
+		parent = newparent;
 		parent->children.push_back(this);
 		if (parent->node && node)
 			parent->node->addChild(node);
@@ -89,7 +205,25 @@ namespace peak
 
 	void SceneNode::update(unsigned int time)
 	{
-		ScopedLock lock(mutex);
+		if (!moving)
+			return;
+		// Update position
+		Vector3F position;
+		Vector3F rotation;
+		getTransformation(position, rotation, time);
+		mutex.lock();
+		if (node)
+		{
+			printf("Position: %f/%f/%f\n", position.x, position.y, position.z);
+			node->setPosition(core::vector3df(position.x, position.y,
+				position.z));
+			node->setRotationDegrees(core::vector3df(rotation.x, rotation.y,
+				rotation.z));
+		}
+		mutex.unlock();
+		// Update children
+		for (unsigned int i = 0; i < children.size(); i++)
+			children[i]->update(time);
 	}
 
 	void SceneNode::removeChild(SceneNode *child)

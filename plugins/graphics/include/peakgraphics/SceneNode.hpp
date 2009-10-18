@@ -35,7 +35,7 @@ namespace peak
 {
 	class Graphics;
 
-	struct PositionInfo
+	struct TransformationInfo
 	{
 		Vector3F position;
 		Vector3F rotation;
@@ -48,14 +48,18 @@ namespace peak
 			SceneNode(Graphics *graphics);
 			virtual ~SceneNode();
 
-			void setPosition(const Vector3F &position, unsigned int time = 0);
-			Vector3F getPosition(unsigned int time = 0);
-			void setRotation(const Vector3F &position, unsigned int time = 0);
-			Vector3F getRotation(unsigned int time = 0);
+			void setTransformation(const Vector3F &position,
+				const Vector3F &rotation, unsigned int time = 0);
+			void getTransformation(Vector3F &position, Vector3F &rotation,
+				unsigned int time = 0);
 
 			void setParent(SceneNode *parent);
 			SceneNode *getParent();
 
+			void setMoving(bool moving);
+			bool isMoving();
+
+			virtual bool load() = 0;
 			virtual bool isLoaded() = 0;
 
 			void updateParent();
@@ -64,8 +68,9 @@ namespace peak
 		protected:
 			void removeChild(SceneNode *child);
 
-			PositionInfo position[3];
-			unsigned int positioncount;
+			TransformationInfo transformation[3];
+			unsigned int transformationcount;
+			bool moving;
 			SceneNode *parent;
 			SceneNode *newparent;
 			std::vector<SharedPointer<SceneNode> > children;

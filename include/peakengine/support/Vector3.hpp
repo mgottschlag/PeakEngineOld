@@ -137,6 +137,21 @@ namespace peak
 				return angle;
 			}
 
+			/**
+			 * Sets the vector to the linear interpolation between a and b.
+			 * \param a First vector
+			 * \param b Second vector
+			 * \param d Interpolation factor. If it is 0, then the vector will
+			 * be set to a, if it is 1, the vector will be b.
+			 */
+			Vector3<T> &interpolate(const Vector3<T> &a, const Vector3<T> &b,
+				float d)
+			{
+				Vector3<T> dv = b - a;
+				*this = a + dv * d;
+				return *this;
+			}
+
 			template<typename T2> Vector3<T> operator*(T2 s) const
 			{
 				return Vector3<T>((T)(x * s), (T)(y * s), (T)(z * s));
