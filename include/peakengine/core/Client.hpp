@@ -36,6 +36,9 @@ namespace peak
 			virtual bool shutdown();
 			virtual bool load(BufferPointer serverdata) = 0;
 
+			void sendEntityMessage(Entity *entity, BufferPointer data,
+				bool reliable = false);
+
 			virtual unsigned int getTime();
 
 			void runThread();

@@ -43,6 +43,8 @@ namespace peak
 			void setID(unsigned int id);
 			unsigned int getID();
 
+			virtual void receiveMessage(Buffer *buffer) = 0;
+
 			virtual std::string getType() = 0;
 
 			virtual void update();

@@ -74,6 +74,16 @@ namespace peak
 	{
 	}
 
+	void Client::sendEntityMessage(Entity *entity, BufferPointer data,
+		bool reliable)
+	{
+		BufferPointer msg = new Buffer();
+		msg->write8(EPT_EntityMessage);
+		msg->write16(entity->getID() - 1);
+		*msg.get() += *data.get();
+		connection->send(msg, reliable);
+	}
+
 	unsigned int Client::getTime()
 	{
 		return time;
@@ -144,6 +154,13 @@ namespace peak
 						// update if it was valid
 						if (updatevalid)
 							lastupdate = updatetime;
+						break;
+					}
+					case EPT_EntityMessage:
+					{
+						unsigned int id = data->read16() + 1;
+						Entity *entity = getEntity(id);
+						entity->receiveMessage(data.get());
 						break;
 					}
 					default:

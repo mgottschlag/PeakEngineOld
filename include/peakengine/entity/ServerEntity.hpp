@@ -28,6 +28,9 @@ namespace peak
 		public:
 			ServerEntity(Server *server);
 			virtual ~ServerEntity();
+
+			void sendMessage(Buffer *buffer, bool reliable = false);
+			virtual void receiveMessage(Buffer *buffer);
 		private:
 	};
 }

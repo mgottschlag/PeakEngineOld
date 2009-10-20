@@ -25,4 +25,12 @@ namespace peak
 	ServerEntity::~ServerEntity()
 	{
 	}
+
+	void ServerEntity::sendMessage(Buffer *buffer, bool reliable)
+	{
+		((Server*)getManager())->sendEntityMessage(this, buffer, reliable);
+	}
+	void ServerEntity::receiveMessage(Buffer *buffer)
+	{
+	}
 }

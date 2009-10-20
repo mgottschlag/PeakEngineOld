@@ -58,6 +58,9 @@ namespace peak
 
 			void addClient(Connection *connection);
 
+			void sendEntityMessage(Entity *entity, BufferPointer data,
+				bool reliable = false);
+
 			virtual unsigned int getTime();
 
 			void runThread();

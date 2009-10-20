@@ -86,6 +86,17 @@ namespace peak
 		localconnection = connection;
 	}
 
+	void Server::sendEntityMessage(Entity *entity, BufferPointer data,
+		bool reliable)
+	{
+		BufferPointer msg = new Buffer();
+		msg->write8(EPT_EntityMessage);
+		msg->write16(entity->getID() - 1);
+		*msg.get() += *data.get();
+		for (unsigned int i = 0; i < clients.size(); i++)
+			clients[i].connection->send(msg, reliable);
+	}
+
 	unsigned int Server::getTime()
 	{
 		return time;
@@ -132,6 +143,14 @@ namespace peak
 							clients[i].lastreceived = data->read32();
 							unsigned int clienttime = data->read32();
 							// Read entity messages
+							// TODO: Pack entity messages!
+							break;
+						}
+						case EPT_EntityMessage:
+						{
+							unsigned int id = data->read16() + 1;
+							Entity *entity = getEntity(id);
+							entity->receiveMessage(data.get());
 							break;
 						}
 						default:
