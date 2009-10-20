@@ -53,9 +53,11 @@ namespace peak
 			}
 			virtual void keyPressed(lf::input::CKeyEvent &event)
 			{
+				graphics->onKeyDown((KeyCode)event.getKey());
 			}
 			virtual void keyReleased(lf::input::CKeyEvent &event)
 			{
+				graphics->onKeyUp((KeyCode)event.getKey());
 			}
 
 			Graphics *graphics;
@@ -169,13 +171,35 @@ namespace peak
 	}
 	void Graphics::onMouseMoved(int x, int y, int dx, int dy)
 	{
-		// Get input receivers
 		inputmutex.lock();
+		// Reset mouse
+		if (!ignoremouseinput)
+		{
+			ignoremouseinput = true;
+			input::ICursorControl *cursorcontrol = window->getCursorControl();
+			cursorcontrol->setPosition(300, 300);
+		}
+		else
+		{
+			ignoremouseinput = false;
+			inputmutex.unlock();
+			return;
+		}
+		mousepos += Vector2I(dx, dy);
+		if (mousepos.x < 0)
+			mousepos.x = 0;
+		if (mousepos.y < 0)
+			mousepos.y = 0;
+		if (mousepos.x >= width)
+			mousepos.x = width - 1;
+		if (mousepos.y >= height)
+			mousepos.y = height - 1;
+		// Get input receivers
 		std::vector<InputReceiver*> receivers = inputreceiver;
 		inputmutex.unlock();
 		// Callback
 		for (unsigned int i = 0; i < receivers.size(); i++)
-			receivers[i]->onMouseMoved(x, y, dx, dy);
+			receivers[i]->onMouseMoved(mousepos.x, mousepos.y, dx, dy);
 	}
 
 	void Graphics::runThread()
@@ -183,7 +207,7 @@ namespace peak
 		// Initialize graphics
 		lf::initLF();
 		window = CLFRender::getInstance().createRenderWindow(core::vector2di(0,0),
-			core::vector2d<s32>(width,height), 32,	32,
+			core::vector2d<s32>(width,height), 32, 32,
 			render::EWCF_AUTOCLOSE | (fullscreen ? render::EWCF_FULLSCREEN : 0));
 		window->setWindowCaption(L"PeakEngine");
 		window->setVisible(true);
@@ -194,6 +218,10 @@ namespace peak
 		resmgr = CResourceManager::getInstancePtr();
 		scene = window->getRenderLayer3D()->getScene();
 		fps = 0;
+		input::ICursorControl *cursorcontrol = window->getCursorControl();
+		cursorcontrol->setVisible(false);
+		ignoremouseinput = false;
+		mousepos = Vector2I(width / 2, height / 2);
 		// Create root scene node
 		rootscenenode = new RootSceneNode(this, scene->getRootSceneNode());
 		// We have finished initializaition

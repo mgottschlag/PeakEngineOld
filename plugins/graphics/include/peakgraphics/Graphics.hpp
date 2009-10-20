@@ -21,6 +21,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "KeyCode.hpp"
 #include <peakengine/support/ConditionVariable.hpp>
 #include <peakengine/support/Mutex.hpp>
+#include <peakengine/support/Vector2.hpp>
 
 #include <queue>
 #include <string>
@@ -89,6 +90,8 @@ namespace peak
 			SceneNodePointer rootscenenode;
 
 			Mutex inputmutex;
+			bool ignoremouseinput;
+			Vector2I mousepos;
 			std::vector<InputReceiver*> inputreceiver;
 			EventReceiver *eventreceiver;
 
