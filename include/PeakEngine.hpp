@@ -29,6 +29,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "peakengine/entity/Vector2FProperty.hpp"
 #include "peakengine/entity/Vector3FProperty.hpp"
 #include "peakengine/support/OS.hpp"
+#include "peakengine/support/ScopedLock.hpp"
 
 namespace peak
 {
