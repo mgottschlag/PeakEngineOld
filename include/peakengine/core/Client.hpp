@@ -20,10 +20,22 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "../entity/EntityManager.hpp"
 #include "../support/Buffer.hpp"
 
+#include <queue>
+
 namespace peak
 {
 	class Server;
 	class Connection;
+
+	struct EntityMessage
+	{
+		EntityMessage(Entity *entity, BufferPointer data) : entity(entity),
+			data(data)
+		{
+		}
+		Entity *entity;
+		BufferPointer data;
+	};
 
 	/**
 	 * Base class for game clients.
@@ -81,6 +93,7 @@ namespace peak
 			volatile bool stopping;
 			unsigned int time;
 			unsigned int lastupdate;
+			std::queue<EntityMessage> entitymessages;
 	};
 }
 

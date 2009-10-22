@@ -21,6 +21,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "peakengine/support/OS.hpp"
 
 #include <iostream>
+#include <cstdlib>
 
 namespace peak
 {
@@ -143,7 +144,19 @@ namespace peak
 							clients[i].lastreceived = data->read32();
 							unsigned int clienttime = data->read32();
 							// Read entity messages
-							// TODO: Pack entity messages!
+							while (data->getPosition() + 32 <= data->getSize() * 8)
+							{
+								// Get entity
+								unsigned int id = data->read16() + 1;
+								Entity *entity = getEntity(id);
+								std::cout << "Entity: " << id << "/" << entity << std::endl;
+								// Read message
+								unsigned int size = data->read16();
+								void *msgdata = malloc(size);
+								data->read(msgdata, size);
+								BufferPointer msg = new Buffer(msgdata, size);
+								entity->receiveMessage(msg.get());
+							}
 							break;
 						}
 						case EPT_EntityMessage:

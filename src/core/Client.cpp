@@ -77,11 +77,20 @@ namespace peak
 	void Client::sendEntityMessage(Entity *entity, BufferPointer data,
 		bool reliable)
 	{
-		BufferPointer msg = new Buffer();
-		msg->write8(EPT_EntityMessage);
-		msg->write16(entity->getID() - 1);
-		*msg.get() += *data.get();
-		connection->send(msg, reliable);
+		if (reliable)
+		{
+			// Send message directly
+			BufferPointer msg = new Buffer();
+			msg->write8(EPT_EntityMessage);
+			msg->write16(entity->getID() - 1);
+			*msg.get() += *data.get();
+			connection->send(msg, true);
+		}
+		else
+		{
+			// Put the message into the queue
+			entitymessages.push(EntityMessage(entity, data));
+		}
 	}
 
 	unsigned int Client::getTime()
@@ -175,7 +184,15 @@ namespace peak
 			BufferPointer update = new Buffer();
 			update->write8(EPT_Update);
 			update->write32(lastupdate);
-			// TODO: Get messages
+			update->write32(time);
+			while (entitymessages.size() > 0)
+			{
+				EntityMessage message = entitymessages.front();
+				entitymessages.pop();
+				update->write16(message.entity->getID() - 1);
+				update->write16(message.data->getSize());
+				*update.get() += *message.data.get();
+			}
 			connection->send(update);
 			// 20 ms per frame
 			lastframe = lastframe + 20000;
