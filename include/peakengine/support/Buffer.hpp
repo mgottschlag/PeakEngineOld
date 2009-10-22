@@ -140,6 +140,15 @@ namespace peak
 			std::string readString();
 
 			/**
+			 * Writes raw data to the buffer.
+			 */
+			void write(void *data, unsigned int size);
+			/**
+			 * Reads raw data from the buffer.
+			 */
+			unsigned int read(void *data, unsigned int size);
+
+			/**
 			 * Writes an integer with an arbitrary size to the buffer. Only
 			 * sizes from 1 to 32 are supported.
 			 */

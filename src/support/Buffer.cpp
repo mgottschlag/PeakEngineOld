@@ -396,6 +396,64 @@ namespace peak
 		}
 	}
 
+	void Buffer::write(void *data, unsigned int size)
+	{
+		char *cdata = (char*)data;
+		if (position % 8)
+		{
+			for (unsigned int i = 0; i < size; i++)
+			{
+				write8(cdata[i]);
+			}
+		}
+		else
+		{
+			// We are on an even position
+			if (position / 8 + size + 1 > size)
+			{
+				this->data = (char*)realloc(this->data, position / 8 + size);
+				memcpy(this->data + position / 8, cdata, size);
+				position += size * 8;
+				size += size;
+			}
+			else
+			{
+				memcpy(this->data + position / 8, cdata, size);
+				position += size * 8;
+			}
+		}
+	}
+	unsigned int Buffer::read(void *data, unsigned int size)
+	{
+		char *cdata = (char*)data;
+		if (position % 8)
+		{
+			for (unsigned int i = 0; i < size; i++)
+			{
+				cdata[i] = read8();
+			}
+			// TODO: Return length
+			return size;
+		}
+		else
+		{
+			// We are on an even position
+			if (position / 8 == size)
+				return 0;
+			char *cdata = (char*)data;
+			for (unsigned int i = 0; i < size; i++)
+			{
+				cdata[i] = this->data[position / 8];
+				position += 8;
+				if (position / 8 == size)
+					return i + 1;
+			}
+			if (position / 8 < size)
+				position += 8;
+			return size;
+		}
+	}
+
 	void Buffer::writeInt(int value, unsigned int size)
 	{
 		writeUnsignedInt(value, size);
