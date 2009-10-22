@@ -90,7 +90,6 @@ namespace peak
 			SceneNodePointer rootscenenode;
 
 			Mutex inputmutex;
-			bool ignoremouseinput;
 			Vector2I mousepos;
 			std::vector<InputReceiver*> inputreceiver;
 			EventReceiver *eventreceiver;

@@ -171,20 +171,13 @@ namespace peak
 	}
 	void Graphics::onMouseMoved(int x, int y, int dx, int dy)
 	{
+		if (x == 300 && y == 300)
+			return;
 		inputmutex.lock();
 		// Reset mouse
-		if (!ignoremouseinput)
-		{
-			ignoremouseinput = true;
-			input::ICursorControl *cursorcontrol = window->getCursorControl();
-			cursorcontrol->setPosition(300, 300);
-		}
-		else
-		{
-			ignoremouseinput = false;
-			inputmutex.unlock();
-			return;
-		}
+		input::ICursorControl *cursorcontrol = window->getCursorControl();
+		cursorcontrol->setPosition(300, 300);
+		// Restrict mouse position to the window
 		mousepos += Vector2I(dx, dy);
 		if (mousepos.x < 0)
 			mousepos.x = 0;
@@ -220,7 +213,7 @@ namespace peak
 		fps = 0;
 		input::ICursorControl *cursorcontrol = window->getCursorControl();
 		cursorcontrol->setVisible(false);
-		ignoremouseinput = false;
+		cursorcontrol->setPosition(300, 300);
 		mousepos = Vector2I(width / 2, height / 2);
 		// Create root scene node
 		rootscenenode = new RootSceneNode(this, scene->getRootSceneNode());
