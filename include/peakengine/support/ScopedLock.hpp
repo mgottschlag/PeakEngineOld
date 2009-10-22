@@ -21,10 +21,34 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 namespace peak
 {
+	/**
+	 * Auxilliary class for automatically unlocking a mutex when the current
+	 * variable scope is left. Example:
+	 * \code
+	 * void someFunction()
+	 * {
+	 *     Mutex m;
+	 *     // The mutex is not locked here
+	 *     for (int i = 0; i < 10; i++)
+	 *     {
+	 *         ScopedLock lock(m);
+	 *         // The mutex is locked here
+	 *     }
+	 *     // The mutex is not locked here
+	 * }
+	 * \endcode
+	 * This is useful to restrict a mutex lock to one function.
+	 */
 	class ScopedLock
 	{
 		public:
+			/**
+			 * Constructor. Locks the mutex.
+			 */
 			ScopedLock(const Mutex &mutex);
+			/**
+			 * Destructor. Unlocks the mutex.
+			 */
 			~ScopedLock();
 		private:
 			const Mutex &mutex;

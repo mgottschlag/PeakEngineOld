@@ -21,14 +21,34 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 namespace peak
 {
+	/**
+	 * Simple mutex for multithreading safety. The mutex is NOT recursive.
+	 * \todo Currently only works with pthreads. We need Win32 threads as well.
+	 */
 	class Mutex
 	{
 		public:
+			/**
+			 * Constructor.
+			 */
 			Mutex();
+			/**
+			 * Destructor.
+			 */
 			~Mutex();
 
+			/**
+			 * Tries to lock the mutex, but returns immediately in any case.
+			 * @return true, if the mutex was locked.
+			 */
 			bool tryLock() const;
+			/**
+			 * Locks the mutex.
+			 */
 			void lock() const;
+			/**
+			 * Unlocks the mutex.
+			 */
 			void unlock() const;
 		private:
 			mutable pthread_mutex_t mutex;
