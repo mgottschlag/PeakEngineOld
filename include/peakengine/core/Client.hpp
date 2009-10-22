@@ -25,22 +25,56 @@ namespace peak
 	class Server;
 	class Connection;
 
+	/**
+	 * Base class for game clients.
+	 */
 	class Client : public EntityManager
 	{
 		public:
+			/**
+			 * Constructor.
+			 */
 			Client(Engine *engine);
+			/**
+			 * Destructor.
+			 */
 			virtual ~Client();
 
+			/**
+			 * Connects the client to the given address. This calls load() after
+			 * the client has received the server data.
+			 */
 			bool init(std::string address);
+			/**
+			 * Connects the client to a local server. This calls load() after
+			 * the client has received the server data.
+			 */
 			bool initLocally(Server *server);
+			/**
+			 * Closes the client. Can be implemented by the user.
+			 */
 			virtual bool shutdown();
+			/**
+			 * Creates the client. Has to be implemented by the user.
+			 */
 			virtual bool load(BufferPointer serverdata) = 0;
 
+			/**
+			 * Sends a message to a certain entity. This usually is not called
+			 * directly but rather through ClientEntity::sendMessage().
+			 */
 			void sendEntityMessage(Entity *entity, BufferPointer data,
 				bool reliable = false);
 
+			/**
+			 * Returns the game time of the client. The game time is incremented
+			 * every 20 ms.
+			 */
 			virtual unsigned int getTime();
 
+			/**
+			 * Main client game loop.
+			 */
 			void runThread();
 		private:
 			Connection *connection;

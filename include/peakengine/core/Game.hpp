@@ -32,25 +32,63 @@ namespace peak
 
 	/**
 	 * Main interface providing the basic game actions. This class has to be
-	 * implemented, the engine only provides an abstract interface.
+	 * implemented, the engine only provides an abstract interface for most
+	 * functions.
 	 */
 	class Game
 	{
 		public:
+			/**
+			 * Constructor.
+			 */
 			Game();
+			/**
+			 * Dstructor.
+			 */
 			virtual ~Game();
 
+			/**
+			 * Initializes the game. Is called by the engine at startup, after
+			 * setEngine() has been called.
+			 */
 			virtual bool init() = 0;
+			/**
+			 * Shuts the engine down. Is called when the program is closed.
+			 */
 			virtual bool shutdown() = 0;
 
+			/**
+			 * Sets the engine instance this game is using.
+			 */
 			void setEngine(Engine *engine);
+			/**
+			 * Returns the engine instance this game is using.
+			 */
 			Engine *getEngine();
 
+			/**
+			 * Creates a server. The Server interface has to be implemented by
+			 * the user.
+			 * @param serverdata Server data (map, enemies etc.) in a
+			 * user-defined format (to be specified).
+			 */
 			virtual Server *createServer(BufferPointer serverdata) = 0;
+			/**
+			 * Creates a client connecting to the given server address.
+			 */
 			virtual Client *createClient(std::string address) = 0;
+			/**
+			 * Creates a client which connects to a local server.
+			 */
 			virtual Client *createClient(Server *server) = 0;
 
+			/**
+			 * Adds a user defined entity factory.
+			 */
 			void addEntityFactory(EntityFactory *factory, std::string name);
+			/**
+			 * Returns an entity factory.
+			 */
 			EntityFactory *getEntityFactory(std::string name);
 		private:
 			Engine *engine;

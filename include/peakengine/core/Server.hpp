@@ -40,29 +40,78 @@ namespace peak
 			unsigned int lastreceived;
 	};
 
+	/**
+	 * Base class for game servers.
+	 */
 	class Server : public EntityManager
 	{
 		public:
+			/**
+			 * Constructor.
+			 */
 			Server(Engine *engine);
+			/**
+			 * Destructor.
+			 */
 			virtual ~Server();
 
+			/**
+			 * Creates the server. Calls load() after the network socket has
+			 * been set up.
+			 */
 			bool init(BufferPointer serverdata, unsigned int port = 27272);
+			/**
+			 * Closes the server. Can be implemented by the user.
+			 */
 			virtual bool shutdown();
+			/**
+			 * Creates the server. Has to be implemented by the user.
+			 */
 			virtual bool load(BufferPointer serverdata) = 0;
 
+			/**
+			 * Adds an entity to the server. This must only be called once for
+			 * every entity.
+			 */
 			virtual void addEntity(Entity *entity);
+			/**
+			 * Removes an entity from the server.
+			 */
 			virtual void removeEntity(Entity *entity);
 
+			/**
+			 * This is called when a new client connects to the server.
+			 * @return Initial server data for the client. If 0 is returned,
+			 * the connection is closed at once.
+			 */
 			virtual BufferPointer onNewConnection(Connection *connection) = 0;
+			/**
+			 * This is called after a client has finished connecting.
+			 */
 			virtual void onConnectionAccepted(Connection *connection) = 0;
 
+			/**
+			 * Adds a client to the server. Only called from within
+			 * Client::initLocally().
+			 */
 			void addClient(Connection *connection);
 
+			/**
+			 * Sends a message to a certain entity. This usually is not called
+			 * directly but rather through ServerEntity::sendMessage().
+			 */
 			void sendEntityMessage(Entity *entity, BufferPointer data,
 				bool reliable = false);
 
+			/**
+			 * Returns the game time of the server. The game time is incremented
+			 * every 20 ms.
+			 */
 			virtual unsigned int getTime();
 
+			/**
+			 * Main server game loop.
+			 */
 			void runThread();
 		private:
 			Thread *thread;
