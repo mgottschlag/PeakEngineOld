@@ -14,17 +14,23 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-#ifndef _PEAKGRAPHICS_HPP_
-#define _PEAKGRAPHICS_HPP_
+#ifndef _PEAKGRAPHICS_GROUPSCENENODE_HPP_
+#define _PEAKGRAPHICS_GROUPSCENENODE_HPP_
 
-#include "peakgraphics/Graphics.hpp"
-#include "peakgraphics/CameraSceneNode.hpp"
-#include "peakgraphics/ModelSceneNode.hpp"
-#include "peakgraphics/InputReceiver.hpp"
-#include "peakgraphics/GroupSceneNode.hpp"
+#include "SceneNode.hpp"
 
 namespace peak
 {
+	class GroupSceneNode : public SceneNode
+	{
+		public:
+			GroupSceneNode(Graphics *graphics);
+			~GroupSceneNode();
+
+			virtual bool load();
+			virtual bool isLoaded();
+		private:
+	};
 }
 
 #endif
