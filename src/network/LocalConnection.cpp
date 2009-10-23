@@ -17,6 +17,13 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "peakengine/network/LocalConnection.hpp"
 #include "peakengine/support/ScopedLock.hpp"
 
+#ifdef EMULATE_NETWORK
+#include "peakengine/support/OS.hpp"
+
+#include <cstdlib>
+#include <iostream>
+#endif
+
 namespace peak
 {
 	LocalConnection::LocalConnection() : other(0), mutex(0)
@@ -62,8 +69,71 @@ namespace peak
 		if (!mutex)
 			return;
 		mutex->lock();
+		#ifndef EMULATE_NETWORK
 		if (other)
 			other->received.push(new Buffer(*buffer.get()));
+		#else
+		if (!other)
+		{
+			mutex->unlock();
+			return;
+		}
+		unsigned int time = OS::get().getTime();
+		// Add lag (50-100 ms)
+		unsigned int receivetime = time + (50 + rand() % 50) * 1000;
+		// Create packet
+		ReceivedPacket packet;
+		packet.data = new Buffer(*buffer.get());
+		packet.time = receivetime;
+		packet.sendertime = time;
+		if (reliable)
+		{
+			// Reliable packets always are received in the correct order
+			if (other->reliable.size())
+			{
+				std::list<ReceivedPacket>::reverse_iterator it = other->reliable.rbegin();
+				if (packet.time < it->time)
+					packet.time = it->time;
+			}
+			// Insert into packet queue
+			other->reliable.push_back(packet);
+		}
+		else
+		{
+			// Simulate 5% packet loss
+			unsigned int notlost = rand() % 20;
+			if (notlost)
+			{
+				// Insert into packet queue
+				std::list<ReceivedPacket>::iterator it = other->unreliable.begin();
+				bool inserted = false;
+				while (it != other->unreliable.end())
+				{
+					if (it->time > packet.time)
+					{
+						it = other->unreliable.insert(it, packet);
+						inserted = true;
+						// Enet drops packets which arrive out of order
+						// We have to do the same
+						it++;
+						while (it != other->unreliable.end())
+						{
+							if (it->sendertime < packet.sendertime)
+							{
+								it = other->unreliable.erase(it);
+							}
+							else
+								break;
+						}
+						break;
+					}
+					it++;
+				}
+				if (!inserted)
+					other->unreliable.push_back(packet);
+			}
+		}
+		#endif
 		mutex->unlock();
 	}
 	bool LocalConnection::hasData()
@@ -71,17 +141,43 @@ namespace peak
 		if (!mutex)
 			return false;
 		ScopedLock lock(*mutex);
+		#ifndef EMULATE_NETWORK
 		return received.size() > 0;
+		#else
+		unsigned int time = OS::get().getTime();
+		if (unreliable.size() > 0 && unreliable.begin()->time <= time)
+			return true;
+		if (reliable.size() > 0 && reliable.begin()->time <= time)
+			return true;
+		return false;
+		#endif
 	}
 	BufferPointer LocalConnection::receive()
 	{
 		if (!mutex)
 			return 0;
 		ScopedLock lock(*mutex);
+		#ifndef EMULATE_NETWORK
 		if (received.size() == 0)
 			return 0;
 		BufferPointer data = received.front();
 		received.pop();
 		return data;
+		#else
+		unsigned int time = OS::get().getTime();
+		if (unreliable.size() > 0 && unreliable.begin()->time <= time)
+		{
+			BufferPointer data = unreliable.begin()->data;
+			unreliable.erase(unreliable.begin());
+			return data;
+		}
+		if (reliable.size() > 0 && reliable.begin()->time <= time)
+		{
+			BufferPointer data = reliable.begin()->data;
+			reliable.erase(reliable.begin());
+			return data;
+		}
+		return 0;
+		#endif
 	}
 }

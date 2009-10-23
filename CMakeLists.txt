@@ -28,6 +28,11 @@ src/support/ScopedLock.cpp
 src/support/Thread.cpp
 )
 
+option(PEAKENGINE_EMULATE_NETWORK "Emulate lag/packet loss in LocalConnection" OFF)
+if(PEAKENGINE_EMULATE_NETWORK)
+	add_definitions(-DEMULATE_NETWORK)
+endif(PEAKENGINE_EMULATE_NETWORK)
+
 include_directories(include)
 
 add_library(PeakEngine SHARED ${ENGINE_SRC})

@@ -20,7 +20,11 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "Connection.hpp"
 #include "../support/Mutex.hpp"
 
+#ifndef EMULATE_NETWORK
 #include <queue>
+#else
+#include <list>
+#endif
 
 namespace peak
 {
@@ -39,7 +43,18 @@ namespace peak
 			virtual bool hasData();
 			virtual BufferPointer receive();
 		private:
+			#ifndef EMULATE_NETWORK
 			std::queue<BufferPointer> received;
+			#else
+			struct ReceivedPacket
+			{
+				unsigned int time;
+				unsigned int sendertime;
+				BufferPointer data;
+			};
+			std::list<ReceivedPacket> unreliable;
+			std::list<ReceivedPacket> reliable;
+			#endif
 			LocalConnection *other;
 			Mutex *mutex;
 	};
