@@ -140,6 +140,7 @@ namespace peak
 					{
 						bool updatevalid = true;
 						unsigned int updatetime = data->read32();
+						unsigned int updateclienttime = data->read32();
 						// Adjust time if the latency has decreased
 						// TODO: This might affect client prediction
 						if (updatetime > time)
@@ -148,7 +149,7 @@ namespace peak
 						while (data->getPosition() + 16 <= data->getSize() * 8)
 						{
 							unsigned int id = data->read16() + 1;
-							Entity *entity = getEntity(id);
+							ClientEntity *entity = (ClientEntity*)getEntity(id);
 							// Ignore invalid updates
 							if (!entity)
 							{
@@ -157,6 +158,7 @@ namespace peak
 							}
 							// TODO: Client prediction
 							entity->applyUpdate(data.get(), updatetime);
+							entity->onUpdate(updateclienttime);
 							std::cout << "Update applied for " << id << "." << std::endl;
 						}
 						// Only send the server that we have received this

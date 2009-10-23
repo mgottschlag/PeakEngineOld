@@ -33,4 +33,8 @@ namespace peak
 	void ClientEntity::receiveMessage(Buffer *buffer)
 	{
 	}
+
+	void ClientEntity::onUpdate(unsigned int acktime)
+	{
+	}
 }

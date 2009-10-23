@@ -129,9 +129,13 @@ namespace peak
 			}
 			// Incoming network connections
 			// TODO
-			// Receive data
+			// Update clients
 			for (unsigned int i = 0; i < clients.size(); i++)
 			{
+				// Increase client time. Might get overridden by any incoming
+				// packet
+				clients[i].clienttime++;
+				// Receive data
 				while (clients[i].connection->hasData())
 				{
 					BufferPointer data = clients[i].connection->receive();
@@ -142,7 +146,7 @@ namespace peak
 						{
 							// Read last received packet
 							clients[i].lastreceived = data->read32();
-							unsigned int clienttime = data->read32();
+							clients[i].clienttime = data->read32();
 							// Read entity messages
 							while (data->getPosition() + 32 <= data->getSize() * 8)
 							{
@@ -181,6 +185,7 @@ namespace peak
 				BufferPointer update = new Buffer();
 				update->write8(EPT_Update);
 				update->write32(time);
+				update->write32(clients[i].clienttime);
 				// Fill buffer with updates
 				EntityMap::Iterator it(entities);
 				for (Entity *entity = it.next();entity != 0; entity = it.next())

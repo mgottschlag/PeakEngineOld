@@ -31,6 +31,8 @@ namespace peak
 
 			void sendMessage(Buffer *buffer, bool reliable = false);
 			virtual void receiveMessage(Buffer *buffer);
+
+			virtual void onUpdate(unsigned int acktime);
 		private:
 	};
 }
