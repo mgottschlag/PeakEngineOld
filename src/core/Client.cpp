@@ -165,7 +165,10 @@ namespace peak
 								updatevalid = false;
 								break;
 							}
-							// TODO: Client prediction
+							// Apply backup to remove any user changes
+							if (entity->hasBackup())
+								entity->applyBackup();
+							// Apply update
 							entity->applyUpdate(data.get(), updatetime);
 							entity->onUpdate(updateclienttime);
 							std::cout << "Update applied for " << id << "." << std::endl;

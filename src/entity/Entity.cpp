@@ -19,7 +19,8 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 namespace peak
 {
-	Entity::Entity(EntityManager *manager) : manager(manager), id(0)
+	Entity::Entity(EntityManager *manager) : manager(manager), id(0),
+		backupvalid(false)
 	{
 	}
 	Entity::~Entity()
@@ -94,6 +95,46 @@ namespace peak
 				buffer->writeUnsignedInt(0, 1);
 			}
 		}
+	}
+
+
+	void Entity::createBackup()
+	{
+		backupvalid = true;
+		// Create backup buffer
+		if (!backup)
+		{
+			backup = new Buffer();
+		}
+		else
+		{
+			backup->setPosition(0);
+		}
+		// Store all properties
+		// TODO: This is still slow in many cases where packing causes overhead
+		for (unsigned int i = 0; i < properties.size(); i++)
+		{
+			properties[i]->serialize(backup);
+		}
+	}
+	bool Entity::hasBackup()
+	{
+		return backupvalid;
+	}
+	void Entity::applyBackup()
+	{
+		if (!backupvalid)
+			return;
+		// Reload all properties
+		backup->setPosition(0);
+		for (unsigned int i = 0; i < properties.size(); i++)
+		{
+			properties[i]->deserialize(backup);
+		}
+	}
+	void Entity::discardBackup()
+	{
+		backupvalid = false;
 	}
 
 	EntityManager *Entity::getManager()

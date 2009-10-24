@@ -17,6 +17,8 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #ifndef _PEAKENGINE_ENTITY_ENTITY_HPP_
 #define _PEAKENGINE_ENTITY_ENTITY_HPP_
 
+#include "../support/Buffer.hpp"
+
 #include <vector>
 #include <string>
 
@@ -38,6 +40,11 @@ namespace peak
 			void applyUpdate(Buffer *buffer, unsigned int time);
 			void getUpdate(Buffer *buffer, unsigned int time);
 
+			void createBackup();
+			bool hasBackup();
+			void applyBackup();
+			void discardBackup();
+
 			EntityManager *getManager();
 
 			void setID(unsigned int id);
@@ -54,6 +61,9 @@ namespace peak
 			std::vector<Property*> properties;
 			EntityManager *manager;
 			unsigned int id;
+
+			BufferPointer backup;
+			bool backupvalid;
 	};
 }
 
