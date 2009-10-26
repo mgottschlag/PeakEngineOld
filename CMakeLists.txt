@@ -20,6 +20,9 @@ src/entity/Vector2FProperty.cpp
 src/entity/Vector3FProperty.cpp
 src/entity/IntProperty.cpp
 src/network/LocalConnection.cpp
+src/network/NetworkConnection.cpp
+src/network/NetworkClient.cpp
+src/network/NetworkHost.cpp
 src/support/Buffer.cpp
 src/support/ConditionVariable.cpp
 src/support/Mutex.cpp

@@ -26,6 +26,7 @@ namespace peak
 {
 	class Server;
 	class Connection;
+	class NetworkClient;
 
 	struct EntityMessage
 	{
@@ -53,10 +54,11 @@ namespace peak
 			virtual ~Client();
 
 			/**
-			 * Connects the client to the given address. This calls load() after
+			 * Connects the client to the given address, port and timeout. This calls load() after
 			 * the client has received the server data.
+			 * @param ms Milliseconds to wait to establish a connection, default = 5000.
 			 */
-			bool init(std::string address);
+			bool init(std::string address, unsigned int port, unsigned int ms = 5000);
 			/**
 			 * Connects the client to a local server. This calls load() after
 			 * the client has received the server data.
@@ -90,6 +92,7 @@ namespace peak
 			void runThread();
 		private:
 			Connection *connection;
+			NetworkClient *client;
 			volatile bool stopping;
 			unsigned int time;
 			unsigned int lastupdate;

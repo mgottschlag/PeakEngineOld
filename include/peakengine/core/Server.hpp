@@ -24,6 +24,7 @@ namespace peak
 {
 	class Connection;
 	class Thread;
+	class NetworkHost;
 
 	class ClientInfo
 	{
@@ -118,6 +119,7 @@ namespace peak
 			Thread *thread;
 			volatile bool stopping;
 			Connection * volatile localconnection;
+			NetworkHost *host;
 			std::vector<ClientInfo> clients;
 			unsigned int time;
 	};

@@ -18,6 +18,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "peakengine/network/LocalConnection.hpp"
 #include "peakengine/core/Server.hpp"
 #include "peakengine/network/NetworkData.hpp"
+#include "peakengine/network/NetworkClient.hpp"
 #include "peakengine/core/Engine.hpp"
 #include "peakengine/core/Game.hpp"
 #include "peakengine/entity/EntityFactory.hpp"
@@ -28,16 +29,21 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 namespace peak
 {
-	Client::Client(Engine *engine) : EntityManager(engine), connection(0)
+	Client::Client(Engine *engine) : EntityManager(engine), connection(0), client(0)
 	{
 	}
 	Client::~Client()
 	{
 	}
 
-	bool Client::init(std::string address)
+	bool Client::init(std::string address, unsigned int port, unsigned int ms)
 	{
-		return false;
+		client = new NetworkClient();
+		if(!client->init())
+			return false;
+		if(!client->connect(address, port, ms))
+			return false;
+		return true;
 	}
 	bool Client::initLocally(Server *server)
 	{
@@ -72,6 +78,9 @@ namespace peak
 	}
 	bool Client::shutdown()
 	{
+		if(!client->shutdown())
+			return false;
+		return true;
 	}
 
 	void Client::sendEntityMessage(Entity *entity, BufferPointer data,

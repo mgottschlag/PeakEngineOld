@@ -18,6 +18,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "peakengine/support/Thread.hpp"
 #include "peakengine/network/NetworkData.hpp"
 #include "peakengine/network/Connection.hpp"
+#include "peakengine/network/NetworkHost.hpp"
 #include "peakengine/support/OS.hpp"
 
 #include <iostream>
@@ -28,7 +29,7 @@ namespace peak
 	unsigned int ClientInfo::lastid = 0;
 
 	Server::Server(Engine *engine) : EntityManager(engine), thread(0),
-		localconnection(0)
+		localconnection(0), host(0)
 	{
 	}
 	Server::~Server()
@@ -40,7 +41,8 @@ namespace peak
 	bool Server::init(BufferPointer serverdata, unsigned int port)
 	{
 		// Create network host
-		// TODO
+		host = new NetworkHost();
+		host->init(port);
 		// Load server data
 		time = 0;
 		if (!load(serverdata))
@@ -56,6 +58,9 @@ namespace peak
 		// Exit thread
 		stopping = true;
 		thread->wait();
+		if(!host->shutdown())
+			return false;
+		return true;
 	}
 
 	void Server::addEntity(Entity *entity)
