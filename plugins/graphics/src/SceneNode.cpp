@@ -48,7 +48,7 @@ namespace peak
 		// Check whether the time already has been there
 		for (unsigned int i = 0; i < transformationcount; i++)
 		{
-			if (transformation[i].time == time)
+			if (transformation[i].time == (int)time)
 			{
 				transformation[i].position = position;
 				transformation[i].rotation = rotation;
@@ -70,7 +70,7 @@ namespace peak
 			unsigned int oldesttime = 0xFFFFFFFF;
 			for (unsigned int i = 0; i < 3; i++)
 			{
-				if (transformation[i].time < oldesttime)
+				if (transformation[i].time < (int)oldesttime)
 				{
 					oldesttime = transformation[i].time;
 					oldestentry = i;
@@ -107,7 +107,7 @@ namespace peak
 		// Get exact values
 		for (unsigned int i = 0; i < transformationcount; i++)
 		{
-			if (transformation[i].time == time)
+			if (transformation[i].time == (int)time)
 			{
 				position = transformation[i].position;
 				rotation = transformation[i].rotation;
@@ -119,7 +119,7 @@ namespace peak
 		{
 			TransformationInfo &a = transformation[0];
 			TransformationInfo &b = transformation[1];
-			float s = (float)(time - a.time) / (b.time - a.time);
+			float s = (float)((int)time - a.time) / (b.time - a.time);
 			position.interpolate(a.position, b.position, s);
 			rotation.interpolate(a.rotation, b.rotation, s);
 			return;
@@ -148,12 +148,12 @@ namespace peak
 			// Interpolate
 			TransformationInfo *a = &transformation[0];
 			TransformationInfo *b = &transformation[1];
-			if (time > b->time)
+			if ((int)time > b->time)
 			{
 				a = &transformation[1];
 				b = &transformation[2];
 			}
-			float s = (float)(time - a->time) / (b->time - a->time);
+			float s = (float)((int)time - a->time) / (b->time - a->time);
 			position.interpolate(a->position, b->position, s);
 			rotation.interpolate(a->rotation, b->rotation, s);
 		}

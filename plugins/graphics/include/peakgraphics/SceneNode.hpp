@@ -35,13 +35,6 @@ namespace peak
 {
 	class Graphics;
 
-	struct TransformationInfo
-	{
-		Vector3F position;
-		Vector3F rotation;
-		unsigned int time;
-	};
-
 	class SceneNode : public ReferenceCounted
 	{
 		public:
@@ -67,6 +60,13 @@ namespace peak
 			virtual void update(unsigned int time);
 		protected:
 			void removeChild(SceneNode *child);
+
+			struct TransformationInfo
+			{
+				Vector3F position;
+				Vector3F rotation;
+				int time;
+			};
 
 			TransformationInfo transformation[3];
 			unsigned int transformationcount;
