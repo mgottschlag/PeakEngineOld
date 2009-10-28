@@ -54,3 +54,4 @@ set(CMAKE_BUILD_TYPE debug)
 # Plugins
 
 add_subdirectory(plugins/graphics)
+add_subdirectory(plugins/physics)
