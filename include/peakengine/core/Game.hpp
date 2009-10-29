@@ -74,9 +74,9 @@ namespace peak
 			 */
 			virtual Server *createServer(BufferPointer serverdata) = 0;
 			/**
-			 * Creates a client connecting to the given server address.
+			 * Creates a client connecting to the given server address and port with the given timeout.
 			 */
-			virtual Client *createClient(std::string address) = 0;
+			virtual Client *createClient(std::string address, unsigned int port, unsigned int ms = 5000) = 0;
 			/**
 			 * Creates a client which connects to a local server.
 			 */
