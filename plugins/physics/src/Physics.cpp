@@ -82,5 +82,6 @@ namespace peak
 
 	void Physics::update()
 	{
+		world->stepSimulation(0.020f);
 	}
 }

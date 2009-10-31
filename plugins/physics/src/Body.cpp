@@ -71,11 +71,21 @@ namespace peak
 		return Vector3F(pos.x(),pos.y(),pos.z());
 	}
 
+	void Body::setRotation(const Quaternion &rotation)
+	{
+		btTransform transform = body->getCenterOfMassTransform();
+		transform.setRotation(btQuaternion(rotation.q[0], rotation.q[0],
+			rotation.q[0], rotation.q[0]));
+		body->setCenterOfMassTransform(transform);
+	}
 	void Body::setRotation(const Vector3F &rotation)
 	{
+		setRotation(Quaternion(rotation));
 	}
-	Vector3F Body::getRotation()
+	Quaternion Body::getRotation()
 	{
+		btQuaternion quat = body->getOrientation();
+		return Quaternion(quat.x(), quat.y(), quat.z(), quat.w());
 	}
 	void Body::setLinearVelocity(const Vector3F &linearvel)
 	{

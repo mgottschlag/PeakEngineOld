@@ -18,6 +18,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #define _PEAKPHYSICS_BODY_HPP_
 
 #include <peakengine/support/Vector3.hpp>
+#include <peakengine/support/Quaternion.hpp>
 
 class btRigidBody;
 class btDefaultMotionState;
@@ -49,11 +50,15 @@ namespace peak
 			/**
 			 * Sets the rotation of the body.
 			 */
+			void setRotation(const Quaternion &rotation);
+			/**
+			 * Sets the rotation of the body.
+			 */
 			void setRotation(const Vector3F &rotation);
 			/**
 			 * Returns the rotation of the body.
 			 */
-			Vector3F getRotation();
+			Quaternion getRotation();
 			/**
 			 * Sets the linear velocity of the body.
 			 */

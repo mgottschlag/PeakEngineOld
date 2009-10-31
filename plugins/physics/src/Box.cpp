@@ -29,6 +29,7 @@ namespace peak
 
 	bool Box::init(Vector3F dimensions, float mass)
 	{
+		dimensions /= 2;
 		shape = new btBoxShape(btVector3(dimensions.x, dimensions.y, dimensions.z));
 		transform = new btTransform();
 		transform->setIdentity();
