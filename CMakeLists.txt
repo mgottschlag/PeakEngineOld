@@ -15,6 +15,7 @@ src/entity/EntityManager.cpp
 src/entity/EntityMap.cpp
 src/entity/FloatProperty.cpp
 src/entity/Property.cpp
+src/entity/QuaternionProperty.cpp
 src/entity/ServerEntity.cpp
 src/entity/Vector2FProperty.cpp
 src/entity/Vector3FProperty.cpp

@@ -14,27 +14,33 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-#ifndef _PEAKENGINE_HPP_
-#define _PEAKENGINE_HPP_
+#ifndef _PEAKENGINE_ENTITY_QUATERNIONPROPERTY_HPP_
+#define _PEAKENGINE_ENTITY_QUATERNIONPROPERTY_HPP_
 
-#include "peakengine/core/Client.hpp"
-#include "peakengine/core/Engine.hpp"
-#include "peakengine/core/Game.hpp"
-#include "peakengine/core/Server.hpp"
-#include "peakengine/entity/ClientEntity.hpp"
-#include "peakengine/entity/EntityFactory.hpp"
-#include "peakengine/entity/ServerEntity.hpp"
-#include "peakengine/entity/FloatProperty.hpp"
-#include "peakengine/entity/IntProperty.hpp"
-#include "peakengine/entity/Vector2FProperty.hpp"
-#include "peakengine/entity/Vector3FProperty.hpp"
-#include "peakengine/entity/QuaternionProperty.hpp"
-#include "peakengine/support/OS.hpp"
-#include "peakengine/support/ScopedLock.hpp"
-#include "peakengine/entity/InputHistory.hpp"
+#include "Property.hpp"
+#include "../support/Quaternion.hpp"
 
 namespace peak
 {
+	class QuaternionProperty : public Property
+	{
+		public:
+			QuaternionProperty(Entity *entity);
+			virtual ~QuaternionProperty();
+
+			void init(Quaternion &defaultval);
+
+			virtual void serialize(BufferPointer buffer);
+			virtual void deserialize(BufferPointer buffer);
+
+			virtual bool hasChanged();
+
+			void set(const Quaternion &value);
+			Quaternion get();
+		private:
+			Quaternion &defaultval;
+			Quaternion value;
+	};
 }
 
 #endif
