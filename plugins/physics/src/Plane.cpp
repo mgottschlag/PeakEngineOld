@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2009, Mathias Gottschlag
+Copyright (c) 2009, Mathias Gottschlag, Christian Reiser
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
@@ -14,16 +14,29 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-#ifndef _PEAKPHYSICS_HPP_
-#define _PEAKPHYSICS_HPP_
-
-#include "peakphysics/Physics.hpp"
-#include "peakphysics/Body.hpp"
 #include "peakphysics/Plane.hpp"
-#include "peakphysics/Box.hpp"
+
+#include <btBulletDynamicsCommon.h>
 
 namespace peak
 {
-}
+	Plane::Plane() : Shape()
+	{
+	}
+	Plane::~Plane()
+	{
+	}
 
-#endif
+	bool Plane::init(Vector3F normal, float constant, Vector3F position)
+	{
+		shape = new btStaticPlaneShape(btVector3(normal.x, normal.y, normal.z), constant);
+		transform = new btTransform();
+
+		transform->setIdentity();
+		transform->setOrigin(btVector3(position.x, position.y, position.z));
+
+		inertia = Vector3F(0, 0, 0);
+		mass = 0.0f;
+		return true;
+	}
+}

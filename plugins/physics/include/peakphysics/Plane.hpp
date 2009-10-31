@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2009, Mathias Gottschlag
+Copyright (c) 2009, Mathias Gottschlag, Christian Reiser
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
@@ -14,16 +14,30 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-#ifndef _PEAKPHYSICS_HPP_
-#define _PEAKPHYSICS_HPP_
+#ifndef _PEAKPHYSICS_PLANE_HPP_
+#define _PEAKPHYSICS_PLANE_HPP_
 
-#include "peakphysics/Physics.hpp"
-#include "peakphysics/Body.hpp"
-#include "peakphysics/Plane.hpp"
-#include "peakphysics/Box.hpp"
+#include "Shape.hpp"
 
 namespace peak
 {
+	/**
+	 * Simple planar collision shape.
+	 */
+	class Plane : public Shape
+	{
+		public:
+			Plane();
+			~Plane();
+
+			/**
+			 * Creates a plane
+			 * @param normal Normal vector of the plane
+			 * @param constant Y offset
+			 * @param position Origin of the plane
+			 */
+			bool init(Vector3F normal = Vector3F(0, 1, 0), float constant = 0, Vector3F position = Vector3F(0,0,0));
+	};
 }
 
 #endif

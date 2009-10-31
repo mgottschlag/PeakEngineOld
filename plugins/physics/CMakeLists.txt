@@ -1,7 +1,9 @@
 
 set(SRC
 src/Body.cpp
+src/Box.cpp
 src/Physics.cpp
+src/Plane.cpp
 src/Shape.cpp
 )
 

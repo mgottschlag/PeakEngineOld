@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2009, Mathias Gottschlag
+Copyright (c) 2009, Mathias Gottschlag, Christian Reiser
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
@@ -14,16 +14,29 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-#ifndef _PEAKPHYSICS_HPP_
-#define _PEAKPHYSICS_HPP_
+#ifndef _PEAKPHYSICS_BOX_HPP_
+#define _PEAKPHYSICS_BOX_HPP_
 
-#include "peakphysics/Physics.hpp"
-#include "peakphysics/Body.hpp"
-#include "peakphysics/Plane.hpp"
-#include "peakphysics/Box.hpp"
+#include "Shape.hpp"
 
 namespace peak
 {
+	/**
+	 * Simple box collision shape.
+	 */
+	class Box : public Shape
+	{
+		public:
+			Box();
+			~Box();
+
+			/**
+			 * Creates the box
+			 * @param dimensions Size of the box
+			 * @param mass Mass of the box (0 = static)
+			 */
+			bool init(Vector3F dimensions, float mass = 0.0f);
+	};
 }
 
 #endif

@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2009, Mathias Gottschlag
+Copyright (c) 2008, Christian Reiser
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
@@ -14,16 +14,34 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-#ifndef _PEAKPHYSICS_HPP_
-#define _PEAKPHYSICS_HPP_
-
-#include "peakphysics/Physics.hpp"
-#include "peakphysics/Body.hpp"
-#include "peakphysics/Plane.hpp"
 #include "peakphysics/Box.hpp"
+
+#include <btBulletDynamicsCommon.h>
 
 namespace peak
 {
-}
+	Box::Box() : Shape()
+	{
+	}
+	Box::~Box()
+	{
+	}
 
-#endif
+	bool Box::init(Vector3F dimensions, float mass)
+	{
+		shape = new btBoxShape(btVector3(dimensions.x, dimensions.y, dimensions.z));
+		transform = new btTransform();
+		transform->setIdentity();
+		transform->setOrigin(btVector3(0, 0, 0));
+
+		inertia = Vector3F(0, 0, 0);
+		if (mass != 0.0f)
+		{
+			btVector3 in;
+			shape->calculateLocalInertia(mass, in);
+			inertia = Vector3F(in.x(), in.y(), in.z());
+		}
+		this->mass = mass;
+		return true;
+	}
+}
