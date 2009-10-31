@@ -33,7 +33,7 @@ namespace peak
 	}
 
 	void SceneNode::setTransformation(const Vector3F &position,
-		const Vector3F &rotation, unsigned int time)
+		const Quaternion &rotation, unsigned int time)
 	{
 		ScopedLock lock(mutex);
 		if (transformationcount == 0)
@@ -86,7 +86,7 @@ namespace peak
 			transformation[2].time = time;
 		}
 	}
-	void SceneNode::getTransformation(Vector3F &position, Vector3F &rotation,
+	void SceneNode::getTransformation(Vector3F &position, Quaternion &rotation,
 		unsigned int time)
 	{
 		ScopedLock lock(mutex);
@@ -209,15 +209,15 @@ namespace peak
 			return;
 		// Update position
 		Vector3F position;
-		Vector3F rotation;
+		Quaternion rotation;
 		getTransformation(position, rotation, time);
 		mutex.lock();
 		if (node)
 		{
 			node->setPosition(core::vector3df(position.x, position.y,
 				position.z));
-			node->setRotationDegrees(core::vector3df(rotation.x, rotation.y,
-				rotation.z));
+			node->setRotation(core::quaternion(rotation.q[0], rotation.q[1],
+				rotation.q[2], rotation.q[3]));
 		}
 		mutex.unlock();
 		// Update children

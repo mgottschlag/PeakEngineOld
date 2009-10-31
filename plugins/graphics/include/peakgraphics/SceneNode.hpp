@@ -18,6 +18,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #define _PEAKGRAPHICS_SCENENODE_HPP_
 
 #include <peakengine/support/Vector3.hpp>
+#include <peakengine/support/Quaternion.hpp>
 #include <peakengine/support/ReferenceCounted.hpp>
 #include <peakengine/support/Mutex.hpp>
 
@@ -42,8 +43,8 @@ namespace peak
 			virtual ~SceneNode();
 
 			void setTransformation(const Vector3F &position,
-				const Vector3F &rotation, unsigned int time = 0);
-			void getTransformation(Vector3F &position, Vector3F &rotation,
+				const Quaternion &rotation, unsigned int time = 0);
+			void getTransformation(Vector3F &position, Quaternion &rotation,
 				unsigned int time = 0);
 
 			void setParent(SceneNode *parent);
@@ -64,7 +65,7 @@ namespace peak
 			struct TransformationInfo
 			{
 				Vector3F position;
-				Vector3F rotation;
+				Quaternion rotation;
 				int time;
 			};
 
