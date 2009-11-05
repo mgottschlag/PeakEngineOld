@@ -60,6 +60,10 @@ namespace peak
 			/**
 			 * Creates the server. Calls load() after the network socket has
 			 * been set up.
+			 * @param serverdata Initial server data (includes e.g. the map
+			 * name)
+			 * @param port Port to use for the server. If this is 0, the engine
+			 * does not create a network socket.
 			 */
 			bool init(BufferPointer serverdata, unsigned int port = 27272);
 			/**
@@ -111,6 +115,10 @@ namespace peak
 			 */
 			virtual unsigned int getTime();
 
+			/**
+			 * Starts a thread which calls runThread().
+			 */
+			void startThread();
 			/**
 			 * Main server game loop.
 			 */

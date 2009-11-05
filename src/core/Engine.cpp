@@ -17,6 +17,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "peakengine/core/Engine.hpp"
 #include "peakengine/core/Game.hpp"
 #include "peakengine/core/Client.hpp"
+#include "peakengine/core/Server.hpp"
 
 #include <enet/enet.h>
 
@@ -75,7 +76,18 @@ namespace peak
 		BufferPointer buffer = new Buffer();
 		buffer->writeString("testmap");
 		Server *server = game->createServer(buffer);
-		Client *client = game->createClient(server);
+		Client *client = 0;
+		if (server)
+		{
+			server->startThread();
+			client = game->createClient(server);
+		}
+		else
+		{
+			client = game->createClient("phoenix64.dyndns.org", 27272, 5000);
+		}
+		if (!client)
+			return false;
 		// TODO
 		// Client main loop
 		client->runThread();
@@ -105,9 +117,14 @@ namespace peak
 		if (directory == "")
 			return false;
 		// Initialize engine
+		stopping = false;
+		// Create test game
+		BufferPointer buffer = new Buffer();
+		buffer->writeString("testmap");
+		Server *server = game->createServer(buffer);
 		// TODO
-		// Start game
-		// TODO
+		// Server main loop
+		server->runThread();
 		return false;
 	}
 	void Engine::stop()

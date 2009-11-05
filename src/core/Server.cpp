@@ -40,25 +40,30 @@ namespace peak
 
 	bool Server::init(BufferPointer serverdata, unsigned int port)
 	{
-		// Create network host
-		host = new NetworkHost();
-		host->init(port);
+		if (port)
+		{
+			// Create network host
+			host = new NetworkHost();
+			if (!host->init(port))
+			{
+				delete host;
+				return false;
+			}
+		}
 		// Load server data
 		time = 0;
 		if (!load(serverdata))
 			return false;
-		// Create server thread
 		stopping = false;
-		thread = new Thread();
-		thread->create(new ClassFunctor<Server>(this, &Server::runThread));
 		return true;
 	}
 	bool Server::shutdown()
 	{
 		// Exit thread
 		stopping = true;
-		thread->wait();
-		if(!host->shutdown())
+		if (thread)
+			thread->wait();
+		if(host && !host->shutdown())
 			return false;
 		return true;
 	}
@@ -106,6 +111,13 @@ namespace peak
 	unsigned int Server::getTime()
 	{
 		return time;
+	}
+
+	void Server::startThread()
+	{
+		// Create server thread
+		thread = new Thread();
+		thread->create(new ClassFunctor<Server>(this, &Server::runThread));
 	}
 
 	void Server::runThread()
@@ -158,7 +170,6 @@ namespace peak
 								// Get entity
 								unsigned int id = data->read16() + 1;
 								Entity *entity = getEntity(id);
-								std::cout << "Entity: " << id << "/" << entity << std::endl;
 								// Read message
 								unsigned int size = data->read16();
 								void *msgdata = malloc(size);
@@ -217,6 +228,8 @@ namespace peak
 				std::cout.precision(prec);
 				OS::sleep(lastframe - currenttime);
 			}
+			else
+				std::cout << "Warning: Too much CPU usage." << std::endl;
 		}
 	}
 }
