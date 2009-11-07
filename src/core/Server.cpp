@@ -125,27 +125,28 @@ namespace peak
 		uint64_t lastframe = OS::getSystemTime();
 		while (!stopping)
 		{
+			if (host)
+			{
+				host->update();
+			}
 			// Incoming local connections
 			if (localconnection != 0)
 			{
-				BufferPointer serverdata = onNewConnection(localconnection);
-				if (serverdata)
-				{
-					clients.push_back(ClientInfo((Connection*)localconnection));
-					BufferPointer msg = new Buffer();
-					msg->write8(EPT_InitialData);
-					*msg.get() += *serverdata.get();
-					localconnection->send(msg, true);
-					onConnectionAccepted(localconnection);
-					localconnection = 0;
-				}
-				else
-				{
-					localconnection = 0;
-				}
+				insertNewConnection(localconnection);
+				localconnection = 0;
 			}
 			// Incoming network connections
-			// TODO
+			if (host)
+			{
+				Connection *newconnection = host->getNewConnection();
+				while (newconnection)
+				{
+					std::cout << "Client connected!" << std::endl;
+					insertNewConnection(newconnection);
+					// Next connection
+					newconnection = host->getNewConnection();
+				}
+			}
 			// Update clients
 			for (unsigned int i = 0; i < clients.size(); i++)
 			{
@@ -164,6 +165,7 @@ namespace peak
 							// Read last received packet
 							clients[i].lastreceived = data->read32();
 							clients[i].clienttime = data->read32();
+							std::cout << "EPT_Update: " << clients[i].clienttime << std::endl;
 							// Read entity messages
 							while (data->getPosition() + 32 <= data->getSize() * 8)
 							{
@@ -230,6 +232,33 @@ namespace peak
 			}
 			else
 				std::cout << "Warning: Too much CPU usage." << std::endl;
+		}
+	}
+
+	void Server::insertNewConnection(Connection *connection)
+	{
+		BufferPointer serverdata = onNewConnection(connection);
+		if (serverdata)
+		{
+			clients.push_back(ClientInfo(connection));
+			// Write server data
+			BufferPointer msg = new Buffer();
+			msg->write8(EPT_InitialData);
+			*msg.get() += *serverdata.get();
+			connection->send(msg, true);
+			// Write entities
+			// TODO: Inefficient, we should use much larger packets
+			EntityMap::Iterator it(entities);
+			for (Entity *entity = it.next();entity != 0; entity = it.next())
+			{
+				BufferPointer buffer = new Buffer();
+				buffer->write8(EPT_EntityCreated);
+				buffer->write16(entity->getID());
+				buffer->writeString(entity->getType());
+				entity->getState(buffer.get());
+				connection->send(buffer, true);
+			}
+			onConnectionAccepted(connection);
 		}
 	}
 }

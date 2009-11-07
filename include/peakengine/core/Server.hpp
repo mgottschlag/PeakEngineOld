@@ -124,6 +124,8 @@ namespace peak
 			 */
 			void runThread();
 		private:
+			void insertNewConnection(Connection *connection);
+
 			Thread *thread;
 			volatile bool stopping;
 			Connection * volatile localconnection;

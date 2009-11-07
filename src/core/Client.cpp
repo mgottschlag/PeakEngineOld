@@ -38,11 +38,37 @@ namespace peak
 
 	bool Client::init(std::string address, unsigned int port, unsigned int ms)
 	{
+		// Create connection
 		client = new NetworkClient();
 		if(!client->init())
 			return false;
-		if(!client->connect(address, port, ms))
+		connection = client->connect(address, port, ms);
+		if(!connection)
+		{
 			return false;
+		}
+		// Wait for initial data
+		BufferPointer initialdata;
+		while (!initialdata)
+		{
+			client->update();
+			if (connection->hasData())
+			{
+				initialdata = connection->receive();
+				PacketType type = (PacketType)initialdata->read8();
+				if (type != EPT_InitialData)
+				{
+					initialdata = 0;
+				}
+			}
+		}
+		std::cout << "Got initial data." << std::endl;
+		// Initialize the game
+		time = 0;
+		lastupdate = 0;
+		load(initialdata);
+		// TODO
+		stopping = false;
 		return true;
 	}
 	bool Client::initLocally(Server *server)
@@ -112,6 +138,10 @@ namespace peak
 		uint64_t lastframe = OS::getSystemTime();
 		while (!stopping)
 		{
+			if (client)
+			{
+				client->update();
+			}
 			// Receive data
 			while (connection->hasData())
 			{
