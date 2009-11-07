@@ -409,12 +409,12 @@ namespace peak
 		else
 		{
 			// We are on an even position
-			if (position / 8 + size + 1 > size)
+			if (position / 8 + size > this->size)
 			{
 				this->data = (char*)realloc(this->data, position / 8 + size);
 				memcpy(this->data + position / 8, cdata, size);
 				position += size * 8;
-				size += size;
+				this->size += size;
 			}
 			else
 			{
@@ -438,17 +438,17 @@ namespace peak
 		else
 		{
 			// We are on an even position
-			if (position / 8 == size)
+			if (position / 8 == this->size)
 				return 0;
 			char *cdata = (char*)data;
 			for (unsigned int i = 0; i < size; i++)
 			{
 				cdata[i] = this->data[position / 8];
 				position += 8;
-				if (position / 8 == size)
+				if (position / 8 == this->size)
 					return i + 1;
 			}
-			if (position / 8 < size)
+			if (position / 8 < this->size)
 				position += 8;
 			return size;
 		}
