@@ -83,10 +83,10 @@ namespace peak
 			case ENET_EVENT_TYPE_RECEIVE:
 			{
 				// Push received data into connection
-				Buffer *buffer = new Buffer;
-				buffer->write(event.packet->data, event.packet->dataLength);
+				Buffer *buffer = new Buffer(event.packet->data, event.packet->dataLength, true);
 				NetworkConnection* con = ((NetworkConnection*) event.peer->data);
 				con->injectData((BufferPointer) buffer);
+				enet_packet_destroy(event.packet);
 				break;
 			}
 			case ENET_EVENT_TYPE_DISCONNECT:

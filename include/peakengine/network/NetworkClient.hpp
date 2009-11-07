@@ -23,7 +23,6 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 namespace peak
 {
-	class NetworkConnection; 
 	class Connection;
 	
 	class NetworkClient
@@ -50,7 +49,7 @@ namespace peak
 			 * @param ms Milliseconds to wait to establish a connection.
 			 * @return False if there have been problems establishing the connection.
 			 */
-			bool connect(std::string address, unsigned int port, unsigned int ms = 5000);
+			Connection *connect(std::string address, unsigned int port, unsigned int ms = 5000);
 			
 			/**
 			 * Closes the network socket.

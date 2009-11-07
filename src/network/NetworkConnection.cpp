@@ -47,11 +47,11 @@ namespace peak
 	}
 
 	void NetworkConnection::send(BufferPointer buffer, bool reliable)
-	{    
-		ENetPacket * packet = enet_packet_create (buffer->getData(), 
-		                                          buffer->getSize() + 1, 
+	{
+		ENetPacket * packet = enet_packet_create (buffer->getData(),
+		                                          buffer->getSize(),
 		                                          reliable ? ENET_PACKET_FLAG_RELIABLE : 0);
-		
+
 		// Send the packet to the peer over channel id 0. 
 		enet_peer_send(peer, 0, packet);
 		enet_host_flush(peer->host);

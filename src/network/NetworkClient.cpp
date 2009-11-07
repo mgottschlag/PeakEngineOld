@@ -17,7 +17,8 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "peakengine/network/NetworkClient.hpp"
 #include "peakengine/support/Buffer.hpp"
 #include "peakengine/network/NetworkConnection.hpp"
-#include "peakengine/network/Connection.hpp"
+
+#include <iostream>
 
 namespace peak
 {
@@ -39,7 +40,7 @@ namespace peak
 		return true;
 	}
 
-	bool NetworkClient::connect(std::string address, unsigned int port, unsigned int ms)
+	Connection *NetworkClient::connect(std::string address, unsigned int port, unsigned int ms)
 	{
 		ENetAddress enetaddress;
 		ENetEvent event;
@@ -53,27 +54,28 @@ namespace peak
 		{
 			//TODO
 			// log/print: "No available peers for initiating an ENet connection."
-			return false;
+			return 0;
 		}
 
 		if (enet_host_service (client, &event, ms) > 0 && event.type == ENET_EVENT_TYPE_CONNECT)
 		{
-			//TODO
+			NetworkConnection *connection = new NetworkConnection(peer);
+			peer->data = connection;
 			// log/print: "Connection succeeded."
-			return true;
+			return connection;
 		}
 		else
 		{
 			// log/print "Connection failed."
 			enet_peer_reset(peer);
-			return false;
+			return 0;
 		}
 	}
 	
 	bool NetworkClient::shutdown()
 	{
 		if (client)
-		enet_host_destroy(client);
+			enet_host_destroy(client);
 		client = 0;
 		return true;
 	}
@@ -82,8 +84,7 @@ namespace peak
 	{
 		if (!client)
 			return false;
-		
-		
+
 		// Receive data
 		ENetEvent event;
 		while (enet_host_service(client, &event, 0) > 0)
@@ -93,10 +94,10 @@ namespace peak
 			case ENET_EVENT_TYPE_RECEIVE:
 			{
 				// Push received data into connection
-				Buffer *buffer = new Buffer;
-				buffer->write(event.packet->data, event.packet->dataLength);
+				Buffer *buffer = new Buffer(event.packet->data, event.packet->dataLength, true);
 				NetworkConnection* con = ((NetworkConnection*) event.peer->data);
 				con->injectData((BufferPointer) buffer);
+				enet_packet_destroy(event.packet);
 				break;
 			}
 			case ENET_EVENT_TYPE_DISCONNECT:
