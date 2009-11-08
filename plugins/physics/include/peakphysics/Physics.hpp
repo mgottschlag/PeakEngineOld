@@ -51,13 +51,30 @@ namespace peak
 		Body *body;
 	};
 
+	/**
+	 * Main class for a physics simulation. Holds bodies and can perform
+	 * collision checks. update() has to be called once per game logic step
+	 * (every 20 ms).
+	 */
 	class Physics
 	{
 		public:
+			/**
+			 * Constructor.
+			 */
 			Physics();
+			/**
+			 * Destructor.
+			 */
 			~Physics();
 
+			/**
+			 * Initializes the simulation.
+			 */
 			bool init();
+			/**
+			 * Destroys the simulation.
+			 */
 			bool shutdown();
 
 			/**
@@ -79,6 +96,10 @@ namespace peak
 			 */
 			bool castRay(Vector3F from, Vector3F to, CollisionInfo *info = 0);
 
+			/**
+			 * Moves the simulation forward in time for 20 ms. Moves all bodies
+			 * according to the forces and performs collision checks.
+			 */
 			void update();
 		private:
 			btDefaultCollisionConfiguration *config;
