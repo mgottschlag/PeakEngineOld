@@ -17,6 +17,8 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #ifndef _PEAKPHYSICS_PHYSICS_HPP_
 #define _PEAKPHYSICS_PHYSICS_HPP_
 
+#include <peakengine/support/Vector3.hpp>
+
 #include <list>
 
 class btDefaultCollisionConfiguration;
@@ -28,6 +30,26 @@ class btAxisSweep3;
 namespace peak
 {
 	class Body;
+
+	/**
+	 * Info about the outcome of a ray cast test or any other collision test.
+	 */
+	struct CollisionInfo
+	{
+		/**
+		 * For ray casts, leads to the point where the ray hit any geometry.
+		 * This point is start + lambda * (end - start).
+		 */
+		float lambda;
+		/**
+		 * The point where the collision happened.
+		 */
+		Vector3F point;
+		/**
+		 * The body which belongs to the geometry which caused the collision.
+		 */
+		Body *body;
+	};
 
 	class Physics
 	{
@@ -46,6 +68,16 @@ namespace peak
 			 * Removes a body from the world.
 			 */
 			void removeBody(Body *body);
+
+			/**
+			 * Performs a ray cast collision test.
+			 * @param from Start of the ray.
+			 * @param to End of the ray.
+			 * @param info If not 0, the variable will be filled with the
+			 * collision information.
+			 * @return True if a shape was hit by the ray.
+			 */
+			bool castRay(Vector3F from, Vector3F to, CollisionInfo *info = 0);
 
 			void update();
 		private:

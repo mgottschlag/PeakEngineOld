@@ -21,6 +21,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "peakphysics/Body.hpp"
 #include "peakphysics/Plane.hpp"
 #include "peakphysics/Box.hpp"
+#include "peakphysics/Capsule.hpp"
 
 namespace peak
 {

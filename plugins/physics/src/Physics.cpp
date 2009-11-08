@@ -80,6 +80,26 @@ namespace peak
 		world->removeRigidBody(body->getBody());
 	}
 
+	bool Physics::castRay(Vector3F from, Vector3F to,
+		CollisionInfo *info)
+	{
+		// Cast ray
+		btVector3 bfrom(from.x, from.y, from.z);
+		btVector3 bto(to.x, to.y, to.z);
+		btCollisionWorld::ClosestRayResultCallback tempcallback(bfrom, bto);
+		world->rayTest(bfrom, bto, tempcallback);
+		// Test whether a collision has happened
+		if (!tempcallback.m_collisionObject)
+			return false;
+		// Fill collision info
+		if (!info)
+			return true;
+		info->lambda = tempcallback.m_closestHitFraction;
+		info->point = from + (to - from) * info->lambda;
+		info->body = (Body*)tempcallback.m_collisionObject->getUserPointer();
+		return true;
+	}
+
 	void Physics::update()
 	{
 		world->stepSimulation(0.020f);
