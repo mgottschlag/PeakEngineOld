@@ -51,18 +51,10 @@ namespace peak
 		terrain = new btHeightfieldTerrainShape(image->getWidth(), image->getHeight(), heightvalues, 256, 1, true, false);
 		terrain->setLocalScaling(btVector3(scale.x, scale.y, scale.z));
 		shape = terrain;
-		// TODO: y?
-		//terrain->setLocalScaling(btVector3(scale.x / image->getWidth(), 1, scale.z / image->getHeight()));
 		// Local transformation
 		transform = new btTransform();
 		transform->setIdentity();
 		transform->setOrigin(btVector3(0, 8, 0));
-		btVector3 min;
-		btVector3 max;
-		terrain->getAabb(*transform, min, max);
-		printf("AABB: %f - %f\n", min.x(), max.x());
-		printf("AABB: %f - %f\n", min.y(), max.y());
-		printf("AABB: %f - %f\n", min.z(), max.z());
 		// Set mass
 		inertia = Vector3F(0, 0, 0);
 		if( mass != 0.0f)
