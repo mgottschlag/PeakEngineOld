@@ -47,6 +47,9 @@ namespace peak
 			void getTransformation(Vector3F &position, Quaternion &rotation,
 				unsigned int time = 0);
 
+			void setScale(Vector3F scale);
+			Vector3F getScale();
+
 			void setParent(SceneNode *parent);
 			SceneNode *getParent();
 
@@ -71,6 +74,7 @@ namespace peak
 
 			TransformationInfo transformation[3];
 			unsigned int transformationcount;
+			Vector3F scale;
 			bool moving;
 			SceneNode *parent;
 			SceneNode *newparent;

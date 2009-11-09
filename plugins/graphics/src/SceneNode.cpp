@@ -24,7 +24,8 @@ using namespace lf;
 namespace peak
 {
 	SceneNode::SceneNode(Graphics *graphics) : ReferenceCounted(),
-		transformationcount(0), moving(true), parent(0), newparent(0), node(0),
+		transformationcount(0), scale(1, 1, 1), moving(true), parent(0),
+		newparent(0), node(0),
 		graphics(graphics)
 	{
 	}
@@ -159,6 +160,17 @@ namespace peak
 		}
 	}
 
+	void SceneNode::setScale(Vector3F scale)
+	{
+		ScopedLock lock(mutex);
+		this->scale = scale;
+	}
+	Vector3F SceneNode::getScale()
+	{
+		ScopedLock lock(mutex);
+		return scale;
+	}
+
 	void SceneNode::setParent(SceneNode *parent)
 	{
 		ScopedLock lock(mutex);
@@ -218,6 +230,7 @@ namespace peak
 				position.z));
 			node->setRotation(core::quaternion(rotation.q[0], rotation.q[1],
 				rotation.q[2], rotation.q[3]));
+			node->setScale(core::vector3df(scale.x, scale.y, scale.z));
 		}
 		mutex.unlock();
 		// Update children

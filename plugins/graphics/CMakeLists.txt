@@ -6,6 +6,7 @@ src/GroupSceneNode.cpp
 src/ModelSceneNode.cpp
 src/RootSceneNode.cpp
 src/SceneNode.cpp
+src/TerrainSceneNode.cpp
 )
 
 include_directories(include ../../include)
