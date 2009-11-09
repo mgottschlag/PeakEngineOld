@@ -74,8 +74,8 @@ namespace peak
 	void Body::setRotation(const Quaternion &rotation)
 	{
 		btTransform transform = body->getCenterOfMassTransform();
-		transform.setRotation(btQuaternion(rotation.q[0], rotation.q[0],
-			rotation.q[0], rotation.q[0]));
+		transform.setRotation(btQuaternion(rotation.q[0], rotation.q[1],
+			rotation.q[2], rotation.q[3]));
 		body->setCenterOfMassTransform(transform);
 	}
 	void Body::setRotation(const Vector3F &rotation)
