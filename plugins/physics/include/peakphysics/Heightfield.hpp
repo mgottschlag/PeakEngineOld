@@ -14,18 +14,38 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-#ifndef _PEAKPHYSICS_HPP_
-#define _PEAKPHYSICS_HPP_
+#ifndef _PEAKPHYSICS_HEIGHTFIELD_HPP_
+#define _PEAKPHYSICS_HEIGHTFIELD_HPP_
 
-#include "peakphysics/Physics.hpp"
-#include "peakphysics/Body.hpp"
-#include "peakphysics/Plane.hpp"
-#include "peakphysics/Box.hpp"
-#include "peakphysics/Capsule.hpp"
-#include "peakphysics/Heightfield.hpp"
+#include "Shape.hpp"
+
+#include <string>
+
+class btHeightfieldTerrainShape;
 
 namespace peak
 {
+	/**
+	 * Height field collision shape.
+	 */
+	class Heightfield : public Shape
+	{
+		public:
+			Heightfield();
+			~Heightfield();
+
+			/**
+			 * Creates the height field.
+			 * @param heightmap Heightmap texture.
+			 * @param mass Mass of the heightfield (0 = static)
+			 * @param scale Size of the heightfield.
+			 */
+			bool init(std::string heightmap, float mass = 0.0f,
+				Vector3F scale = Vector3F(1, 1, 1));
+			virtual bool destroy();
+		private:
+			btHeightfieldTerrainShape *terrain;
+	};
 }
 
 #endif
