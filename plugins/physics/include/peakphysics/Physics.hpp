@@ -94,7 +94,14 @@ namespace peak
 			 * collision information.
 			 * @return True if a shape was hit by the ray.
 			 */
-			bool castRay(Vector3F from, Vector3F to, CollisionInfo *info = 0);
+			bool castRay(Vector3F from, Vector3F to, CollisionInfo *info = 0,
+				Body *exclude = 0);
+
+			/**
+			 * Returns the Bullet world. Can be used e.g. for manual collision
+			 * checking.
+			 */
+			btDynamicsWorld *getWorld();
 
 			/**
 			 * Moves the simulation forward in time for 20 ms. Moves all bodies

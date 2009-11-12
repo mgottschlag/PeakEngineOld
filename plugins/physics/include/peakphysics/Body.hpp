@@ -22,6 +22,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 class btRigidBody;
 class btDefaultMotionState;
+class btTransform;
 
 namespace peak
 {
@@ -90,6 +91,13 @@ namespace peak
 			 * Returns the Bullet body.
 			 */
 			btRigidBody *getBody();
+
+			/**
+			 * Returns the bullet transformation information which includes
+			 * position/rotation. Only used internally, e.g. in
+			 * CharacterController.
+			 */
+			btTransform &getTransform();
 
 			/**
 			 * Returns the shape.

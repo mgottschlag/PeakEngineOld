@@ -80,16 +80,37 @@ namespace peak
 		world->removeRigidBody(body->getBody());
 	}
 
-	bool Physics::castRay(Vector3F from, Vector3F to,
-		CollisionInfo *info)
+	class RayCallback : public btCollisionWorld::ClosestRayResultCallback
+	{
+		public:
+			RayCallback(btCollisionObject *me, const btVector3 &from,
+				const btVector3 &to)
+				: btCollisionWorld::ClosestRayResultCallback(from, to),
+				me(me)
+			{
+			}
+			virtual btScalar addSingleResult(btCollisionWorld::LocalRayResult &result,
+				bool normal)
+			{
+				if (result.m_collisionObject == me)
+					return 1.0f;
+				return btCollisionWorld::ClosestRayResultCallback::addSingleResult(result,
+					normal);
+			}
+		private:
+			btCollisionObject *me;
+	};
+
+	bool Physics::castRay(Vector3F from, Vector3F to, CollisionInfo *info,
+		Body *exclude)
 	{
 		// Cast ray
 		btVector3 bfrom(from.x, from.y, from.z);
 		btVector3 bto(to.x, to.y, to.z);
-		btCollisionWorld::ClosestRayResultCallback tempcallback(bfrom, bto);
+		RayCallback tempcallback(exclude ? exclude->getBody() : 0, bfrom, bto);
 		world->rayTest(bfrom, bto, tempcallback);
 		// Test whether a collision has happened
-		if (!tempcallback.m_collisionObject)
+		if (!tempcallback.hasHit())
 			return false;
 		// Fill collision info
 		if (!info)
@@ -98,6 +119,11 @@ namespace peak
 		info->point = from + (to - from) * info->lambda;
 		info->body = (Body*)tempcallback.m_collisionObject->getUserPointer();
 		return true;
+	}
+
+	btDynamicsWorld *Physics::getWorld()
+	{
+		return world;
 	}
 
 	void Physics::update()

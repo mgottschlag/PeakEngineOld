@@ -121,6 +121,10 @@ namespace peak
 	{
 		return body;
 	}
+	btTransform &Body::getTransform()
+	{
+		return body->getWorldTransform();
+	}
 
 	Shape *Body::getShape()
 	{
