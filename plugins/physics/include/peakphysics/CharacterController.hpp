@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2009, Mathias Gottschlag
+Copyright (c) 2009, Mathias Gottschlag, Christian Reiser
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
@@ -14,19 +14,41 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-#ifndef _PEAKPHYSICS_HPP_
-#define _PEAKPHYSICS_HPP_
+#ifndef _PEAKPHYSICS_CHARACTERCONTROLLER_HPP_
+#define _PEAKPHYSICS_CHARACTERCONTROLLER_HPP_
 
-#include "peakphysics/Physics.hpp"
-#include "peakphysics/Body.hpp"
-#include "peakphysics/Plane.hpp"
-#include "peakphysics/Box.hpp"
-#include "peakphysics/Capsule.hpp"
-#include "peakphysics/Heightfield.hpp"
-#include "peakphysics/CharacterController.hpp"
+#include <peakengine/support/Vector3.hpp>
 
 namespace peak
 {
+	class Physics;
+	class Body;
+	class Shape;
+
+	class CharacterController
+	{
+		public:
+			CharacterController();
+			~CharacterController();
+
+			void init(Physics *physics);
+			void destroy();
+
+			void setHorizontalSpeed(Vector3F speed);
+			bool onGround();
+
+			void update();
+
+			Body *getBody();
+		private:
+			Physics *physics;
+			Body *body;
+			Shape *shape;
+
+			bool onground;
+			Vector3F speed;
+			Vector3F realspeed;
+	};
 }
 
 #endif

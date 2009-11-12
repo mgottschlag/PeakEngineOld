@@ -3,6 +3,7 @@ set(SRC
 src/Body.cpp
 src/Box.cpp
 src/Capsule.cpp
+src/CharacterController.cpp
 src/Heightfield.cpp
 src/Physics.cpp
 src/Plane.cpp
