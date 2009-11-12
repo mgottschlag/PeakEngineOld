@@ -43,7 +43,7 @@ namespace peak
 			for (int x = 0; x < image->getWidth(); x++)
 			{
 				RGBQUAD color;
-				image->getPixelColor(x, image->getHeight() - y, &color);
+				image->getPixelColor(x, image->getHeight() - y - 1, &color);
 				heightvalues[x + y * image->getWidth()] = ((float)color.rgbRed + color.rgbGreen + color.rgbBlue) / 3.0f;
 			}
 		}
