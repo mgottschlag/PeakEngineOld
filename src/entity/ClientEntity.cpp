@@ -19,7 +19,8 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 namespace peak
 {
-	ClientEntity::ClientEntity(Client *client) : Entity(client)
+	ClientEntity::ClientEntity(Client *client, bool local) : Entity(client),
+		local(local)
 	{
 	}
 	ClientEntity::~ClientEntity()
@@ -32,6 +33,15 @@ namespace peak
 	}
 	void ClientEntity::receiveMessage(Buffer *buffer)
 	{
+	}
+
+	void ClientEntity::setLocal(bool local)
+	{
+		this->local = local;
+	}
+	bool ClientEntity::isLocal()
+	{
+		return local;
 	}
 
 	void ClientEntity::onUpdate(unsigned int acktime)

@@ -27,7 +27,8 @@ namespace peak
 	class EntityFactory
 	{
 		public:
-			virtual ClientEntity *createClientEntity(Client *client) = 0;
+			virtual ClientEntity *createClientEntity(Client *client,
+				bool local) = 0;
 			virtual ServerEntity *createServerEntity(Server *server) = 0;
 		private:
 	};

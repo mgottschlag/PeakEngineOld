@@ -153,6 +153,7 @@ namespace peak
 					{
 						unsigned int id = data->read16();
 						std::string type = data->readString();
+						bool local = data->readUnsignedInt(1);
 						// Create entity
 						Game *game = getEngine()->getGame();
 						EntityFactory *factory = game->getEntityFactory(type);
@@ -161,7 +162,8 @@ namespace peak
 							// TODO: Warn
 							continue;
 						}
-						ClientEntity *entity = factory->createClientEntity(this);
+						ClientEntity *entity = factory->createClientEntity(this,
+							local);
 						entity->setID(id);
 						entity->setState(data.get());
 						addEntity(entity);
@@ -201,7 +203,6 @@ namespace peak
 							// Apply update
 							entity->applyUpdate(data.get(), updatetime);
 							entity->onUpdate(updateclienttime);
-							std::cout << "Update applied for " << id << "." << std::endl;
 						}
 						// Only send the server that we have received this
 						// update if it was valid

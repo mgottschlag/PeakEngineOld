@@ -31,7 +31,11 @@ namespace peak
 
 			void sendMessage(Buffer *buffer, bool reliable = false);
 			virtual void receiveMessage(Buffer *buffer);
+
+			void setOwner(unsigned int owner);
+			unsigned int getOwner();
 		private:
+			unsigned int owner;
 	};
 }
 

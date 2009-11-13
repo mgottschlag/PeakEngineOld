@@ -20,6 +20,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "peakengine/network/Connection.hpp"
 #include "peakengine/network/NetworkHost.hpp"
 #include "peakengine/support/OS.hpp"
+#include "peakengine/entity/ServerEntity.hpp"
 
 #include <iostream>
 #include <cstdlib>
@@ -70,16 +71,36 @@ namespace peak
 
 	void Server::addEntity(Entity *entity)
 	{
-		// TODO: Owner?
 		EntityManager::addEntity(entity);
+		// Save owner of the entity
+		ClientInfo *owner = 0;
+		unsigned int ownerid = ((ServerEntity*)entity)->getOwner();
 		// Send the entity to all clients
 		BufferPointer buffer = new Buffer();
 		buffer->write8(EPT_EntityCreated);
 		buffer->write16(entity->getID());
 		buffer->writeString(entity->getType());
+		// Owner bit unset
+		buffer->writeUnsignedInt(0, 1);
 		entity->getState(buffer.get());
 		for (unsigned int i = 0; i < clients.size(); i++)
-			clients[i].connection->send(buffer, true);
+		{
+			if (clients[i].id != ownerid)
+				clients[i].connection->send(buffer, true);
+			else
+				owner = &clients[i];
+		}
+		// Send the entity to the owner
+		if (!owner)
+			return;
+		buffer = new Buffer();
+		buffer->write8(EPT_EntityCreated);
+		buffer->write16(entity->getID());
+		buffer->writeString(entity->getType());
+		// Set owner bit this time
+		buffer->writeUnsignedInt(1, 1);
+		entity->getState(buffer.get());
+		owner->connection->send(buffer, true);
 	}
 	void Server::removeEntity(Entity *entity)
 	{
@@ -258,7 +279,7 @@ namespace peak
 				entity->getState(buffer.get());
 				connection->send(buffer, true);
 			}
-			onConnectionAccepted(connection);
+			onConnectionAccepted(clients[clients.size() - 1]);
 		}
 	}
 }

@@ -94,7 +94,7 @@ namespace peak
 			/**
 			 * This is called after a client has finished connecting.
 			 */
-			virtual void onConnectionAccepted(Connection *connection) = 0;
+			virtual void onConnectionAccepted(ClientInfo &client) = 0;
 
 			/**
 			 * Adds a client to the server. Only called from within

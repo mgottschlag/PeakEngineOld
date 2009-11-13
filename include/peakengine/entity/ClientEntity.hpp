@@ -26,14 +26,18 @@ namespace peak
 	class ClientEntity : public Entity
 	{
 		public:
-			ClientEntity(Client *client);
+			ClientEntity(Client *client, bool local);
 			virtual ~ClientEntity();
 
 			void sendMessage(Buffer *buffer, bool reliable = false);
 			virtual void receiveMessage(Buffer *buffer);
 
+			void setLocal(bool local);
+			bool isLocal();
+
 			virtual void onUpdate(unsigned int acktime);
 		private:
+			bool local;
 	};
 }
 

@@ -19,7 +19,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 namespace peak
 {
-	ServerEntity::ServerEntity(Server *server) : Entity(server)
+	ServerEntity::ServerEntity(Server *server) : Entity(server), owner(0)
 	{
 	}
 	ServerEntity::~ServerEntity()
@@ -32,5 +32,14 @@ namespace peak
 	}
 	void ServerEntity::receiveMessage(Buffer *buffer)
 	{
+	}
+
+	void ServerEntity::setOwner(unsigned int owner)
+	{
+		this->owner = owner;
+	}
+	unsigned int ServerEntity::getOwner()
+	{
+		return owner;
 	}
 }
