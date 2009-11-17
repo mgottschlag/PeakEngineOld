@@ -72,4 +72,39 @@ namespace peak
 	{
 		return value;
 	}
+
+	QuaternionProperty16::QuaternionProperty16(Entity *entity)
+		: QuaternionProperty(entity)
+	{
+	}
+
+	void QuaternionProperty16::serialize(BufferPointer buffer)
+	{
+		buffer->writeInt((short)(value.q[0] * 32767), 16);
+		buffer->writeInt((short)(value.q[1] * 32767), 16);
+		buffer->writeInt((short)(value.q[2] * 32767), 16);
+		buffer->writeInt((short)(value.q[3] * 32767), 16);
+	}
+	void QuaternionProperty16::deserialize(BufferPointer buffer)
+	{
+		Quaternion newvalue;
+		newvalue.q[0] = (float)buffer->readInt(16) / 32767;
+		newvalue.q[1] = (float)buffer->readInt(16) / 32767;
+		newvalue.q[2] = (float)buffer->readInt(16) / 32767;
+		newvalue.q[3] = (float)buffer->readInt(16) / 32767;
+		if (newvalue == value)
+			return;
+		value = newvalue;
+		setChanged();
+	}
+
+	bool QuaternionProperty16::hasChanged()
+	{
+		for (unsigned int i = 0; i < 4; i++)
+		{
+			if ((short)(value.q[i] * 32767) != (short)(defaultval.q[i] * 32767))
+				return true;
+		}
+		return false;
+	}
 }

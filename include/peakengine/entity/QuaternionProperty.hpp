@@ -37,9 +37,19 @@ namespace peak
 
 			void set(const Quaternion &value);
 			Quaternion get();
-		private:
+		protected:
 			Quaternion &defaultval;
 			Quaternion value;
+	};
+	class QuaternionProperty16 : public QuaternionProperty
+	{
+		public:
+			QuaternionProperty16(Entity *entity);
+
+			virtual void serialize(BufferPointer buffer);
+			virtual void deserialize(BufferPointer buffer);
+
+			virtual bool hasChanged();
 	};
 }
 
