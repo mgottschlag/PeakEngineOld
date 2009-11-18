@@ -185,21 +185,28 @@ namespace peak
 						{
 							// Read last received packet
 							clients[i].lastreceived = data->read32();
-							clients[i].clienttime = data->read32();
-							std::cout << "EPT_Update: " << clients[i].clienttime << std::endl;
-							// Read entity messages
-							while (data->getPosition() + 32 <= data->getSize() * 8)
+							unsigned int updatetime = data->read32();
+							clients[i].clienttime = updatetime;
+							// Read entity updates
+							bool updatevalid = true;
+							while (data->getPosition() + 16 <= data->getSize() * 8)
 							{
-								// Get entity
 								unsigned int id = data->read16() + 1;
-								Entity *entity = getEntity(id);
-								// Read message
-								unsigned int size = data->read16();
-								void *msgdata = malloc(size);
-								data->read(msgdata, size);
-								BufferPointer msg = new Buffer(msgdata, size);
-								entity->receiveMessage(msg.get());
+								ServerEntity *entity = (ServerEntity*)getEntity(id);
+								// Ignore invalid updates
+								if (!entity)
+								{
+									updatevalid = false;
+									break;
+								}
+								// Apply update
+								entity->applyClientUpdate(data.get(), updatetime);
+								entity->onUpdate();
 							}
+							// Only tell the client that we have received this
+							// update if it was valid
+							if (updatevalid)
+								clients[i].lastupdate = updatetime;
 							break;
 						}
 						case EPT_EntityMessage:
@@ -225,6 +232,7 @@ namespace peak
 				update->write8(EPT_Update);
 				update->write32(time);
 				update->write32(clients[i].clienttime);
+				update->write32(clients[i].lastupdate);
 				// Fill buffer with updates
 				EntityMap::Iterator it(entities);
 				for (Entity *entity = it.next();entity != 0; entity = it.next())

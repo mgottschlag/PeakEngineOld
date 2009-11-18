@@ -40,6 +40,10 @@ namespace peak
 			void applyUpdate(Buffer *buffer, unsigned int time);
 			void getUpdate(Buffer *buffer, unsigned int time);
 
+			bool hasChangedClient(unsigned int time);
+			void applyClientUpdate(Buffer *buffer, unsigned int time);
+			void getClientUpdate(Buffer *buffer, unsigned int time);
+
 			void createBackup();
 			bool hasBackup();
 			void applyBackup();
@@ -57,8 +61,10 @@ namespace peak
 			virtual void update();
 
 			void addProperty(Property *property);
+			void addClientProperty(Property *property);
 		private:
 			std::vector<Property*> properties;
+			std::vector<Property*> clientproperties;
 			EntityManager *manager;
 			unsigned int id;
 

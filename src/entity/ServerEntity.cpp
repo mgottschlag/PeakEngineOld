@@ -42,4 +42,8 @@ namespace peak
 	{
 		return owner;
 	}
+
+	void ServerEntity::onUpdate()
+	{
+	}
 }

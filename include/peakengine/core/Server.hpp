@@ -30,7 +30,7 @@ namespace peak
 	{
 		public:
 			ClientInfo(Connection *connection) : connection(connection),
-				lastreceived(0), clienttime(0)
+				lastreceived(0), clienttime(0), lastupdate(0)
 			{
 				id = ++lastid;
 			}
@@ -40,6 +40,7 @@ namespace peak
 			static unsigned int lastid;
 			unsigned int lastreceived;
 			unsigned int clienttime;
+			unsigned int lastupdate;
 	};
 
 	/**

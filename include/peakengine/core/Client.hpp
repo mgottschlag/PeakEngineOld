@@ -96,6 +96,7 @@ namespace peak
 			volatile bool stopping;
 			unsigned int time;
 			unsigned int lastupdate;
+			unsigned int lastacked;
 			std::queue<EntityMessage> entitymessages;
 	};
 }

@@ -29,7 +29,8 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 namespace peak
 {
-	Client::Client(Engine *engine) : EntityManager(engine), connection(0), client(0)
+	Client::Client(Engine *engine) : EntityManager(engine), connection(0),
+		client(0), lastacked(0)
 	{
 	}
 	Client::~Client()
@@ -112,20 +113,12 @@ namespace peak
 	void Client::sendEntityMessage(Entity *entity, BufferPointer data,
 		bool reliable)
 	{
-		if (reliable)
-		{
-			// Send message directly
-			BufferPointer msg = new Buffer();
-			msg->write8(EPT_EntityMessage);
-			msg->write16(entity->getID() - 1);
-			*msg.get() += *data.get();
-			connection->send(msg, true);
-		}
-		else
-		{
-			// Put the message into the queue
-			entitymessages.push(EntityMessage(entity, data));
-		}
+		// Send message directly
+		BufferPointer msg = new Buffer();
+		msg->write8(EPT_EntityMessage);
+		msg->write16(entity->getID() - 1);
+		*msg.get() += *data.get();
+		connection->send(msg, reliable);
 	}
 
 	unsigned int Client::getTime()
@@ -182,6 +175,7 @@ namespace peak
 						bool updatevalid = true;
 						unsigned int updatetime = data->read32();
 						unsigned int updateclienttime = data->read32();
+						lastacked = data->read32();
 						// Adjust time if the latency has decreased
 						// TODO: This might affect client prediction
 						if (updatetime > time)
@@ -225,18 +219,20 @@ namespace peak
 			// Update entities
 			time++;
 			update();
-			// Send messages
+			// Send update
 			BufferPointer update = new Buffer();
 			update->write8(EPT_Update);
 			update->write32(lastupdate);
 			update->write32(time);
-			while (entitymessages.size() > 0)
+			// Fill buffer with updates
+			EntityMap::Iterator it(entities);
+			for (Entity *entity = it.next();entity != 0; entity = it.next())
 			{
-				EntityMessage message = entitymessages.front();
-				entitymessages.pop();
-				update->write16(message.entity->getID() - 1);
-				update->write16(message.data->getSize());
-				*update.get() += *message.data.get();
+				if (entity->hasChangedClient(lastacked))
+				{
+					update->write16(entity->getID() - 1);
+					entity->getClientUpdate(update.get(), lastacked);
+				}
 			}
 			connection->send(update);
 			// 20 ms per frame

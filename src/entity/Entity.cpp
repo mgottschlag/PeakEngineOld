@@ -97,6 +97,47 @@ namespace peak
 		}
 	}
 
+	bool Entity::hasChangedClient(unsigned int time)
+	{
+		for (unsigned int i = 0; i < clientproperties.size(); i++)
+		{
+			if (clientproperties[i]->getLastChange() > time)
+				return true;
+		}
+		return false;
+	}
+	void Entity::applyClientUpdate(Buffer *buffer, unsigned int time)
+	{
+		// Update all properties.
+		for (unsigned int i = 0; i < clientproperties.size(); i++)
+		{
+			int changed = buffer->readUnsignedInt(1);
+			if (changed)
+			{
+				clientproperties[i]->deserialize(buffer);
+			}
+		}
+		// TODO: Callback
+	}
+	void Entity::getClientUpdate(Buffer *buffer, unsigned int time)
+	{
+		for (unsigned int i = 0; i < clientproperties.size(); i++)
+		{
+			// TODO: Property flags
+			if (clientproperties[i]->getLastChange() > time)
+			{
+				// Bit set: Property changed.
+				buffer->writeUnsignedInt(1, 1);
+				// Write the property to the stream.
+				clientproperties[i]->serialize(buffer);
+			}
+			else
+			{
+				// Bit not set: Property remained unchanged.
+				buffer->writeUnsignedInt(0, 1);
+			}
+		}
+	}
 
 	void Entity::createBackup()
 	{
@@ -158,5 +199,9 @@ namespace peak
 	void Entity::addProperty(Property *property)
 	{
 		properties.push_back(property);
+	}
+	void Entity::addClientProperty(Property *property)
+	{
+		clientproperties.push_back(property);
 	}
 }

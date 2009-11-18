@@ -34,6 +34,8 @@ namespace peak
 
 			void setOwner(unsigned int owner);
 			unsigned int getOwner();
+
+			virtual void onUpdate();
 		private:
 			unsigned int owner;
 	};
