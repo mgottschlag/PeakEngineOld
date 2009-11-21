@@ -37,7 +37,7 @@ namespace peak
 			/**
 			 * Destroys the shape
 			 */
-			virtual bool destroy(void);
+			virtual bool destroy();
 
 			/**
 			 * Returns the mass of the shape
@@ -56,11 +56,11 @@ namespace peak
 			/**
 			 * Returns a pointer to the btCollisionShape
 			 */
-			btCollisionShape *getShape(void);
+			btCollisionShape *getShape();
 			/**
 			 * Returns the position/rotation of the shape
 			 */
-			btTransform getTransform(void);
+			btTransform getTransform();
 		protected:
 			btCollisionShape *shape;
 			btTransform *transform;

@@ -99,6 +99,8 @@ namespace peak
 			 */
 			Vector2I abs;
 	};
+
+	typedef ScreenPosition ScreenSize;
 }
 
 #endif
