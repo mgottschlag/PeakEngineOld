@@ -23,7 +23,7 @@ using namespace lf;
 
 namespace peak
 {
-	SceneNode::SceneNode(Graphics *graphics) : ReferenceCounted(),
+	SceneNode::SceneNode(Graphics *graphics) : Loadable(),
 		transformationcount(0), scale(1, 1, 1), moving(true), parent(0),
 		newparent(0), node(0),
 		graphics(graphics)

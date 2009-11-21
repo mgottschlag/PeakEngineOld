@@ -1,6 +1,7 @@
 
 set(SRC
 src/Graphics.cpp
+src/Loadable.cpp
 src/scene/CameraSceneNode.cpp
 src/scene/GroupSceneNode.cpp
 src/scene/ModelSceneNode.cpp

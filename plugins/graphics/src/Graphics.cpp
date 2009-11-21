@@ -131,10 +131,10 @@ namespace peak
 		inputmutex.unlock();
 	}
 
-	void Graphics::registerLoading(SceneNode *node)
+	void Graphics::registerLoading(Loadable *loadable)
 	{
 		loadingmutex.lock();
-		loading.push(node);
+		loading.push(loadable);
 		loadingmutex.unlock();
 	}
 	void Graphics::registerParentChange(SceneNode *node)
@@ -234,13 +234,13 @@ namespace peak
 				resmgr->loadResources(file.c_str());
 				loadingmutex.lock();
 			}
-			// Load scene nodes
+			// Load loadable objects
 			while (loading.size() > 0)
 			{
-				SceneNodePointer node = loading.front();
+				LoadablePointer loadable = loading.front();
 				loading.pop();
 				loadingmutex.unlock();
-				node->load();
+				loadable->tryLoading();
 				loadingmutex.lock();
 			}
 			loadingmutex.unlock();

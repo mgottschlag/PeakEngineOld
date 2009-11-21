@@ -63,7 +63,7 @@ namespace peak
 			void addInputReceiver(InputReceiver *receiver);
 			void removeInputReceiver(InputReceiver *receiver);
 
-			void registerLoading(SceneNode *node);
+			void registerLoading(Loadable *loadable);
 			void registerParentChange(SceneNode *node);
 
 			lf::render::IRenderWindow *getWindow();
@@ -98,7 +98,7 @@ namespace peak
 			std::queue<SceneNodePointer> parentchange;
 			Mutex loadingmutex;
 			std::queue<std::string> loadingfiles;
-			std::queue<SceneNodePointer> loading;
+			std::queue<LoadablePointer> loading;
 
 			unsigned int fps;
 	};

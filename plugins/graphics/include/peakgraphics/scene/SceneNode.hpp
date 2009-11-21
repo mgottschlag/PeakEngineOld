@@ -17,9 +17,9 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #ifndef _PEAKGRAPHICS_SCENE_SCENENODE_HPP_
 #define _PEAKGRAPHICS_SCENE_SCENENODE_HPP_
 
+#include "peakgraphics/Loadable.hpp"
 #include <peakengine/support/Vector3.hpp>
 #include <peakengine/support/Quaternion.hpp>
-#include <peakengine/support/ReferenceCounted.hpp>
 #include <peakengine/support/Mutex.hpp>
 
 #include <vector>
@@ -36,7 +36,7 @@ namespace peak
 {
 	class Graphics;
 
-	class SceneNode : public ReferenceCounted
+	class SceneNode : public Loadable
 	{
 		public:
 			SceneNode(Graphics *graphics);
@@ -57,7 +57,6 @@ namespace peak
 			bool isMoving();
 
 			virtual bool load() = 0;
-			virtual bool isLoaded() = 0;
 
 			void updateParent();
 
