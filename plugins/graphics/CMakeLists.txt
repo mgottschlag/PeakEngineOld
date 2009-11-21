@@ -1,12 +1,12 @@
 
 set(SRC
-src/CameraSceneNode.cpp
 src/Graphics.cpp
-src/GroupSceneNode.cpp
-src/ModelSceneNode.cpp
-src/RootSceneNode.cpp
-src/SceneNode.cpp
-src/TerrainSceneNode.cpp
+src/scene/CameraSceneNode.cpp
+src/scene/GroupSceneNode.cpp
+src/scene/ModelSceneNode.cpp
+src/scene/RootSceneNode.cpp
+src/scene/SceneNode.cpp
+src/scene/TerrainSceneNode.cpp
 )
 
 include_directories(include ../../include)

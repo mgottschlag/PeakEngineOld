@@ -18,11 +18,11 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #define _PEAKGRAPHICS_HPP_
 
 #include "peakgraphics/Graphics.hpp"
-#include "peakgraphics/CameraSceneNode.hpp"
-#include "peakgraphics/ModelSceneNode.hpp"
 #include "peakgraphics/InputReceiver.hpp"
-#include "peakgraphics/GroupSceneNode.hpp"
-#include "peakgraphics/TerrainSceneNode.hpp"
+#include "peakgraphics/scene/CameraSceneNode.hpp"
+#include "peakgraphics/scene/ModelSceneNode.hpp"
+#include "peakgraphics/scene/GroupSceneNode.hpp"
+#include "peakgraphics/scene/TerrainSceneNode.hpp"
 
 namespace peak
 {

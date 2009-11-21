@@ -14,7 +14,7 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-#include "peakgraphics/ModelSceneNode.hpp"
+#include "peakgraphics/scene/GroupSceneNode.hpp"
 #include "peakgraphics/Graphics.hpp"
 #include <peakengine/support/ScopedLock.hpp>
 
@@ -23,31 +23,26 @@ using namespace lf;
 
 namespace peak
 {
-	ModelSceneNode::ModelSceneNode(std::string name, Graphics *graphics)
-		: SceneNode(graphics), name(name)
+	GroupSceneNode::GroupSceneNode(Graphics *graphics) : SceneNode(graphics)
 	{
 		graphics->registerLoading(this);
 	}
-	ModelSceneNode::~ModelSceneNode()
+	GroupSceneNode::~GroupSceneNode()
 	{
 		if (node)
 			node->drop();
 	}
 
-	bool ModelSceneNode::load()
+	bool GroupSceneNode::load()
 	{
-		// Load model
-		CResourceManager *resmgr = CResourceManager::getInstancePtr();
-		res::CModel *model = resmgr->getModel(name.c_str());
-		if (!model)
-			return false;
+		// Create camera
 		ScopedLock lock(mutex);
-		node = new scene::CModelSceneNode(model);
+		node = new scene::CGroupSceneNode();
 		// Update parent and position
 		// TODO
 		return true;
 	}
-	bool ModelSceneNode::isLoaded()
+	bool GroupSceneNode::isLoaded()
 	{
 		return node != 0;
 	}

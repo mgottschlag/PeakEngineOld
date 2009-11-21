@@ -17,7 +17,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #ifndef _PEAKGRAPHICS_GRAPHICS_HPP_
 #define _PEAKGRAPHICS_GRAPHICS_HPP_
 
-#include "SceneNode.hpp"
+#include "scene/SceneNode.hpp"
 #include "KeyCode.hpp"
 #include <peakengine/support/ConditionVariable.hpp>
 #include <peakengine/support/Mutex.hpp>

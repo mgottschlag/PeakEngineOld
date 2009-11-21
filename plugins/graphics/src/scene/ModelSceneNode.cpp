@@ -14,39 +14,45 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-#include "peakgraphics/CameraSceneNode.hpp"
+#include "peakgraphics/scene/ModelSceneNode.hpp"
 #include "peakgraphics/Graphics.hpp"
 #include <peakengine/support/ScopedLock.hpp>
 
 #include <lf/Lightfeather.h>
 using namespace lf;
 
+#include <iostream>
+
 namespace peak
 {
-	CameraSceneNode::CameraSceneNode(Graphics *graphics) : SceneNode(graphics)
+	ModelSceneNode::ModelSceneNode(std::string name, Graphics *graphics)
+		: SceneNode(graphics), name(name)
 	{
 		graphics->registerLoading(this);
 	}
-	CameraSceneNode::~CameraSceneNode()
+	ModelSceneNode::~ModelSceneNode()
 	{
 		if (node)
 			node->drop();
 	}
 
-	bool CameraSceneNode::load()
+	bool ModelSceneNode::load()
 	{
-		// Create camera
-		scene::C3DCamera *camera = new scene::C3DCamera(graphics->getWindow(),
-			core::PI / 3.0f, 1.0f, 1000.0f, true);
-		camera->setBackgroundColor(core::CColorI(0,0,255,0));
+		// Load model
+		CResourceManager *resmgr = CResourceManager::getInstancePtr();
+		res::CModel *model = resmgr->getModel(name.c_str());
+		if (!model)
+		{
+			std::cout << "Model \"" << name << "\" not available." << std::endl;
+			return false;
+		}
 		ScopedLock lock(mutex);
-		node = camera;
-		graphics->getWindow()->getRenderLayer3D()->addCamera(camera);
+		node = new scene::CModelSceneNode(model);
 		// Update parent and position
 		// TODO
 		return true;
 	}
-	bool CameraSceneNode::isLoaded()
+	bool ModelSceneNode::isLoaded()
 	{
 		return node != 0;
 	}

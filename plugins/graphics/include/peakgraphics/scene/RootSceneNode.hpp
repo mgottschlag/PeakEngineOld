@@ -14,36 +14,23 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-#include "peakgraphics/GroupSceneNode.hpp"
-#include "peakgraphics/Graphics.hpp"
-#include <peakengine/support/ScopedLock.hpp>
+#ifndef _PEAKGRAPHICS_SCENE_ROOTSCENENODE_HPP_
+#define _PEAKGRAPHICS_SCENE_ROOTSCENENODE_HPP_
 
-#include <lf/Lightfeather.h>
-using namespace lf;
+#include "SceneNode.hpp"
 
 namespace peak
 {
-	GroupSceneNode::GroupSceneNode(Graphics *graphics) : SceneNode(graphics)
+	class RootSceneNode : public SceneNode
 	{
-		graphics->registerLoading(this);
-	}
-	GroupSceneNode::~GroupSceneNode()
-	{
-		if (node)
-			node->drop();
-	}
+		public:
+			RootSceneNode(Graphics *graphics, lf::scene::CSceneNode *node);
+			~RootSceneNode();
 
-	bool GroupSceneNode::load()
-	{
-		// Create camera
-		ScopedLock lock(mutex);
-		node = new scene::CGroupSceneNode();
-		// Update parent and position
-		// TODO
-		return true;
-	}
-	bool GroupSceneNode::isLoaded()
-	{
-		return node != 0;
-	}
+			virtual bool load();
+			virtual bool isLoaded();
+		private:
+	};
 }
+
+#endif

@@ -14,7 +14,7 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-#include "peakgraphics/TerrainSceneNode.hpp"
+#include "peakgraphics/scene/TerrainSceneNode.hpp"
 #include "peakgraphics/Graphics.hpp"
 #include <peakengine/support/ScopedLock.hpp>
 

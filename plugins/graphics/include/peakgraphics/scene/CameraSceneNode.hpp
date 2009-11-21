@@ -14,31 +14,22 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-#ifndef _PEAKGRAPHICS_TERRAINSCENENODE_HPP_
-#define _PEAKGRAPHICS_TERRAINSCENENODE_HPP_
+#ifndef _PEAKGRAPHICS_SCENE_CAMERASCENENODE_HPP_
+#define _PEAKGRAPHICS_SCENE_CAMERASCENENODE_HPP_
 
 #include "SceneNode.hpp"
 
-#include <string>
-
 namespace peak
 {
-	class TerrainSceneNode : public SceneNode
+	class CameraSceneNode : public SceneNode
 	{
 		public:
-			TerrainSceneNode(std::string name, std::string heightmap,
-				std::string colormap, std::string detailmap, Vector3F scale,
-				Graphics *graphics);
-			~TerrainSceneNode();
+			CameraSceneNode(Graphics *graphics);
+			~CameraSceneNode();
 
 			virtual bool load();
 			virtual bool isLoaded();
 		private:
-			std::string name;
-			std::string heightmap;
-			std::string colormap;
-			std::string detailmap;
-			Vector3F modelscale;
 	};
 }
 
