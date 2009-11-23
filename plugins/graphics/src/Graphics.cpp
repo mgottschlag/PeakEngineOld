@@ -78,6 +78,7 @@ namespace peak
 		this->fullscreen = fullscreen;
 		this->width = width;
 		this->height = height;
+		mouselocked = false;
 		// Create server thread
 		cond.lock();
 		stopping = false;
@@ -172,12 +173,15 @@ namespace peak
 	}
 	void Graphics::onMouseMoved(int x, int y, int dx, int dy)
 	{
-		if (x == 300 && y == 300)
+		if (mouselocked && x == 300 && y == 300)
 			return;
 		inputmutex.lock();
 		// Reset mouse
-		input::ICursorControl *cursorcontrol = window->getCursorControl();
-		cursorcontrol->setPosition(300, 300);
+		if (mouselocked)
+		{
+			input::ICursorControl *cursorcontrol = window->getCursorControl();
+			cursorcontrol->setPosition(300, 300);
+		}
 		// Restrict mouse position to the window
 		mousepos += Vector2I(dx, dy);
 		if (mousepos.x < 0)
@@ -194,6 +198,15 @@ namespace peak
 		// Callback
 		for (unsigned int i = 0; i < receivers.size(); i++)
 			receivers[i]->onMouseMoved(mousepos.x, mousepos.y, dx, dy);
+	}
+
+	void Graphics::setMouseLocked(bool mouselocked)
+	{
+		this->mouselocked = mouselocked;
+	}
+	bool Graphics::isMouseLocked()
+	{
+		return mouselocked;
 	}
 
 	void Graphics::runThread()

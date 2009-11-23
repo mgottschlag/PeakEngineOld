@@ -72,6 +72,9 @@ namespace peak
 			void onKeyUp(peak::KeyCode key);
 			void onMouseMoved(int x, int y, int dx, int dy);
 
+			void setMouseLocked(bool mouselocked);
+			bool isMouseLocked();
+
 			void runThread();
 		private:
 			Thread *thread;
@@ -82,6 +85,7 @@ namespace peak
 			bool fullscreen;
 			int width;
 			int height;
+			bool mouselocked;
 
 			lf::render::IRenderWindow *window;
 			lf::CResourceManager *resmgr;
@@ -101,6 +105,7 @@ namespace peak
 			std::queue<LoadablePointer> loading;
 
 			unsigned int fps;
+
 	};
 }
 

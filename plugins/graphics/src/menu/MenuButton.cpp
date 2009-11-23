@@ -16,6 +16,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 #include "peakgraphics/menu/MenuButton.hpp"
 #include "peakgraphics/menu/Menu.hpp"
+#include "peakgraphics/menu/MenuInputListener.hpp"
 #include <peakengine/support/ScopedLock.hpp>
 
 #include <lf/Lightfeather.h>
@@ -40,6 +41,9 @@ namespace peak
 		widget->setVisible(visible);
 		widget->setPosition(20,20);
 		widget->setSize(400,300);
+		// Set input handler
+		menu->registerInput(this);
+		((gui::CGUIButton*)widget)->addActionListener(menu->getInputListener());
 		// Set parent
 		if (parent)
 		{
@@ -54,5 +58,11 @@ namespace peak
 		// Update position
 		updatePosition();
 		return true;
+	}
+	bool MenuButton::destroy()
+	{
+		if (widget)
+			menu->deregisterInput(this);
+		return MenuElement::destroy();
 	}
 }

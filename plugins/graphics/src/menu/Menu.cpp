@@ -15,6 +15,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
 #include "peakgraphics/menu/Menu.hpp"
+#include "peakgraphics/menu/MenuInputListener.hpp"
 #include "peakgraphics/Graphics.hpp"
 #include <peakengine/support/ScopedLock.hpp>
 
@@ -26,10 +27,12 @@ namespace peak
 	Menu::Menu(Graphics *graphics, std::string themename)
 		: Loadable(), graphics(graphics), themename(themename)
 	{
+		listener = new MenuInputListener(this);
 		graphics->registerLoading(this);
 	}
 	Menu::~Menu()
 	{
+		delete listener;
 	}
 
 	bool Menu::load()
@@ -64,6 +67,10 @@ namespace peak
 	std::string Menu::getThemeName()
 	{
 		return themename;
+	}
+
+	void Menu::onAction(MenuElement *element)
+	{
 	}
 
 	void Menu::registerMenu(Menu *menu, std::string name)
@@ -123,6 +130,15 @@ namespace peak
 		}
 	}
 
+	void Menu::registerInput(MenuElement *element)
+	{
+		listener->registerInput(element);
+	}
+	void Menu::deregisterInput(MenuElement *element)
+	{
+		listener->deregisterInput(element);
+	}
+
 	void Menu::registerParentChange(MenuElement *element)
 	{
 		parentchange.push(element);
@@ -160,6 +176,10 @@ namespace peak
 	lf::gui::CGUIManager *Menu::getGUIManager()
 	{
 		return guimgr;
+	}
+	MenuInputListener *Menu::getInputListener()
+	{
+		return listener;
 	}
 
 	std::map<std::string, SharedPointer<Menu> > Menu::menus;

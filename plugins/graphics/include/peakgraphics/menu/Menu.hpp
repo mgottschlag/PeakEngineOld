@@ -36,6 +36,7 @@ namespace lf
 namespace peak
 {
 	class Graphics;
+	class MenuInputListener;
 
 	class Menu : public Loadable
 	{
@@ -52,6 +53,8 @@ namespace peak
 			virtual std::string getName() = 0;
 			std::string getThemeName();
 
+			virtual void onAction(MenuElement *element);
+
 			static void registerMenu(Menu *menu, std::string name);
 			static void deregisterMenu(std::string name);
 			static void deregisterMenu(Menu *menu);
@@ -64,11 +67,15 @@ namespace peak
 			void addRootElement(MenuElement *element);
 			void removeRootElement(MenuElement *element);
 
+			void registerInput(MenuElement *element);
+			void deregisterInput(MenuElement *element);
+
 			static void registerParentChange(MenuElement *element);
 			void update();
 			static void updateAll();
 
 			lf::gui::CGUIManager *getGUIManager();
+			MenuInputListener *getInputListener();
 		private:
 			Graphics *graphics;
 			std::string themename;
@@ -77,6 +84,8 @@ namespace peak
 			lf::gui::CGUITheme *theme;
 
 			std::vector<MenuElementPointer> rootelements;
+
+			MenuInputListener *listener;
 
 			Mutex mutex;
 
