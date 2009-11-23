@@ -111,7 +111,15 @@ namespace peak
 	}
 	void MenuElement::updatePosition()
 	{
-		// TODO
+		if (!widget)
+			return;
+		// Get absolute position/size in pixels
+		Vector2I screensize = graphics->getWindowSize();
+		Vector2I abspos = position.getAbsolute(screensize);
+		Vector2I abssize = size.getAbsolute(screensize);
+		// Set size/position
+		widget->setPosition(abspos.x, abspos.y);
+		widget->setSize(abssize.x, abssize.y);
 	}
 	void MenuElement::update()
 	{

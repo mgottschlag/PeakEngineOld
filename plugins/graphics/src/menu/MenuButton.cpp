@@ -39,8 +39,6 @@ namespace peak
 		// Create button
 		widget = new gui::CGUIButton(core::stringw(caption.c_str()).c_str(), 1, 1);
 		widget->setVisible(visible);
-		widget->setPosition(20,20);
-		widget->setSize(400,300);
 		// Set input handler
 		menu->registerInput(this);
 		((gui::CGUIButton*)widget)->addActionListener(menu->getInputListener());

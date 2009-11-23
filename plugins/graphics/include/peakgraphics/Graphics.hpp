@@ -67,6 +67,7 @@ namespace peak
 			void registerParentChange(SceneNode *node);
 
 			lf::render::IRenderWindow *getWindow();
+			Vector2I getWindowSize();
 
 			void onKeyDown(peak::KeyCode key);
 			void onKeyUp(peak::KeyCode key);

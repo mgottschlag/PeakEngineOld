@@ -150,6 +150,10 @@ namespace peak
 	{
 		return window;
 	}
+	Vector2I Graphics::getWindowSize()
+	{
+		return Vector2I(width, height);
+	}
 
 	void Graphics::onKeyDown(peak::KeyCode key)
 	{
