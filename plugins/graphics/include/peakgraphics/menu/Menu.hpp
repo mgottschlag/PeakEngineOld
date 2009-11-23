@@ -41,7 +41,7 @@ namespace peak
 	{
 		public:
 			Menu(Graphics *graphics, std::string themename);
-			~Menu();
+			virtual ~Menu();
 
 			virtual bool load();
 			virtual bool destroy();
@@ -80,13 +80,15 @@ namespace peak
 
 			Mutex mutex;
 
-			static std::map<std::string, Menu*> menus;
+			static std::map<std::string, SharedPointer<Menu> > menus;
 			static Menu *activemenu;
 			static Menu *shownmenu;
 
 			static Mutex parentchangemutex;
 			static std::queue<MenuElementPointer> parentchange;
 	};
+
+	typedef SharedPointer<Menu> MenuPointer;
 }
 
 #endif

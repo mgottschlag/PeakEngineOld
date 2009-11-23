@@ -29,7 +29,6 @@ namespace peak
 			virtual ~MenuButton();
 
 			virtual bool load();
-			virtual bool destroy();
 		private:
 			std::string caption;
 	};

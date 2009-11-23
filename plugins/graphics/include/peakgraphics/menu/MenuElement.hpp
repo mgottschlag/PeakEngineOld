@@ -53,12 +53,14 @@ namespace peak
 			void setSize(ScreenSize size);
 			ScreenSize getSize();
 
-			virtual void show();
-			virtual void hide();
+			virtual void setVisible(bool visible);
+			virtual bool isVisible();
 
 			virtual void updateParent();
 			virtual void updatePosition();
 			virtual void update();
+
+			lf::gui::CGUIWidget *getWidget();
 		protected:
 			void removeChild(MenuElement *child);
 
@@ -72,6 +74,7 @@ namespace peak
 
 			ScreenPosition position;
 			ScreenPosition size;
+			bool visible;
 
 			bool changed;
 

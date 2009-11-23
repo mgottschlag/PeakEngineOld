@@ -15,6 +15,11 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
 #include "peakgraphics/menu/MenuButton.hpp"
+#include "peakgraphics/menu/Menu.hpp"
+#include <peakengine/support/ScopedLock.hpp>
+
+#include <lf/Lightfeather.h>
+using namespace lf;
 
 namespace peak
 {
@@ -29,8 +34,25 @@ namespace peak
 
 	bool MenuButton::load()
 	{
-	}
-	bool MenuButton::destroy()
-	{
+		ScopedLock lock(mutex);
+		// Create button
+		widget = new gui::CGUIButton(core::stringw(caption.c_str()).c_str(), 1, 1);
+		widget->setVisible(visible);
+		widget->setPosition(20,20);
+		widget->setSize(400,300);
+		// Set parent
+		if (parent)
+		{
+			if (parent->getWidget())
+				parent->getWidget()->addChild(widget);
+		}
+		else
+		{
+			menu->addRootElement(this);
+			menu->getGUIManager()->addChild(widget);
+		}
+		// Update position
+		updatePosition();
+		return true;
 	}
 }

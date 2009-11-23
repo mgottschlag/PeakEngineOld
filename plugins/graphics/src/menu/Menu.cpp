@@ -40,7 +40,7 @@ namespace peak
 			return false;
 		// Create render layer
 		// TODO: Custom background color
-		guimgr = new gui::CGUIManager(core::CColorI(0,0,0,255), false);
+		guimgr = new gui::CGUIManager(core::CColorI(0, 0, 0, 255), false);
 		guimgr->setActiveTheme(theme);
 		return true;
 	}
@@ -72,7 +72,7 @@ namespace peak
 	}
 	void Menu::deregisterMenu(std::string name)
 	{
-		std::map<std::string, Menu*>::iterator it = menus.find(name);
+		std::map<std::string, MenuPointer>::iterator it = menus.find(name);
 		if (it == menus.end())
 			return;
 		menus.erase(it);
@@ -83,10 +83,10 @@ namespace peak
 	}
 	Menu *Menu::getMenu(std::string name)
 	{
-		std::map<std::string, Menu*>::iterator it = menus.find(name);
+		std::map<std::string, MenuPointer>::iterator it = menus.find(name);
 		if (it == menus.end())
 			return 0;
-		return it->second;
+		return it->second.get();
 	}
 
 	void Menu::setActive(bool active)
@@ -162,7 +162,7 @@ namespace peak
 		return guimgr;
 	}
 
-	std::map<std::string, Menu*> Menu::menus;
+	std::map<std::string, SharedPointer<Menu> > Menu::menus;
 	Menu *Menu::activemenu = 0;
 	Menu *Menu::shownmenu = 0;
 

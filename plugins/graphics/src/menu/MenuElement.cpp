@@ -26,7 +26,7 @@ namespace peak
 {
 	MenuElement::MenuElement(Graphics *graphics, Menu *menu, MenuElement *parent)
 		: graphics(graphics), menu(menu), newparent(parent), parent(0),
-		widget(0), changed(false)
+		widget(0), visible(true), changed(false)
 	{
 	}
 	MenuElement::~MenuElement()
@@ -40,9 +40,13 @@ namespace peak
 
 	bool MenuElement::load()
 	{
+		return false;
 	}
 	bool MenuElement::destroy()
 	{
+		if (widget)
+			widget->drop();
+		return true;
 	}
 
 	void MenuElement::setPosition(ScreenPosition position)
@@ -64,11 +68,14 @@ namespace peak
 		return size;
 	}
 
-	void MenuElement::show()
+	void MenuElement::setVisible(bool visible)
 	{
+		this->visible = visible;
+		changed = true;
 	}
-	void MenuElement::hide()
+	bool MenuElement::isVisible()
 	{
+		return visible;
 	}
 
 	void MenuElement::updateParent()
@@ -112,6 +119,8 @@ namespace peak
 		{
 			// Apply position, size
 			updatePosition();
+			// Update visibility
+			widget->setVisible(visible);
 			// Reset change flag
 			changed = false;
 		}
@@ -120,6 +129,11 @@ namespace peak
 		{
 			children[i]->update();
 		}
+	}
+
+	lf::gui::CGUIWidget *MenuElement::getWidget()
+	{
+		return widget;
 	}
 
 	void MenuElement::removeChild(MenuElement *child)

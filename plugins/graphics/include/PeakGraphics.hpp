@@ -19,6 +19,8 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 #include "peakgraphics/Graphics.hpp"
 #include "peakgraphics/InputReceiver.hpp"
+#include "peakgraphics/menu/Menu.hpp"
+#include "peakgraphics/menu/MenuButton.hpp"
 #include "peakgraphics/scene/CameraSceneNode.hpp"
 #include "peakgraphics/scene/ModelSceneNode.hpp"
 #include "peakgraphics/scene/GroupSceneNode.hpp"
