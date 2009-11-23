@@ -17,6 +17,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "peakgraphics/Graphics.hpp"
 #include "peakgraphics/scene/RootSceneNode.hpp"
 #include "peakgraphics/InputReceiver.hpp"
+#include "peakgraphics/menu/Menu.hpp"
 #include <peakengine/support/Thread.hpp>
 #include <peakengine/support/OS.hpp>
 
@@ -257,6 +258,8 @@ namespace peak
 			parentmutex.unlock();
 			// Update scene node positions
 			rootscenenode->update(OS::get().getTime());
+			// Update active menu
+			Menu::updateAll();
 			// Render
 			if (!CLFRender::getInstance().update())
 			{
