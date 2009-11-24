@@ -28,12 +28,19 @@ namespace peak
 	void EntityManager::addEntity(Entity *entity)
 	{
 		// Add entity to the entity list
-		unsigned int id = entities.addEntity(entity);
-		if (!id)
+		if (!entity->getID())
 		{
-			// TODO: Assert?
+			unsigned int id = entities.addEntity(entity);
+			if (!id)
+			{
+				// TODO: Assert?
+			}
+			entity->setID(id);
 		}
-		entity->setID(id);
+		else
+		{
+			entities.addEntity(entity, entity->getID());
+		}
 	}
 	void EntityManager::removeEntity(Entity *entity)
 	{

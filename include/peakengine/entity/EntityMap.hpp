@@ -30,6 +30,7 @@ namespace peak
 			~EntityMap();
 
 			unsigned int addEntity(Entity *entity);
+			void addEntity(Entity *entity, unsigned int id);
 			void removeEntity(unsigned int id);
 			Entity *getEntity(unsigned int id);
 

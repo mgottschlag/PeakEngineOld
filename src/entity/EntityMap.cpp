@@ -47,6 +47,23 @@ namespace peak
 		size++;
 		return id + 1;
 	}
+	void EntityMap::addEntity(Entity *entity, unsigned int id)
+	{
+		id -= 1;
+		ScopedLock lock(mutex);
+		// Insert entity
+		if (entities[id])
+		{
+			// Simply replace it
+			entities[id] = entity;
+			return;
+		}
+		entities[id] = entity;
+		// Increment counters
+		used1[id / 256]++;
+		used2[id / 8192]++;
+		size++;
+	}
 	void EntityMap::removeEntity(unsigned int id)
 	{
 		ScopedLock lock(mutex);

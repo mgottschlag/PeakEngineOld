@@ -71,6 +71,7 @@ namespace peak
 
 	void Server::addEntity(Entity *entity)
 	{
+		entity->setID(0);
 		EntityManager::addEntity(entity);
 		// Save owner of the entity
 		ClientInfo *owner = 0;
