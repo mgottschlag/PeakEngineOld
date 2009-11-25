@@ -173,6 +173,10 @@ namespace peak
 		}
 	}
 
+	Graphics *Menu::getGraphics()
+	{
+		return graphics;
+	}
 	lf::gui::CGUIManager *Menu::getGUIManager()
 	{
 		return guimgr;

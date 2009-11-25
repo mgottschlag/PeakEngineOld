@@ -17,11 +17,16 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #ifndef _PEAKENGINE_CORE_ENGINE_HPP_
 #define _PEAKENGINE_CORE_ENGINE_HPP_
 
+#include <peakengine/support/Buffer.hpp>
+#include <peakengine/support/ConditionVariable.hpp>
+
 #include <string>
 
 namespace peak
 {
 	class Game;
+	class Server;
+	class Client;
 
 	/**
 	 * Main engine class
@@ -73,21 +78,48 @@ namespace peak
 			/**
 			 * Starts a game server-
 			 */
-			bool runServer();
+			bool runServer(BufferPointer serverdata);
 			/**
 			 * Stops the engine.
 			 */
 			void stop();
 
 			/**
-			 * Renders one frame into the current OpenGL context. This has to be
-			 * the context with which the engine was started.
+			 * Creates a server and starts the server thread.
 			 */
-			void render();
+			Server *createServer(BufferPointer serverdata);
+			/**
+			 * Stops the currently running server.
+			 */
+			void stopServer();
+			/**
+			 * Returns the currently running server or 0 if none exists.
+			 */
+			Server *getServer();
+			/**
+			 * Creates a client and starts the client thread.
+			 */
+			Client *createClient(std::string address, unsigned int port,
+				unsigned int timeout);
+			/**
+			 * Starts a client and connects to a local server previously
+			 * created via createServer().
+			 */
+			Client *createLocalClient();
+			/**
+			 * Stops the currently running server.
+			 */
+			void stopClient();
+			/**
+			 * Returns the currently running server or 0 if none exists.
+			 */
+			Client *getClient();
 		private:
 			Game *game;
 			std::string directory;
-			bool stopping;
+			ConditionVariable stopping;
+			Server *server;
+			Client *client;
 	};
 }
 

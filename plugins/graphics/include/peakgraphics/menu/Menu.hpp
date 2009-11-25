@@ -74,6 +74,7 @@ namespace peak
 			void update();
 			static void updateAll();
 
+			Graphics *getGraphics();
 			lf::gui::CGUIManager *getGUIManager();
 			MenuInputListener *getInputListener();
 		private:

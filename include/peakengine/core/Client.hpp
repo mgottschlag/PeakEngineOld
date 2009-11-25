@@ -27,6 +27,7 @@ namespace peak
 	class Server;
 	class Connection;
 	class NetworkClient;
+	class Thread;
 
 	struct EntityMessage
 	{
@@ -87,6 +88,10 @@ namespace peak
 			virtual unsigned int getTime();
 
 			/**
+			 * Starts a thread which calls runThread().
+			 */
+			void startThread();
+			/**
 			 * Main client game loop.
 			 */
 			void runThread();
@@ -98,6 +103,7 @@ namespace peak
 			unsigned int lastupdate;
 			unsigned int lastacked;
 			std::queue<EntityMessage> entitymessages;
+			Thread *thread;
 	};
 }
 

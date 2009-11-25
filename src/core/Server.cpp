@@ -63,8 +63,11 @@ namespace peak
 		// Exit thread
 		stopping = true;
 		if (thread)
+		{
 			thread->wait();
-		if(host && !host->shutdown())
+			delete thread;
+		}
+		if (host && !host->shutdown())
 			return false;
 		return true;
 	}

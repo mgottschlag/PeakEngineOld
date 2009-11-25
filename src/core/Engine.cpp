@@ -23,7 +23,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 namespace peak
 {
-	Engine::Engine() : game(0)
+	Engine::Engine() : game(0), server(0), client(0)
 	{
 		// Initialize networking
 		enet_initialize();
@@ -68,33 +68,22 @@ namespace peak
 		if (directory == "")
 			return false;
 		// Initialize engine
-		stopping = false;
+		stopping.lock();
 		if (!game->init())
-			return false;
-		// TODO
-		// Create test game
-		BufferPointer buffer = new Buffer();
-		buffer->writeString("testmap");
-		Server *server = game->createServer(buffer);
-		Client *client = 0;
-		if (server)
 		{
-			server->startThread();
-			client = game->createClient(server);
-		}
-		else
-		{
-			client = game->createClient("phoenix64.dyndns.org", 27272, 5000);
-		}
-		if (!client)
+			stopping.unlock();
 			return false;
+		}
 		// TODO
-		// Client main loop
-		client->runThread();
+		// Wait for engine to be closed
+		stopping.wait();
+		stopping.unlock();
 		// Clean up again
+		stopClient();
+		stopServer();
 		game->shutdown();
 		// TODO
-		return false;
+		return true;
 	}
 	bool Engine::runFromEditor()
 	{
@@ -109,7 +98,7 @@ namespace peak
 		// TODO
 		return false;
 	}
-	bool Engine::runServer()
+	bool Engine::runServer(BufferPointer serverdata)
 	{
 		// Check game
 		if (!game)
@@ -117,22 +106,93 @@ namespace peak
 		if (directory == "")
 			return false;
 		// Initialize engine
-		stopping = false;
-		// Create test game
-		BufferPointer buffer = new Buffer();
-		buffer->writeString("testmap");
-		Server *server = game->createServer(buffer);
+		stopping.lock();
 		// TODO
-		// Server main loop
-		server->runThread();
+		// Create server
+		Server *server = createServer(serverdata);
+		if (!server)
+		{
+			stopping.unlock();
+			return false;
+		}
+		// Wait for engine to be closed
+		stopping.wait();
+		stopping.unlock();
+		// Clean up again
+		stopClient();
+		stopServer();
+		// TODO
 		return false;
 	}
 	void Engine::stop()
 	{
-		stopping = true;
+		stopping.lock();
+		stopping.signal();
+		stopping.unlock();
 	}
 
-	void Engine::render()
+	Server *Engine::createServer(BufferPointer serverdata)
 	{
+		// Stop existing server
+		if (server)
+			stopServer();
+		// Create new server
+		server = game->createServer(serverdata);
+		if (!server)
+			return 0;
+		// Start thread
+		server->startThread();
+		return server;
+	}
+	void Engine::stopServer()
+	{
+		if (!server)
+			return;
+		server->shutdown();
+		delete server;
+	}
+	Server *Engine::getServer()
+	{
+		return server;
+	}
+	Client *Engine::createClient(std::string address, unsigned int port,
+		unsigned int timeout)
+	{
+		// Stop existing server
+		if (client)
+			stopClient();
+		// Create new client
+		client = game->createClient(address, port, timeout);
+		if (!client)
+			return 0;
+		// Start thread
+		client->startThread();
+		return client;
+	}
+	Client *Engine::createLocalClient()
+	{
+		if (!server)
+			return 0;
+		// Stop existing server
+		if (client)
+			stopClient();
+		// Create new client
+		client = game->createClient(server);
+		if (!client)
+			return 0;
+		// Start thread
+		client->startThread();
+		return client;
+	}
+	void Engine::stopClient()
+	{
+		if (!client)
+			return;
+		client->shutdown();
+		delete client;
+	}
+	Client *Engine::getClient()
+	{
+		return client;
 	}
 }

@@ -24,13 +24,14 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "peakengine/entity/EntityFactory.hpp"
 #include "peakengine/entity/ClientEntity.hpp"
 #include "peakengine/support/OS.hpp"
+#include "peakengine/support/Thread.hpp"
 
 #include <iostream>
 
 namespace peak
 {
 	Client::Client(Engine *engine) : EntityManager(engine), connection(0),
-		client(0), lastacked(0)
+		client(0), lastacked(0), thread(0)
 	{
 	}
 	Client::~Client()
@@ -105,7 +106,14 @@ namespace peak
 	}
 	bool Client::shutdown()
 	{
-		if(!client->shutdown())
+		// Exit thread
+		stopping = true;
+		if (thread)
+		{
+			thread->wait();
+			delete thread;
+		}
+		if (!client->shutdown())
 			return false;
 		return true;
 	}
@@ -124,6 +132,13 @@ namespace peak
 	unsigned int Client::getTime()
 	{
 		return time;
+	}
+
+	void Client::startThread()
+	{
+		// Create server thread
+		thread = new Thread();
+		thread->create(new ClassFunctor<Client>(this, &Client::runThread));
 	}
 
 	void Client::runThread()
