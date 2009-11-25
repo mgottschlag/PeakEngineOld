@@ -40,18 +40,18 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 namespace peak
 {
 /**
- * \mainpage PeakEngine
+ * @mainpage PeakEngine
  *
- * \section about About
+ * @section about About
  * The PeakEngine is a multiplatform, multithreading, easy-to use modular game
  * engine with automatic networking, 3D graphics and physics. It is based on
  * Lightfeather3D, Bullet, enet, FreeImagePlus. The core documented here however
  * only contains networking and object management, all other parts are available
  * as separate modules in the plugins/ subdirectory.
  *
- * \section design Design
+ * @section design Design
  *
- * \subsection overview Overview
+ * @subsection overview Overview
  * The engine always uses a client/server architecture, even for singleplayer
  * games where data is then passed from the server to the client by simply
  * passing a pointer. The game logics are decoupled from the graphics, and
@@ -66,7 +66,7 @@ namespace peak
  *
  * The main class which does all initialization and starts the main loop is
  * Engine, it is used like this:
- * \code
+ * @code
  * #include <PeakEngine.hpp>
  * #include "MyGame.hpp"
  *
@@ -81,9 +81,9 @@ namespace peak
  *         return -1;
  *     return 0;
  * }
- * \endcode
+ * @endcode
  *
- * \subsection entity Entity
+ * @subsection entity Entity
  * Entities are defined by inheriting from ServerEntity and ClientEntity: As
  * the engine uses a strict client/server architecture, different code runs on
  * the server and the client. Entities are automatically synchronized via
@@ -96,7 +96,7 @@ namespace peak
  *
  * TODO: Example.
  *
- * \subsection networking Networking
+ * @subsection networking Networking
  * TODO: Talk about delta updates, reliable and unreliable entity messages here.
  */
 }
