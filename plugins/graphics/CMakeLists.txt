@@ -5,6 +5,7 @@ src/Loadable.cpp
 src/menu/Menu.cpp
 src/menu/MenuButton.cpp
 src/menu/MenuElement.cpp
+src/menu/MenuImage.cpp
 src/scene/CameraSceneNode.cpp
 src/scene/GroupSceneNode.cpp
 src/scene/ModelSceneNode.cpp

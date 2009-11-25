@@ -14,21 +14,24 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-#ifndef _PEAKGRAPHICS_HPP_
-#define _PEAKGRAPHICS_HPP_
+#ifndef _PEAKGRAPHICS_MENU_MENUIMAGE_HPP_
+#define _PEAKGRAPHICS_MENU_MENUIMAGE_HPP_
 
-#include "peakgraphics/Graphics.hpp"
-#include "peakgraphics/InputReceiver.hpp"
-#include "peakgraphics/menu/Menu.hpp"
-#include "peakgraphics/menu/MenuButton.hpp"
-#include "peakgraphics/menu/MenuImage.hpp"
-#include "peakgraphics/scene/CameraSceneNode.hpp"
-#include "peakgraphics/scene/ModelSceneNode.hpp"
-#include "peakgraphics/scene/GroupSceneNode.hpp"
-#include "peakgraphics/scene/TerrainSceneNode.hpp"
+#include "MenuElement.hpp"
 
 namespace peak
 {
+	class MenuImage : public MenuElement
+	{
+		public:
+			MenuImage(Graphics *graphics, std::string file, Menu *menu,
+				MenuElement *parent = 0);
+			virtual ~MenuImage();
+
+			virtual bool load();
+		private:
+			std::string filename;
+	};
 }
 
 #endif
