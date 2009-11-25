@@ -60,6 +60,11 @@ namespace peak
 			static void deregisterMenu(Menu *menu);
 			static Menu *getMenu(std::string name);
 
+			void setClear(bool clear);
+			bool getClear();
+			void setClearColor(unsigned int color);
+			unsigned int getClearColor();
+
 			void setActive(bool active);
 			bool isActive();
 			static Menu *getActiveMenu();
@@ -87,6 +92,10 @@ namespace peak
 			std::vector<MenuElementPointer> rootelements;
 
 			MenuInputListener *listener;
+
+			bool changed;
+			bool clear;
+			unsigned int clearcolor;
 
 			Mutex mutex;
 

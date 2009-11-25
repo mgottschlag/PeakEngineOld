@@ -25,7 +25,8 @@ using namespace lf;
 namespace peak
 {
 	Menu::Menu(Graphics *graphics, std::string themename)
-		: Loadable(), graphics(graphics), themename(themename)
+		: Loadable(), graphics(graphics), themename(themename), guimgr(0),
+		theme(0), changed(false), clear(false), clearcolor(0)
 	{
 		listener = new MenuInputListener(this);
 		graphics->registerLoading(this);
@@ -96,6 +97,29 @@ namespace peak
 		return it->second.get();
 	}
 
+	void Menu::setClear(bool clear)
+	{
+		if (this->clear == clear)
+			return;
+		this->clear = clear;
+		changed = true;
+	}
+	bool Menu::getClear()
+	{
+		return clear;
+	}
+	void Menu::setClearColor(unsigned int color)
+	{
+		if (clearcolor == color)
+			return;
+		clearcolor = color;
+		changed = true;
+	}
+	unsigned int Menu::getClearColor()
+	{
+		return clearcolor;
+	}
+
 	void Menu::setActive(bool active)
 	{
 		if (active)
@@ -145,6 +169,13 @@ namespace peak
 	}
 	void Menu::update()
 	{
+		if (changed && guimgr)
+		{
+			// Set background color
+			guimgr->setClearBuffers(clear);
+			guimgr->setClearColor(core::CColorI(clearcolor, core::ECO_ARGB));
+			changed = false;
+		}
 		// Update elements
 		mutex.lock();
 		for (unsigned int i = 0; i < rootelements.size(); i++)
@@ -171,6 +202,9 @@ namespace peak
 			parentchange.pop();
 			element->updateParent();
 		}
+		// Update active menu
+		if (activemenu)
+			activemenu->update();
 	}
 
 	Graphics *Menu::getGraphics()
