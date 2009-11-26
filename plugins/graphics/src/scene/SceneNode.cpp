@@ -24,9 +24,8 @@ using namespace lf;
 namespace peak
 {
 	SceneNode::SceneNode(Graphics *graphics) : Loadable(),
-		transformationcount(0), scale(1, 1, 1), moving(true), parent(0),
-		newparent(0), node(0),
-		graphics(graphics)
+		transformationcount(0), scale(1, 1, 1), moving(true), visible(true),
+		parent(0), newparent(0), node(0), graphics(graphics)
 	{
 	}
 	SceneNode::~SceneNode()
@@ -192,6 +191,15 @@ namespace peak
 		return moving;
 	}
 
+	void SceneNode::setVisible(bool visible)
+	{
+		this->visible = visible;
+	}
+	bool SceneNode::isVisible()
+	{
+		return visible;
+	}
+
 	void SceneNode::updateParent()
 	{
 		ScopedLock lock(mutex);
@@ -231,6 +239,7 @@ namespace peak
 			node->setRotation(core::quaternion(rotation.q[0], rotation.q[1],
 				rotation.q[2], rotation.q[3]));
 			node->setScale(core::vector3df(scale.x, scale.y, scale.z));
+			node->setVisible(visible);
 		}
 		mutex.unlock();
 		// Update children

@@ -56,6 +56,9 @@ namespace peak
 			void setMoving(bool moving);
 			bool isMoving();
 
+			void setVisible(bool visible);
+			bool isVisible();
+
 			virtual bool load() = 0;
 
 			void updateParent();
@@ -75,6 +78,7 @@ namespace peak
 			unsigned int transformationcount;
 			Vector3F scale;
 			bool moving;
+			bool visible;
 			SceneNode *parent;
 			SceneNode *newparent;
 			std::vector<SharedPointer<SceneNode> > children;
