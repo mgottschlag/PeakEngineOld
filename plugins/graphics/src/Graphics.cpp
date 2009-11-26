@@ -40,9 +40,21 @@ namespace peak
 			}
 			virtual void mousePressed(lf::input::CMouseEvent &event)
 			{
+				if (event.getButton() == 1)
+					graphics->onKeyDown(KEY_LBUTTON);
+				if (event.getButton() == 2)
+					graphics->onKeyDown(KEY_RBUTTON);
+				if (event.getButton() == 3)
+					graphics->onKeyDown(KEY_MBUTTON);
 			}
 			virtual void mouseReleased(lf::input::CMouseEvent &event)
 			{
+				if (event.getButton() == 1)
+					graphics->onKeyUp(KEY_LBUTTON);
+				if (event.getButton() == 2)
+					graphics->onKeyUp(KEY_RBUTTON);
+				if (event.getButton() == 3)
+					graphics->onKeyUp(KEY_MBUTTON);
 			}
 			virtual void mouseMoved(lf::input::CMouseEvent &event)
 			{
