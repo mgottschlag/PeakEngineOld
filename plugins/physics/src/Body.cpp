@@ -22,7 +22,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 namespace peak
 {
-	Body::Body() : body(0), physics(0), state(0)
+	Body::Body() : body(0), physics(0), state(0), userdata(0)
 	{
 	}
 	Body::~Body()
@@ -115,6 +115,15 @@ namespace peak
 	{
 		btVector3 gravity = body->getGravity();
 		return Vector3F(gravity.x(), gravity.y(), gravity.z());
+	}
+
+	void Body::setUserData(void *data)
+	{
+		userdata = data;
+	}
+	void *Body::getUserData()
+	{
+		return userdata;
 	}
 
 	btRigidBody *Body::getBody()

@@ -88,6 +88,15 @@ namespace peak
 			Vector3F getGravity();
 
 			/**
+			 * Attaches a user defined pointer to the body.
+			 */
+			void setUserData(void *data);
+			/**
+			 * Returns a pointer to user data.
+			 */
+			void *getUserData();
+
+			/**
 			 * Returns the Bullet body.
 			 */
 			btRigidBody *getBody();
@@ -109,6 +118,7 @@ namespace peak
 			btDefaultMotionState *state;
 			Shape *shape;
 			bool autodeactivation;
+			void *userdata;
 	};
 }
 
