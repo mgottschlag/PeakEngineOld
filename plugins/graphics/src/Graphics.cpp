@@ -18,6 +18,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "peakgraphics/scene/RootSceneNode.hpp"
 #include "peakgraphics/InputReceiver.hpp"
 #include "peakgraphics/menu/Menu.hpp"
+#include "peakgraphics/menu/Sprite.hpp"
 #include <peakengine/support/Thread.hpp>
 #include <peakengine/support/OS.hpp>
 
@@ -289,6 +290,8 @@ namespace peak
 			rootscenenode->update(OS::get().getTime());
 			// Update active menu
 			Menu::updateAll();
+			// Update sprites
+			Sprite::updateAll();
 			// Render
 			if (!CLFRender::getInstance().update())
 			{

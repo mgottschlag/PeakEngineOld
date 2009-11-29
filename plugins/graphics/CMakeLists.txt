@@ -6,6 +6,8 @@ src/menu/Menu.cpp
 src/menu/MenuButton.cpp
 src/menu/MenuElement.cpp
 src/menu/MenuImage.cpp
+src/menu/Sprite.cpp
+src/menu/SpriteLayer.cpp
 src/scene/CameraSceneNode.cpp
 src/scene/GroupSceneNode.cpp
 src/scene/ModelSceneNode.cpp

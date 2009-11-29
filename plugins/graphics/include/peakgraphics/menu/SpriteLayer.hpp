@@ -14,23 +14,44 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-#ifndef _PEAKGRAPHICS_HPP_
-#define _PEAKGRAPHICS_HPP_
+#ifndef _PEAKGRAPHICS_MENU_SPRITELAYER_HPP_
+#define _PEAKGRAPHICS_MENU_SPRITELAYER_HPP_
 
-#include "peakgraphics/Graphics.hpp"
-#include "peakgraphics/InputReceiver.hpp"
-#include "peakgraphics/menu/Menu.hpp"
-#include "peakgraphics/menu/MenuButton.hpp"
-#include "peakgraphics/menu/MenuImage.hpp"
-#include "peakgraphics/menu/Sprite.hpp"
-#include "peakgraphics/menu/SpriteLayer.hpp"
-#include "peakgraphics/scene/CameraSceneNode.hpp"
-#include "peakgraphics/scene/ModelSceneNode.hpp"
-#include "peakgraphics/scene/GroupSceneNode.hpp"
-#include "peakgraphics/scene/TerrainSceneNode.hpp"
+#include "../Loadable.hpp"
+
+namespace lf
+{
+	namespace gui
+	{
+		class CGUIManager;
+	}
+}
 
 namespace peak
 {
+	class Graphics;
+
+	class SpriteLayer : public Loadable
+	{
+		public:
+			SpriteLayer(Graphics *graphics);
+			virtual ~SpriteLayer();
+
+			virtual bool load();
+			virtual bool destroy();
+
+			virtual void show();
+			virtual void hide();
+
+			Graphics *getGraphics();
+			lf::gui::CGUIManager *getGUIManager();
+		protected:
+			Graphics *graphics;
+			lf::gui::CGUIManager *guimgr;
+	};
+
+	typedef SharedPointer<SpriteLayer> SpriteLayerPointer;
 }
+
 
 #endif

@@ -14,23 +14,53 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-#ifndef _PEAKGRAPHICS_HPP_
-#define _PEAKGRAPHICS_HPP_
-
-#include "peakgraphics/Graphics.hpp"
-#include "peakgraphics/InputReceiver.hpp"
-#include "peakgraphics/menu/Menu.hpp"
-#include "peakgraphics/menu/MenuButton.hpp"
-#include "peakgraphics/menu/MenuImage.hpp"
-#include "peakgraphics/menu/Sprite.hpp"
 #include "peakgraphics/menu/SpriteLayer.hpp"
-#include "peakgraphics/scene/CameraSceneNode.hpp"
-#include "peakgraphics/scene/ModelSceneNode.hpp"
-#include "peakgraphics/scene/GroupSceneNode.hpp"
-#include "peakgraphics/scene/TerrainSceneNode.hpp"
+#include "peakgraphics/Graphics.hpp"
+
+#include <lf/Lightfeather.h>
+using namespace lf;
 
 namespace peak
 {
-}
+	SpriteLayer::SpriteLayer(Graphics *graphics) : graphics(graphics)
+	{
+		graphics->registerLoading(this);
+	}
+	SpriteLayer::~SpriteLayer()
+	{
+	}
 
-#endif
+	bool SpriteLayer::load()
+	{
+		// Create render layer
+		guimgr = new gui::CGUIManager(core::CColorI(0, 0, 0, 255), false);
+		show();
+		return true;
+	}
+	bool SpriteLayer::destroy()
+	{
+		if (!guimgr)
+			return false;
+		hide();
+		guimgr->drop();
+		return true;
+	}
+
+	void SpriteLayer::show()
+	{
+		graphics->getWindow()->addGUIManager(guimgr);
+	}
+	void SpriteLayer::hide()
+	{
+		graphics->getWindow()->removeGUIManager(guimgr);
+	}
+
+	Graphics *SpriteLayer::getGraphics()
+	{
+		return graphics;
+	}
+	lf::gui::CGUIManager *SpriteLayer::getGUIManager()
+	{
+		return guimgr;
+	}
+}
