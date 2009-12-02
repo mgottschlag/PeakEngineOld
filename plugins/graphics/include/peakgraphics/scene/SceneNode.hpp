@@ -59,8 +59,6 @@ namespace peak
 			void setVisible(bool visible);
 			bool isVisible();
 
-			virtual bool load() = 0;
-
 			void updateParent();
 
 			virtual void update(unsigned int time);

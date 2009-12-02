@@ -43,7 +43,7 @@ namespace peak
 			 */
 			Game();
 			/**
-			 * Dstructor.
+			 * Destructor.
 			 */
 			virtual ~Game();
 

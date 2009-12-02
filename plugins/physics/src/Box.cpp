@@ -31,6 +31,7 @@ namespace peak
 	{
 		dimensions /= 2;
 		shape = new btBoxShape(btVector3(dimensions.x, dimensions.y, dimensions.z));
+		// FIXME: Optimize this!
 		transform = new btTransform();
 		transform->setIdentity();
 		transform->setOrigin(btVector3(0, 0, 0));
