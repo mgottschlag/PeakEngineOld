@@ -18,8 +18,8 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #define _PEAKENGINE_SUPPORT_BUFFER_HPP_
 
 #include "ReferenceCounted.hpp"
+#include "SizedIntegers.hpp"
 
-#include <stdint.h>
 #include <string>
 
 namespace peak

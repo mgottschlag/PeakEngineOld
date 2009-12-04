@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2009, Mathias Gottschlag
+Copyright (c) 2009, Christian Reiser
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
@@ -14,39 +14,16 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-#include "peakgraphics/Loadable.hpp"
+#ifndef _PEAKENGINE_SUPPORT_SIZEDINTEGERS_HPP_
+#define _PEAKENGINE_SUPPORT_SIZEDINTEGERS_HPP_
 
-namespace peak
-{
-	Loadable::Loadable() : ReferenceCounted(), loaded(false)
-	{
-	}
-	Loadable::~Loadable()
-	{
-	}
+#if defined(_MSC_VER) || defined(_WINDOWS_) || defined(_WIN32)
+typedef unsigned __int8 uint8_t;
+typedef unsigned __int16 uint16_t;
+typedef unsigned __int32 uint32_t;
+typedef unsigned __int64 uint64_t;
+#else
+#include <stdint.h>
+#endif
 
-	bool Loadable::tryLoading()
-	{
-		if (load())
-		{
-			setLoaded(true);
-			return true;
-		}
-		else
-			return false;
-	}
-
-	bool Loadable::destroy()
-	{
-		setLoaded(false);
-		return true;
-	}
-	void Loadable::setLoaded(bool loaded)
-	{
-		this->loaded = loaded;
-	}
-	bool Loadable::isLoaded()
-	{
-		return loaded;
-	}
-}
+#endif

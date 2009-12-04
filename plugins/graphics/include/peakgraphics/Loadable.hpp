@@ -30,7 +30,7 @@ namespace peak
 			bool tryLoading();
 			virtual bool load() = 0;
 			virtual bool destroy();
-			bool setLoaded(bool loaded);
+			void setLoaded(bool loaded);
 			bool isLoaded();
 		private:
 			bool loaded;

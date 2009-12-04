@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C++ Express 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PeakEngine", "PeakEngine.vcproj", "{31A391F8-A121-4584-8FF0-3672EE2B85F5}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PeakGraphics", "PeakGraphics.vcproj", "{31A391F8-A121-4584-8AF0-3672EE2B85F5}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PeakPhysics", "PeakPhysics.vcproj", "{31A391F8-A121-4584-8AF0-3272EE2B85F5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{31A391F8-A121-4584-8FF0-3672EE2B85F5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{31A391F8-A121-4584-8FF0-3672EE2B85F5}.Debug|Win32.Build.0 = Debug|Win32
+		{31A391F8-A121-4584-8FF0-3672EE2B85F5}.Release|Win32.ActiveCfg = Release|Win32
+		{31A391F8-A121-4584-8FF0-3672EE2B85F5}.Release|Win32.Build.0 = Release|Win32
+		{31A391F8-A121-4584-8AF0-3672EE2B85F5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{31A391F8-A121-4584-8AF0-3672EE2B85F5}.Debug|Win32.Build.0 = Debug|Win32
+		{31A391F8-A121-4584-8AF0-3672EE2B85F5}.Release|Win32.ActiveCfg = Release|Win32
+		{31A391F8-A121-4584-8AF0-3672EE2B85F5}.Release|Win32.Build.0 = Release|Win32
+		{31A391F8-A121-4584-8AF0-3272EE2B85F5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{31A391F8-A121-4584-8AF0-3272EE2B85F5}.Debug|Win32.Build.0 = Debug|Win32
+		{31A391F8-A121-4584-8AF0-3272EE2B85F5}.Release|Win32.ActiveCfg = Release|Win32
+		{31A391F8-A121-4584-8AF0-3272EE2B85F5}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

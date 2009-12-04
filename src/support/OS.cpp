@@ -18,7 +18,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 #if defined(_MSC_VER) || defined(_WINDOWS_) || defined(_WIN32)
 #include <time.h>
-#include <winbase.h>
+#include <windows.h>
 #define usleep(x) Sleep((x)/1000)
 #else
 #include <unistd.h>

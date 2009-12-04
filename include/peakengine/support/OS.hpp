@@ -17,7 +17,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #ifndef _PEAKENGINE_SUPPORT_OS_HPP_
 #define _PEAKENGINE_SUPPORT_OS_HPP_
 
-#include <stdint.h>
+#include "SizedIntegers.hpp"
 
 namespace peak
 {

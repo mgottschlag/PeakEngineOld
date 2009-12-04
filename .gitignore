@@ -8,3 +8,5 @@ install_manifest.txt
 /plugins/graphics/libPeakGraphics.so
 /plugins/physics/libPeakPhysics.so
 /docs/doxygen
+/lib
+/obj
