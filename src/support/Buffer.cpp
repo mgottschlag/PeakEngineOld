@@ -548,7 +548,11 @@ namespace peak
 		char *msg = (char*)malloc(size * 3);
 		for (unsigned int i = 0; i < size; i++)
 		{
+			#if defined(_MSC_VER) || defined(_WINDOWS_) || defined(_WIN32)
 			_snprintf(msg + i * 3, (size - i) * 3, "%02x ", (unsigned char)data[i]);
+			#else
+			snprintf(msg + i * 3, (size - i) * 3, "%02x ", (unsigned char)data[i]);
+			#endif
 		}
 		std::cout << msg << std::endl;
 		free(msg);
