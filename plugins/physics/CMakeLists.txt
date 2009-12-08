@@ -6,6 +6,7 @@ src/Capsule.cpp
 src/CharacterController.cpp
 src/Heightfield.cpp
 src/Physics.cpp
+src/PhysicsProfiler.cpp
 src/Plane.cpp
 src/Shape.cpp
 )

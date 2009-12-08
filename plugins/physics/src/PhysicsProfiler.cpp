@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2009, Mathias Gottschlag
+Copyright (c) 2009, Mathias Gottschlag, Christian Reiser
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
@@ -14,20 +14,23 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-#ifndef _PEAKPHYSICS_HPP_
-#define _PEAKPHYSICS_HPP_
-
-#include "peakphysics/Physics.hpp"
-#include "peakphysics/Body.hpp"
-#include "peakphysics/Plane.hpp"
-#include "peakphysics/Box.hpp"
-#include "peakphysics/Capsule.hpp"
-#include "peakphysics/Heightfield.hpp"
-#include "peakphysics/CharacterController.hpp"
 #include "peakphysics/PhysicsProfiler.hpp"
+
+#include <LinearMath/btQuickprof.h>
 
 namespace peak
 {
-}
+	PhysicsProfiler::PhysicsProfiler()
+	{
+		profiler = CProfileManager::Get_Iterator();
+	}
+	PhysicsProfiler::~PhysicsProfiler()
+	{
+		CProfileManager::Release_Iterator(profiler);
+	}
 
-#endif
+	void PhysicsProfiler::dump()
+	{
+		CProfileManager::dumpRecursive(profiler, 4);
+	}
+}
