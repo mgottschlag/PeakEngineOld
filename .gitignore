@@ -10,3 +10,5 @@ install_manifest.txt
 /docs/doxygen
 /lib
 /obj
+/msvc/PeakEngine.ncb
+/msvc/PeakEngine.suo

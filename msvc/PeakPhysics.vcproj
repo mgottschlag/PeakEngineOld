@@ -186,11 +186,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\plugins\physics\src\PhysicsProfiler.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\plugins\physics\src\Plane.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\plugins\physics\src\Shape.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\plugins\physics\src\Trimesh.cpp"
 				>
 			</File>
 		</Filter>
@@ -228,11 +236,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\plugins\physics\include\peakphysics\PhysicsProfiler.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\plugins\physics\include\peakphysics\Plane.hpp"
 				>
 			</File>
 			<File
 				RelativePath="..\plugins\physics\include\peakphysics\Shape.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\plugins\physics\include\peakphysics\Trimesh.hpp"
 				>
 			</File>
 		</Filter>

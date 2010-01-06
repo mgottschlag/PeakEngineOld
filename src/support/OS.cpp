@@ -43,7 +43,11 @@ namespace peak
 	uint64_t OS::getSystemTime()
 	{
 		#if defined(_MSC_VER) || defined(_WINDOWS_) || defined(_WIN32)
-		return (uint64_t)GetTickCount() * 1000;
+		LARGE_INTEGER timerfreq;
+		QueryPerformanceFrequency(&timerfreq);
+		LARGE_INTEGER counter;
+		QueryPerformanceCounter(&counter);
+		return counter.QuadPart * 1000000 / timerfreq.QuadPart;
 		#else
 		struct timeval tv;
 		gettimeofday(&tv, 0);
