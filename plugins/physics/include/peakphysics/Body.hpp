@@ -81,7 +81,7 @@ namespace peak
 			/**
 			 * Sets the gravity which affects the body.
 			 */
-			void setGravity(const Vector3F &gravity = Vector3F(0, -9.81, 0));
+			void setGravity(const Vector3F &gravity = Vector3F(0.0f, -9.81f, 0.0f));
 			/**
 			 * Returns the gravity which affects the body.
 			 */

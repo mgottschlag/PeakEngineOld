@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9,00"
 	Name="PeakPhysics"
-	ProjectGUID="{31A391F8-A121-4584-8AF0-3272EE2B85F5}"
+	ProjectGUID="{7DD1B7B6-7C8E-4216-905F-1BD6D52BCE36}"
 	RootNamespace="PeakPhysics"
 	TargetFrameworkVersion="196613"
 	>
@@ -17,8 +17,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="..\lib"
-			IntermediateDirectory="..\obj"
+			OutputDirectory="$(SolutionDir)..\lib"
+			IntermediateDirectory="$(SolutionDir)..\obj"
 			ConfigurationType="4"
 			CharacterSet="2"
 			BuildLogFile="$(IntDir)\$(ProjectName).htm"
@@ -41,17 +41,15 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\include;..\plugins\physics\include"
-				PreprocessorDefinitions="_DEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;WIN32"
+				AdditionalIncludeDirectories="..\plugins\physics\include;..\include"
+				PreprocessorDefinitions="WIN32"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
-				ObjectFile="$(IntDir)\"
-				ProgramDataBaseFileName="$(TargetDir)vc90.pdb"
-				XMLDocumentationFileName="$(IntDir)\"
+				ProgramDataBaseFileName="$(IntDir)\$(ProjectName).pdb"
 				WarningLevel="3"
 				DebugInformationFormat="4"
-				DisableSpecificWarnings="4996"
+				DisableSpecificWarnings="4996;4099"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -64,7 +62,6 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\$(ProjectName).lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -84,11 +81,12 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
+			OutputDirectory="$(SolutionDir)..\lib"
+			IntermediateDirectory="$(SolutionDir)..\obj"
+			ConfigurationType="4"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
+			BuildLogFile="$(IntDir)\$(ProjectName).htm"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -109,10 +107,14 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				RuntimeLibrary="2"
+				AdditionalIncludeDirectories="..\plugins\physics\include;..\include"
+				PreprocessorDefinitions="WIN32"
+				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
+				ProgramDataBaseFileName="$(IntDir)\$(ProjectName).pdb"
 				WarningLevel="3"
 				DebugInformationFormat="3"
+				DisableSpecificWarnings="4996;4099"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -124,17 +126,10 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
-				GenerateDebugInformation="true"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				TargetMachine="1"
+				Name="VCLibrarianTool"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -146,9 +141,6 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
@@ -157,55 +149,7 @@
 	</References>
 	<Files>
 		<Filter
-			Name="src"
-			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
-			>
-			<File
-				RelativePath="..\plugins\physics\src\Body.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\plugins\physics\src\Box.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\plugins\physics\src\Capsule.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\plugins\physics\src\CharacterController.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\plugins\physics\src\Heightfield.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\plugins\physics\src\Physics.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\plugins\physics\src\PhysicsProfiler.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\plugins\physics\src\Plane.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\plugins\physics\src\Shape.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\plugins\physics\src\Trimesh.cpp"
-				>
-			</File>
-		</Filter>
-		<Filter
 			Name="include"
-			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
 				RelativePath="..\plugins\physics\include\peakphysics\Body.hpp"
@@ -249,6 +193,50 @@
 			</File>
 			<File
 				RelativePath="..\plugins\physics\include\peakphysics\Trimesh.hpp"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="src"
+			>
+			<File
+				RelativePath="..\plugins\physics\src\Body.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\plugins\physics\src\Box.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\plugins\physics\src\Capsule.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\plugins\physics\src\CharacterController.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\plugins\physics\src\Heightfield.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\plugins\physics\src\Physics.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\plugins\physics\src\PhysicsProfiler.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\plugins\physics\src\Plane.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\plugins\physics\src\Shape.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\plugins\physics\src\Trimesh.cpp"
 				>
 			</File>
 		</Filter>

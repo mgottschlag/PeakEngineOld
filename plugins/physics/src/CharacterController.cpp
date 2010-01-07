@@ -38,7 +38,7 @@ namespace peak
 		this->physics = physics;
 		// Create body/shape
 		shape = new Capsule();
-		((Capsule*)shape)->init(0.3, 1.0, 80.0f);
+		((Capsule*)shape)->init(0.3f, 1.0f, 80.0f);
 		body = new Body();
 		body->init(physics, shape);
 	}
@@ -88,7 +88,7 @@ namespace peak
 		realspeed = body->getLinearVelocity();
 		// Raycast
 		Vector3F raystart = body->getPosition();
-		Vector3F rayend = raystart + Vector3F(0, -1.3, 0);
+		Vector3F rayend = raystart + Vector3F(0.0f, -1.3f, 0.0f);
 		CollisionInfo collinfo;
 		bool onground = false;
 		if (physics->castRay(raystart, rayend, &collinfo, body))
@@ -97,7 +97,7 @@ namespace peak
 			body->setGravity(Vector3F(0, 0, 0));
 			// Reset position
 			Vector3F diff = collinfo.point - rayend;
-			body->setPosition(collinfo.point + peak::Vector3F(0, 1.1, 0));
+			body->setPosition(collinfo.point + peak::Vector3F(0.0f, 1.1f, 0.0f));
 			body->setLinearVelocity(Vector3F(0, 0, 0));
 			if (speed.getLength() > 0)
 			{
@@ -119,7 +119,7 @@ namespace peak
 		else
 		{
 			onground = false;
-			body->setGravity(Vector3F(0, -9.81, 0));
+			body->setGravity(Vector3F(0.0f, -9.81f, 0.0f));
 			body->getBody()->activate();
 		}
 	}

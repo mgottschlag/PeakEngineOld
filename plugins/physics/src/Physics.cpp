@@ -54,7 +54,7 @@ namespace peak
 		dispatcher = new btCollisionDispatcher(config);
 		solver = new btSequentialImpulseConstraintSolver();
 		world = new btSoftRigidDynamicsWorld(dispatcher, worldbox, solver, config);
-		world->setGravity(btVector3(0, -9.81, 0));
+		world->setGravity(btVector3(0.0f, -9.81f, 0.0f));
 
 		// Set up collision callbacks
 		gContactDestroyedCallback = customContactDestroyedCallback;

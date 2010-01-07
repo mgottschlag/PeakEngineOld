@@ -34,25 +34,31 @@ namespace peak
 
 	bool TrimeshData::init(std::string name)
 	{
+		// Open file from harddisk
 		std::ifstream file(name.c_str());
 		if (!file.is_open())
 			return false;
 
+		// Determine file size
 		file.seekg(0, std::ios_base::end);
 		int length = file.tellg();
 		file.seekg(0, std::ios_base::beg);
 
+		// Copy file content to a local buffer and close file
 		char *buffer = new char[length];
 		file.read(buffer, length);
 		file.close();
 
 
+		// Declare these dynamic sized arrays because of missing vertex and index counts in .obj files
 		std::vector<Vector3F> dynvertices = std::vector<Vector3F>();
 		std::vector<int> dynindices = std::vector<int>();
 
+		// Read the vertex and index data, until the virtual file end is reached.
 		int p = 0;
 		while (p != length)
 		{
+			// If line starts with 'v' vertex data is read
 			if (buffer[p] == 'v')
 			{
 				p++;
@@ -67,6 +73,7 @@ namespace peak
 					{	
 						if (p2 != 0)
 						{
+							// Convert to float
 							buffer[p2] = '\0';
 							std::string vertexstring(buffer2);
 							char *end = (char *)vertexstring.c_str() + vertexstring.length();
@@ -85,6 +92,7 @@ namespace peak
 				}
 				dynvertices.push_back(Vector3F(vertexcomponents[0], vertexcomponents[1], vertexcomponents[2]));
 			}
+			// If line starts with 'f' index data is read
 			else if (buffer[p] == 'f')
 			{
 				p++;
@@ -100,6 +108,7 @@ namespace peak
 						buffer[p2] = '\0';
 						if (p2 != 0)
 						{
+							// Convert to int
 							std::string facestring(buffer2);
 							char *end = (char *)facestring.c_str() + facestring.length();
 							facecomponents[p3] = (int)strtol(facestring.c_str(), &end, 10);
@@ -118,6 +127,7 @@ namespace peak
 				for (int i = 0; i < 3; i++)
 					dynindices.push_back(facecomponents[i]);
 			}
+			// If line starts with any other charcter than 'v' or 'f', then skip line
 			else
 			{
 				while (buffer[p] != '\n' && p != length)
@@ -127,7 +137,11 @@ namespace peak
 			}
 
 		}
+
+		// Free memory
+		delete[] buffer;
 		
+		// Copy the data from dynamic sized to fixed sized arrays (better performance)
 		vertexcount = dynvertices.size();
 		vertices = new Vector3F[vertexcount];
 		indexcount = dynindices.size();
