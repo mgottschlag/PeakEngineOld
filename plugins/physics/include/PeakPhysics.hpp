@@ -25,6 +25,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "peakphysics/Heightfield.hpp"
 #include "peakphysics/CharacterController.hpp"
 #include "peakphysics/PhysicsProfiler.hpp"
+#include "peakphysics/Trimesh.hpp"
 
 namespace peak
 {

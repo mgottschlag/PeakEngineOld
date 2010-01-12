@@ -77,8 +77,9 @@ namespace peak
 			 * Creates the trimesh
 			 * @param data The vertex and index data of the trimesh
 			 * @param mass Mass of the trimesh (0 = static)
+			 * @param buildhull Should be true if input mesh is concave and should result in a non-static shape
 			 */
-			bool init(TrimeshData data, float mass = 0.0f);
+			bool init(TrimeshData data, float mass = 0.0f, bool buildhull = true);
 			virtual bool destroy();
 
 		private:

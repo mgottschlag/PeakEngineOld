@@ -82,7 +82,7 @@ namespace peak
 							p3++;
 						}
 					}
-					if ((buffer[p] >= 48 && buffer[p] <= 57) || buffer[p] == '.')
+					if ((buffer[p] >= 48 && buffer[p] <= 57) || buffer[p] == '.' || buffer[p] == '-')
 					{
 						buffer2[p2] = buffer[p];
 						p2++;
@@ -111,7 +111,8 @@ namespace peak
 							// Convert to int
 							std::string facestring(buffer2);
 							char *end = (char *)facestring.c_str() + facestring.length();
-							facecomponents[p3] = (int)strtol(facestring.c_str(), &end, 10);
+							// Subtract one because file format uses one-based-indexing
+							facecomponents[p3] = (int)strtol(facestring.c_str(), &end, 10) - 1;
 							p2 = 0;
 							p3++;
 						}
@@ -170,8 +171,8 @@ namespace peak
 	{
 		if (!vertices || !indices)
 			return false;
-		delete vertices;
-		delete indices;
+		delete[] vertices;
+		delete[] indices;
 		return true;
 	}
 
@@ -199,10 +200,11 @@ namespace peak
 	{
 	}
 
-	bool Trimesh::init(TrimeshData data, float mass)
+	bool Trimesh::init(TrimeshData data, float mass, bool buildhull)
 	{
+		// Build triangle mesh from data
 		trimesh = new btTriangleMesh();
-		for (int i = 0; i < data.getIndexCount() * 3; i++)
+		for (int i = 0; i < data.getIndexCount() / 3; i++)
 		{
 			int index0 = data.getIndices()[i * 3];
 			int index1 = data.getIndices()[i * 3 + 1];
@@ -214,19 +216,29 @@ namespace peak
 
 			trimesh->addTriangle(vertex0, vertex1, vertex2);
 		}
-		btConvexShape *tmpshape = new btConvexTriangleMeshShape(trimesh);
-		btShapeHull *hull = new btShapeHull(tmpshape);
-		btScalar margin = tmpshape->getMargin();
-		hull->buildHull(margin);
-		tmpshape->setUserPointer(hull);
-		shape = new btConvexHullShape();
-		btConvexHullShape *convexshape = (btConvexHullShape*)(shape);
-		for (int j = 0; j < hull->numVertices() ; j++)
+
+		if (mass != 0.0f)
 		{
-			convexshape->addPoint(btVector3(hull->getVertexPointer()[j]));
+			btConvexShape *convexshape = new btConvexTriangleMeshShape(trimesh);
+			if (buildhull)
+			{
+				btShapeHull *hull = new btShapeHull(convexshape);
+				btScalar margin = convexshape->getMargin();
+				hull->buildHull(margin);
+				convexshape->setUserPointer(hull);
+				shape = new btConvexHullShape();
+				btConvexHullShape *convexhullshape = (btConvexHullShape*)(shape);
+				for (int j = 0; j < hull->numVertices() ; j++)
+					convexhullshape->addPoint(btVector3(hull->getVertexPointer()[j]));
+				delete convexshape;
+				delete hull;
+			}
+			else
+				shape = convexshape;
 		}
-		delete tmpshape;
-		delete hull;
+		else
+			shape = new btBvhTriangleMeshShape(trimesh, true);
+
 		// FIXME: Optimize this!
 		transform = new btTransform();
 		transform->setIdentity();

@@ -9,6 +9,7 @@ src/Physics.cpp
 src/PhysicsProfiler.cpp
 src/Plane.cpp
 src/Shape.cpp
+src/Trimesh.cpp
 )
 
 include_directories(include ../../include)
