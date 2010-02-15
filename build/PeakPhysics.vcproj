@@ -107,6 +107,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
+				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories="..\plugins\physics\include;..\include"
 				PreprocessorDefinitions="WIN32"
 				RuntimeLibrary="0"
@@ -168,6 +169,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\plugins\physics\include\peakphysics\Compound.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\plugins\physics\include\peakphysics\Heightfield.hpp"
 				>
 			</File>
@@ -189,6 +194,10 @@
 			</File>
 			<File
 				RelativePath="..\plugins\physics\include\peakphysics\Shape.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\plugins\physics\include\peakphysics\Sphere.hpp"
 				>
 			</File>
 			<File
@@ -216,6 +225,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\plugins\physics\src\Compound.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\plugins\physics\src\Heightfield.cpp"
 				>
 			</File>
@@ -233,6 +246,10 @@
 			</File>
 			<File
 				RelativePath="..\plugins\physics\src\Shape.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\plugins\physics\src\Sphere.cpp"
 				>
 			</File>
 			<File

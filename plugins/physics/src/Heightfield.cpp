@@ -51,19 +51,10 @@ namespace peak
 		terrain = new btHeightfieldTerrainShape(image->getWidth(), image->getHeight(), heightvalues, 256, 1, true, false);
 		terrain->setLocalScaling(btVector3(scale.x, scale.y, scale.z));
 		shape = terrain;
-		// Local transformation
-		transform = new btTransform();
-		transform->setIdentity();
-		transform->setOrigin(btVector3(0, 8, 0));
-		// Set mass
-		inertia = Vector3F(0, 0, 0);
-		if( mass != 0.0f)
-		{
-			btVector3 in;
-			shape->calculateLocalInertia(mass, in);
-			inertia = Vector3F(in.x(), in.y(), in.z());
-		}
+
 		this->mass = mass;
+		calculateInertia();
+			
 		delete image;
 		return true;
 	}

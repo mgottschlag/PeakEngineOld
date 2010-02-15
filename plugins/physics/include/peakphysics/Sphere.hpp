@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2009, Mathias Gottschlag, Christian Reiser
+Copyright (c) 2009-2010, Mathias Gottschlag, Christian Reiser
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
@@ -14,28 +14,28 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-#ifndef _PEAKPHYSICS_PLANE_HPP_
-#define _PEAKPHYSICS_PLANE_HPP_
+#ifndef _PEAKPHYSICS_SPHERE_HPP_
+#define _PEAKPHYSICS_SPHERE_HPP_
 
 #include "Shape.hpp"
 
 namespace peak
 {
 	/**
-	 * Simple planar collision shape.
+	 * Sphere collision shape.
 	 */
-	class Plane : public Shape
+	class Sphere : public Shape
 	{
 		public:
-			Plane();
-			~Plane();
+			Sphere();
+			~Sphere();
 
 			/**
-			 * Creates a plane
-			 * @param normal Normal vector of the plane
-			 * @param constant Y offset
+			 * Creates the sphere
+			 * @param radius Radius of the sphere
+			 * @param mass Mass of the sphere (0 = static)
 			 */
-			bool init(Vector3F normal = Vector3F(0, 1, 0), float constant = 0);
+			bool init(float radius, float mass = 0.0f);
 	};
 }
 

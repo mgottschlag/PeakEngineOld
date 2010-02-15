@@ -20,7 +20,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 namespace peak
 {
-	Shape::Shape() : shape(0), transform(0), mass(0)
+	Shape::Shape() : shape(0), mass(0)
 	{
 	}
 	Shape::~Shape()
@@ -30,7 +30,6 @@ namespace peak
 	bool Shape::destroy()
 	{
 		delete shape;
-		delete transform;
 		return true;
 	}
 
@@ -54,8 +53,15 @@ namespace peak
 	{
 		return shape;
 	}
-	btTransform Shape::getTransform()
+
+	void Shape::calculateInertia()
 	{
-		return *transform;
+		inertia = Vector3F(0, 0, 0);
+		if (mass != 0.0f)
+		{
+			btVector3 in;
+			shape->calculateLocalInertia(mass, in);
+			inertia = Vector3F(in.x(), in.y(), in.z());
+		}
 	}
 }

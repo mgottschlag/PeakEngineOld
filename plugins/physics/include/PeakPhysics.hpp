@@ -26,6 +26,8 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "peakphysics/CharacterController.hpp"
 #include "peakphysics/PhysicsProfiler.hpp"
 #include "peakphysics/Trimesh.hpp"
+#include "peakphysics/Sphere.hpp"
+#include "peakphysics/Compound.hpp"
 
 namespace peak
 {

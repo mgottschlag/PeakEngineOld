@@ -27,14 +27,9 @@ namespace peak
 	{
 	}
 
-	bool Plane::init(Vector3F normal, float constant, Vector3F position)
+	bool Plane::init(Vector3F normal, float constant)
 	{
 		shape = new btStaticPlaneShape(btVector3(normal.x, normal.y, normal.z), constant);
-		transform = new btTransform();
-
-		transform->setIdentity();
-		transform->setOrigin(btVector3(position.x, position.y, position.z));
-
 		inertia = Vector3F(0, 0, 0);
 		mass = 0.0f;
 		return true;

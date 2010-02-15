@@ -30,18 +30,8 @@ namespace peak
 	bool Capsule::init(float radius, float height, float mass)
 	{
 		shape = new btCapsuleShape(radius, height);
-		transform = new btTransform();
-		transform->setIdentity();
-		transform->setOrigin(btVector3(0, 0, 0));
-
-		inertia = Vector3F(0, 0, 0);
-		if (mass != 0.0f)
-		{
-			btVector3 in;
-			shape->calculateLocalInertia(mass, in);
-			inertia = Vector3F(in.x(), in.y(), in.z());
-		}
 		this->mass = mass;
+		calculateInertia();
 		return true;
 	}
 }

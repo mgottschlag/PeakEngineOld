@@ -4,10 +4,12 @@ src/Body.cpp
 src/Box.cpp
 src/Capsule.cpp
 src/CharacterController.cpp
+src/Compound.cpp
 src/Heightfield.cpp
 src/Physics.cpp
 src/PhysicsProfiler.cpp
 src/Plane.cpp
+src/Sphere.cpp
 src/Shape.cpp
 src/Trimesh.cpp
 )

@@ -31,7 +31,11 @@ namespace peak
 
 	bool Body::init(Physics *physics, Shape *shape, bool autodeactivation)
 	{
-		state = new btDefaultMotionState(shape->getTransform());
+		btTransform transform;
+		transform.setIdentity();
+		transform.setOrigin(btVector3(0, 0, 0));
+
+		state = new btDefaultMotionState(transform);
 		Vector3F inertia = shape->getInertia();
 
 		btRigidBody::btRigidBodyConstructionInfo rbinfo(shape->getMass(), state,

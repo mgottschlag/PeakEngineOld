@@ -57,13 +57,14 @@ namespace peak
 			 * Returns a pointer to the btCollisionShape
 			 */
 			btCollisionShape *getShape();
+
 			/**
-			 * Returns the position/rotation of the shape
+			 * Calculates the inertia. This method is automatically called for all shape types except of compound shapes.
+			 * As user it has only to be called after having added all childs to a compound shape.
 			 */
-			btTransform getTransform();
+			void calculateInertia();
 		protected:
 			btCollisionShape *shape;
-			btTransform *transform;
 			float mass;
 			Vector3F inertia;
 	};
